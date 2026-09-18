@@ -51,6 +51,28 @@ def _short_conference(name: str | None) -> str:
     return "Запад" if _conference_key(name) == "west" else "Восток" if name else ""
 
 
+CURRENT_SEASON = "2026/2027"
+
+
+def _current_team(player: dict) -> dict:
+    """Клуб игрока в текущем сезоне.
+
+    У заметной части игроков (около 15%) API оставляет поле team пустым,
+    хотя карьера по клубам лежит рядом в teams — с перечнем сезонов у
+    каждого клуба. Раньше такие игроки выпадали из составов: сайт смотрел
+    только на team. Теперь, если team пуст, берём клуб, у которого среди
+    сезонов есть текущий.
+    """
+    team = player.get("team")
+    if team:
+        return team
+    for entry in player.get("teams") or ():
+        seasons = [s.strip() for s in (entry.get("seasons") or "").split(",")]
+        if CURRENT_SEASON in seasons:
+            return entry
+    return {}
+
+
 def _stat(player: dict, stat_id: str, default=0):
     for entry in player.get("stats") or ():
         if entry.get("id") == stat_id:
@@ -169,16 +191,30 @@ def collect(progress=print) -> dict:
             progress(f"  стр. {page}: всего {total}") if page % 5 == 0 or fresh == 0 else None
         ),
     )
-    players = []
+    # Конференцию берём из справочника клубов: в истории карьеры её нет.
+    conference_by_team = {t["id"]: t["conference"] for t in teams}
+
+    players, recovered, skipped = [], 0, 0
     for p in raw_players:
-        team = p.get("team") or {}
+        team = _current_team(p)
+        if team and not p.get("team"):
+            recovered += 1
+
+        gp = _int(_stat(p, "gp"))
+        # Без клуба в текущем сезоне и без единого матча — это не чей-то
+        # состав, а хвост прошлых лет. В списках он только путал бы.
+        if not team and gp == 0:
+            skipped += 1
+            continue
+
         players.append(
             {
                 "id": p.get("id"),
                 "name": p.get("name"),
                 "team_id": team.get("id"),
                 "team": team.get("name"),
-                "conference": _short_conference(team.get("conference")),
+                "conference": conference_by_team.get(team.get("id"))
+                              or _short_conference(team.get("conference")),
                 "role": p.get("role"),
                 "role_key": p.get("role_key"),
                 "number": p.get("shirt_number"),
@@ -195,7 +231,8 @@ def collect(progress=print) -> dict:
                 "top_speed": round(float(_stat(p, "top_speed", 0.0) or 0), 1),
             }
         )
-    progress(f"  игроков: {len(players)}")
+    progress(f"  игроков: {len(players)} (клуб восстановлен по истории карьеры: {recovered}, "
+             f"без клуба и без матчей в сезоне пропущено: {skipped})")
 
     season = {
         "fetched_at": dt.datetime.now().isoformat(timespec="seconds"),
