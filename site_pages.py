@@ -1,19 +1,20 @@
 """Собирает страницы из общей разметки web/shell.html.
 
   * web/index.html + web/logos.css — локальная версия (её отдаёт serve.py);
-  * publish/khl-tracker.html      — публичная: всё в одном файле, данные
-                                    зашифрованы паролем (см. webkey.py);
+  * publish/khl-tracker.html      — публичная: данные зашифрованы паролем
+                                    (см. webkey.py), код, стили и логотипы —
+                                    отдельными файлами рядом;
   * publish/preview.html          — та же публичная страница, обёрнутая
                                     в полный документ для проверки у себя.
 
 Публичная страница собрана по правилам страниц claude.ai: без собственных
 <html>/<head>/<body> (обёртку добавляет платформа), внешние скрипты только
-с cdnjs и jsdelivr, картинки встроены — чужие адреса там заблокированы.
+с cdnjs и jsdelivr, свои файлы — рядом со страницей: чужие адреса там
+заблокированы.
 """
 
 from __future__ import annotations
 
-import base64
 import json
 import re
 from pathlib import Path
@@ -73,13 +74,6 @@ def _logo_ids() -> list[str]:
     return sorted(p.stem for p in LOGOS.glob("*.png") if p.stem.isdigit())
 
 
-def _guard(text: str, closing: str, what: str) -> str:
-    # Встроенный код не должен случайно закрыть свой собственный тег.
-    if closing.lower() in text.lower():
-        raise ValueError(f"в {what} встретилось «{closing}» — встраивание сломало бы страницу")
-    return text
-
-
 # ----------------------------------------------------------------- локальная
 
 def write_local() -> Path:
@@ -115,12 +109,20 @@ def write_local() -> Path:
 
 # ---------------------------------------------------------------- публичная
 
-def _inline_logo_css() -> str:
-    rules = []
+# Неизменные части публичной версии лежат рядом со страницей отдельными
+# файлами. Каждое утро меняется только зашифрованный блок внутри страницы,
+# а перед заменой страницу приходится прочитать целиком — поэтому она
+# должна быть маленькой: код, стили и логотипы в неё не встраиваются.
+STATIC_FILES = ["app.css", "app.js", "logos.css"]
+
+
+def web_asset_map() -> dict[str, str]:
+    """Опубликованный путь -> файл на диске, для первой публикации и
+    для публикации после изменений в коде или оформлении."""
+    files = {name: str(PUBLISH / name) for name in STATIC_FILES}
     for team_id in _logo_ids():
-        data = base64.b64encode((LOGOS / f"{team_id}.png").read_bytes()).decode()
-        rules.append(f'.logo-{team_id}{{background-image:url("data:image/png;base64,{data}")}}')
-    return "\n".join(rules)
+        files[f"logos/{team_id}.png"] = str(PUBLISH / "logos" / f"{team_id}.png")
+    return files
 
 
 def build_web_page(payload: dict) -> str:
@@ -129,9 +131,6 @@ def build_web_page(payload: dict) -> str:
         {k: vault[k] for k in ("v", "kdf", "iterations", "salt", "iv", "data")},
         separators=(",", ":"),
     )
-
-    css = _guard((WEB / "app.css").read_text(encoding="utf-8"), "</style", "app.css")
-    js = _guard((WEB / "app.js").read_text(encoding="utf-8"), "</script", "app.js")
 
     body = _variant(_shell(), "web")
     # Пока не введён пароль, приложение скрыто — без вспышки пустой страницы.
@@ -142,18 +141,34 @@ def build_web_page(payload: dict) -> str:
         '<meta name="color-scheme" content="dark">',
         '<meta name="robots" content="noindex, nofollow">',
         FONTS,
-        f"<style>\n{css}\n</style>",
-        f"<style>\n{_inline_logo_css()}\n</style>",
+        '<link rel="stylesheet" href="app.css">',
+        '<link rel="stylesheet" href="logos.css">',
         body,
         f'<script type="application/json" id="vault">{vault_json}</script>',
         *[f'<script src="{src}"></script>' for src in CDN_SCRIPTS],
-        f"<script>\n{js}\n</script>",
+        '<script src="app.js"></script>',
         "",
     ])
 
 
+def _write_web_assets() -> None:
+    import shutil
+
+    (PUBLISH / "logos").mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(WEB / "app.css", PUBLISH / "app.css")
+    shutil.copyfile(WEB / "app.js", PUBLISH / "app.js")
+    # Пути к логотипам относительные: файлы опубликованы рядом со страницей.
+    (PUBLISH / "logos.css").write_text(
+        "".join(f'.logo-{i}{{background-image:url("logos/{i}.png")}}\n' for i in _logo_ids()),
+        encoding="utf-8",
+    )
+    for team_id in _logo_ids():
+        shutil.copyfile(LOGOS / f"{team_id}.png", PUBLISH / "logos" / f"{team_id}.png")
+
+
 def write_web(payload: dict) -> Path:
     PUBLISH.mkdir(exist_ok=True)
+    _write_web_assets()
     page = build_web_page(payload)
     WEB_PAGE.write_text(page, encoding="utf-8")
 

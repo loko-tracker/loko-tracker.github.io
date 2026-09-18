@@ -23,6 +23,14 @@ import webkey
 
 MIN_LENGTH = webkey.MIN_PASSWORD
 
+# Согласие принимаем в любой раскладке: русская «у» выглядит как латинская
+# «y», и её вводят не задумываясь. «н» здесь нет намеренно — это «нет».
+YES = {"да", "д", "y", "yes", "у", "ага", "ok", "ок"}
+
+
+def confirmed(answer: str) -> bool:
+    return answer.strip().lower().rstrip(".!") in YES
+
 
 def main() -> int:
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -34,7 +42,7 @@ def main() -> int:
 
     if auth.is_configured() or webkey.is_configured():
         print("  Вход уже был настроен. Продолжить — значит заменить логин и пароль.")
-        if input("  Заменить? [y/N]: ").strip().lower() not in ("y", "yes", "д", "да"):
+        if not confirmed(input("  Заменить? Напиши да или нет: ")):
             print("  Оставил как было.")
             return 0
         print()

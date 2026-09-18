@@ -1,0 +1,1417 @@
+<title>Дорога к Кубку Гагарина</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    color-scheme: light;
+
+    --plane:        #f1f3f5;
+    --surface:      #ffffff;
+    --surface-sunk: #e9edf1;
+
+    --ink:          #0e1418;
+    --ink-2:        #49535c;
+    --ink-muted:    #6b757f;
+
+    --rule:         #dde3e8;
+    --rule-strong:  #c2ccd4;
+
+    --accent:       #a8232b;
+    --accent-soft:  rgba(168, 35, 43, 0.09);
+    --good:         #0f7a33;
+
+    /* ordinal ramp: one blue hue, light -> dark = low -> high probability
+       steps 250/350/450/500/600 of the reference blue ramp */
+    --odds-1:       #86b6ef;
+    --odds-2:       #5598e7;
+    --odds-3:       #2a78d6;
+    --odds-4:       #256abf;
+    --odds-5:       #184f95;
+    --bar-mono:     #2a78d6;
+    --bar-track:    #e5eaef;
+
+    --shadow:       0 1px 2px rgba(14, 20, 24, 0.05), 0 8px 24px -12px rgba(14, 20, 24, 0.12);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --plane:        #0d1013;
+      --surface:      #14181b;
+      --surface-sunk: #1b2126;
+      --ink:          #f2f5f7;
+      --ink-2:        #b7c0c8;
+      --ink-muted:    #8d99a4;
+      --rule:         #262e34;
+      --rule-strong:  #3a444c;
+      --accent:       #ff7a7a;
+      --accent-soft:  rgba(255, 122, 122, 0.12);
+      --good:         #37c05e;
+      --odds-1:       #256abf;
+      --odds-2:       #3987e5;
+      --odds-3:       #5598e7;
+      --odds-4:       #86b6ef;
+      --odds-5:       #b7d3f6;
+      --bar-mono:     #5598e7;
+      --bar-track:    #21282e;
+      --shadow:       0 1px 2px rgba(0, 0, 0, 0.5), 0 8px 24px -12px rgba(0, 0, 0, 0.7);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --plane:        #0d1013;
+    --surface:      #14181b;
+    --surface-sunk: #1b2126;
+    --ink:          #f2f5f7;
+    --ink-2:        #b7c0c8;
+    --ink-muted:    #8d99a4;
+    --rule:         #262e34;
+    --rule-strong:  #3a444c;
+    --accent:       #ff7a7a;
+    --accent-soft:  rgba(255, 122, 122, 0.12);
+    --good:         #37c05e;
+    --odds-1:       #256abf;
+    --odds-2:       #3987e5;
+    --odds-3:       #5598e7;
+    --odds-4:       #86b6ef;
+    --odds-5:       #b7d3f6;
+    --bar-mono:     #5598e7;
+    --bar-track:    #21282e;
+    --shadow:       0 1px 2px rgba(0, 0, 0, 0.5), 0 8px 24px -12px rgba(0, 0, 0, 0.7);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--plane);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding-inline: 16px;
+    padding-block: 0 56px;
+  }
+
+  /* ---------- masthead ---------- */
+
+  .masthead {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 30;
+    background: var(--plane);
+    border-bottom: 1px solid var(--rule);
+  }
+  .masthead-in {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding-inline: 16px;
+    padding-block: 12px 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 16px;
+  }
+  .wordmark {
+    font-family: Oswald, "IBM Plex Sans", sans-serif;
+    font-weight: 600;
+    font-size: clamp(19px, 4.2vw, 26px);
+    letter-spacing: 0.005em;
+    line-height: 1.1;
+    margin: 0;
+    text-transform: uppercase;
+  }
+  .wordmark .cup { color: var(--accent); }
+  .masthead-meta {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    margin-inline-start: auto;
+  }
+
+  /* season rail — dates are the real scale, not games played */
+  .rail { padding-block: 0 12px; max-width: 1080px; margin: 0 auto; padding-inline: 16px; }
+  .rail-track {
+    position: relative;
+    height: 5px;
+    background: var(--surface-sunk);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .rail-fill { position: absolute; inset: 0 auto 0 0; background: var(--accent); border-radius: 999px; }
+  .rail-labels {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.03em;
+    color: var(--ink-muted);
+    padding-top: 5px;
+    text-transform: uppercase;
+  }
+  .rail-labels b { color: var(--ink-2); font-weight: 500; }
+
+  /* ---------- sections ---------- */
+
+  section { margin-top: 40px; }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin: 0 0 6px;
+  }
+  .eyebrow::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+  h2 {
+    font-family: Oswald, "IBM Plex Sans", sans-serif;
+    font-weight: 500;
+    font-size: clamp(21px, 3.4vw, 27px);
+    line-height: 1.15;
+    letter-spacing: 0.005em;
+    margin: 0 0 4px;
+    text-wrap: balance;
+  }
+  .lede {
+    color: var(--ink-2);
+    max-width: 63ch;
+    margin: 0 0 20px;
+    font-size: 14.5px;
+  }
+  .lede strong { color: var(--ink); font-weight: 600; }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+  }
+
+  /* ---------- odds chart ---------- */
+
+  .odds { padding: 18px 18px 14px; }
+  .odds-scale {
+    display: grid;
+    grid-template-columns: var(--label-col) 1fr;
+    gap: 0 12px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    color: var(--ink-muted);
+    --label-col: 148px;
+  }
+  .odds-ticks {
+    position: relative;
+    height: 15px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .odds-tick { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; }
+  .odds-tick.zero { transform: none; left: 0 !important; }
+
+  .odds-rows {
+    display: grid;
+    grid-template-columns: var(--label-col) 1fr;
+    gap: 3px 12px;
+    --label-col: 148px;
+    padding-top: 7px;
+  }
+  .odds-team {
+    font-family: Oswald, sans-serif;
+    font-weight: 400;
+    font-size: 14.5px;
+    text-align: right;
+    align-self: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--ink);
+    letter-spacing: 0.01em;
+  }
+  .odds-bar-cell {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    cursor: default;
+  }
+  .odds-bar {
+    height: 15px;
+    border-radius: 0 4px 4px 0;
+    flex: none;
+    transition: filter 0.12s ease;
+  }
+  .odds-bar-cell:hover .odds-bar,
+  .odds-bar-cell:focus-visible .odds-bar { filter: brightness(1.12) saturate(1.1); }
+  .odds-val {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-2);
+    white-space: nowrap;
+  }
+  .odds-val .coef { color: var(--ink-muted); }
+  .odds-foot {
+    font-size: 12px;
+    color: var(--ink-muted);
+    padding-top: 12px;
+    margin-top: 10px;
+    border-top: 1px solid var(--rule);
+    max-width: 70ch;
+  }
+
+  /* ---------- standings ---------- */
+
+  .conf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+  }
+  .conf-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 13px 16px 11px;
+    border-bottom: 1px solid var(--rule-strong);
+  }
+  .conf-name {
+    font-family: Oswald, sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0;
+  }
+  .conf-note {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .table-scroll { overflow-x: auto; }
+  table.standings {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  table.standings th {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    text-align: right;
+    padding: 7px 10px 6px;
+    border-bottom: 1px solid var(--rule);
+    white-space: nowrap;
+  }
+  table.standings th.pos, table.standings th.club { text-align: left; }
+  table.standings td {
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--rule);
+    text-align: right;
+    font-family: "IBM Plex Mono", monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+    color: var(--ink-2);
+    white-space: nowrap;
+  }
+  table.standings td.pos {
+    text-align: left;
+    color: var(--ink-muted);
+    width: 1%;
+    padding-right: 4px;
+  }
+  table.standings td.club {
+    text-align: left;
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    width: 99%;
+  }
+  table.standings td.pts { color: var(--ink); font-weight: 600; }
+  table.standings tbody tr:last-child td { border-bottom: 0; }
+  table.standings tbody tr.cut td { border-bottom: 2px solid var(--rule-strong); }
+  tr.cutline td {
+    padding: 0;
+    border-bottom: 0;
+  }
+  .cutline-label {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    padding: 3px 10px 4px;
+    background: var(--surface-sunk);
+  }
+  .flag {
+    display: inline-block;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 1px 5px;
+    border-radius: 3px;
+    margin-left: 7px;
+    vertical-align: 1.5px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  /* ---------- scorers ---------- */
+
+  table.scorers { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.scorers th {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    text-align: right;
+    padding: 11px 10px 8px;
+    border-bottom: 1px solid var(--rule-strong);
+    white-space: nowrap;
+  }
+  table.scorers th.pos, table.scorers th.who, table.scorers th.shape { text-align: left; }
+  table.scorers td {
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--rule);
+    text-align: right;
+    font-family: "IBM Plex Mono", monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+    color: var(--ink-2);
+    white-space: nowrap;
+  }
+  table.scorers td.pos { text-align: left; color: var(--ink-muted); }
+  table.scorers td.who { text-align: left; font-family: "IBM Plex Sans", sans-serif; font-size: 14px; color: var(--ink); }
+  table.scorers td.who .club { color: var(--ink-muted); font-size: 12.5px; display: block; }
+  table.scorers td.shape { text-align: left; width: 132px; }
+  table.scorers td.pts { color: var(--ink); font-weight: 600; font-size: 14px; }
+  table.scorers tbody tr:last-child td { border-bottom: 0; }
+  .minibar-track {
+    position: relative;
+    height: 8px;
+    width: 100%;
+    background: var(--bar-track);
+    border-radius: 999px;
+    overflow: hidden;
+    cursor: default;
+  }
+  .minibar-fill { position: absolute; inset: 0 auto 0 0; background: var(--bar-mono); border-radius: 999px; }
+
+  /* ---------- contenders ---------- */
+
+  .tier { margin-top: 16px; }
+  .tier-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 8px;
+  }
+  .tier-head .bar {
+    height: 3px;
+    width: 26px;
+    border-radius: 999px;
+    background: var(--odds-5);
+    flex: none;
+  }
+  .tier-2 .tier-head .bar { background: var(--odds-3); }
+  .tier-3 .tier-head .bar { background: var(--odds-1); }
+
+  .club-row {
+    display: grid;
+    grid-template-columns: 178px 1fr;
+    gap: 4px 20px;
+    padding: 15px 18px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .club-row:last-child { border-bottom: 0; }
+  .club-id { min-width: 0; }
+  .club-title {
+    font-family: Oswald, sans-serif;
+    font-weight: 500;
+    font-size: 17px;
+    letter-spacing: 0.01em;
+    margin: 0;
+    line-height: 1.2;
+  }
+  .club-sub {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+    letter-spacing: 0.02em;
+    margin-top: 2px;
+  }
+  .club-body { min-width: 0; font-size: 14px; color: var(--ink-2); }
+  .club-body p { margin: 0 0 8px; }
+  .club-body p:last-child { margin-bottom: 0; }
+  .club-body strong { color: var(--ink); font-weight: 600; }
+  .risk {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+  .risk b {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+    flex: none;
+  }
+
+  /* ---------- picks ---------- */
+
+  .picks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 16px;
+    align-items: start;
+  }
+  .picks-card { padding: 16px 18px 18px; }
+  .picks-card h3 {
+    font-family: Oswald, sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 2px;
+  }
+  .picks-card .who {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .pick-list { display: grid; gap: 9px; }
+  .pick-line {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 6px 12px;
+    align-items: baseline;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .pick-line:last-child { border-bottom: 0; padding-bottom: 0; }
+  .pick-label {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .pick-val {
+    font-family: Oswald, sans-serif;
+    font-size: 15.5px;
+    font-weight: 500;
+    color: var(--ink);
+    text-align: right;
+    letter-spacing: 0.01em;
+  }
+
+  .field { display: grid; gap: 4px; margin-bottom: 11px; }
+  .field > label {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  select, input[type="text"], textarea {
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--surface-sunk);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 7px 9px;
+    width: 100%;
+    min-width: 0;
+  }
+  textarea { resize: vertical; min-height: 62px; line-height: 1.5; }
+  select:focus-visible, input:focus-visible, textarea:focus-visible, button:focus-visible, .odds-bar-cell:focus-visible, .minibar-track:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  button {
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--surface);
+    background: var(--ink);
+    border: 1px solid var(--ink);
+    border-radius: 6px;
+    padding: 7px 14px;
+    cursor: pointer;
+  }
+  button.ghost { background: transparent; color: var(--ink-2); border-color: var(--rule-strong); }
+  button:disabled { opacity: 0.45; cursor: not-allowed; }
+  .row-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+  .save-state {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+  }
+  .save-state.ok { color: var(--good); }
+
+  .journal { padding: 16px 18px 18px; margin-top: 16px; }
+  .journal-list { display: grid; gap: 0; margin: 14px 0 0; padding: 0; list-style: none; }
+  .journal-list li {
+    display: grid;
+    grid-template-columns: 78px 1fr;
+    gap: 4px 14px;
+    padding: 10px 0;
+    border-top: 1px solid var(--rule);
+    font-size: 14px;
+    color: var(--ink-2);
+  }
+  .journal-list li time {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    letter-spacing: 0.02em;
+    padding-top: 2px;
+  }
+  .journal-empty { color: var(--ink-muted); font-size: 13.5px; margin: 12px 0 0; }
+
+  /* ---------- tooltip ---------- */
+
+  #tip {
+    position: fixed;
+    z-index: 60;
+    pointer-events: none;
+    background: var(--ink);
+    color: var(--plane);
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-size: 12.5px;
+    line-height: 1.4;
+    max-width: 240px;
+    box-shadow: 0 6px 20px -6px rgba(0,0,0,0.45);
+    opacity: 0;
+    transition: opacity 0.1s ease;
+  }
+  #tip.on { opacity: 1; }
+  #tip b { font-family: Oswald, sans-serif; font-weight: 500; font-size: 13.5px; display: block; }
+  #tip .num { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; }
+
+  /* ---------- footer ---------- */
+
+  footer {
+    margin-top: 44px;
+    padding-top: 18px;
+    border-top: 1px solid var(--rule);
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+  footer h3 {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin: 0 0 8px;
+    font-weight: 500;
+  }
+  footer ul { margin: 0; padding-left: 18px; }
+  footer li { margin-bottom: 3px; }
+  footer a { color: var(--ink-2); text-decoration: none; border-bottom: 1px solid var(--rule-strong); }
+  footer a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  @media (max-width: 560px) {
+    .odds-scale, .odds-rows { --label-col: 104px; }
+    .odds-team { font-size: 13px; }
+    .club-row { grid-template-columns: 1fr; gap: 10px; }
+    .journal-list li { grid-template-columns: 1fr; gap: 2px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+
+<header class="masthead">
+  <div class="masthead-in">
+    <h1 class="wordmark">Дорога к <span class="cup">Кубку Гагарина</span></h1>
+    <div class="masthead-meta">Сезон 2026/27 · 22 клуба · данные на 17.09.2026</div>
+  </div>
+</header>
+
+<div class="rail">
+  <div class="rail-track"><div class="rail-fill" id="railFill" style="width:6%"></div></div>
+  <div class="rail-labels">
+    <span><b>5 сент</b> старт регулярки</span>
+    <span id="railNow">—</span>
+    <span>плей-офф <b>после 20 мар</b></span>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <section id="odds">
+    <p class="eyebrow">Букмекерский расклад</p>
+    <h2>Гонка за Кубком: кто в фаворитах</h2>
+    <p class="lede">Шесть клубов получили не менее 10% на чемпионство — это самый плотный расклад за последние годы. <strong>«Авангард»</strong> впереди за счёт лучшей трансферной кампании лета, <strong>«Локомотив»</strong> — как действующий чемпион с сохранённым костяком.</p>
+    <div class="panel odds">
+      <div class="odds-scale">
+        <div></div>
+        <div class="odds-ticks" id="oddsTicks"></div>
+      </div>
+      <div class="odds-rows" id="oddsRows"></div>
+      <p class="odds-foot">Вероятность посчитана как 1/коэффициент, поэтому включает маржу букмекера и в сумме по лиге даёт больше 100% — читать как относительный вес, а не как честную вероятность. Остальные 12 клубов идут выше 20.00.</p>
+    </div>
+  </section>
+
+  <section id="standings">
+    <p class="eyebrow">Регулярный чемпионат</p>
+    <h2>Турнирная таблица</h2>
+    <p class="lede">Пройдено по 4–6 матчей: на такой выборке таблица почти ничего не говорит о силе команд. Смотреть тут стоит на аномалии — <strong>«Трактор» последний на Востоке</strong>, а <strong>«Нефтехимик» первый</strong>, и оба наверняка вернутся к своим местам.</p>
+    <div class="conf-grid">
+      <div class="panel">
+        <div class="conf-head">
+          <h3 class="conf-name">Запад</h3>
+          <span class="conf-note">11 клубов · 8 в плей-офф</span>
+        </div>
+        <div class="table-scroll">
+          <table class="standings">
+            <thead>
+              <tr><th class="pos">#</th><th class="club">Клуб</th><th>И</th><th>В</th><th>О</th></tr>
+            </thead>
+            <tbody id="tbWest"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="conf-head">
+          <h3 class="conf-name">Восток</h3>
+          <span class="conf-note">11 клубов · 8 в плей-офф</span>
+        </div>
+        <div class="table-scroll">
+          <table class="standings">
+            <thead>
+              <tr><th class="pos">#</th><th class="club">Клуб</th><th>И</th><th>В</th><th>О</th></tr>
+            </thead>
+            <tbody id="tbEast"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="scorers">
+    <p class="eyebrow">Личная статистика</p>
+    <h2>Гонка бомбардиров</h2>
+    <p class="lede">У <strong>Николая Голдобина</strong> отрыв в четыре передачи от всей лиги — при том, что его СКА записали в главные разочарования межсезонья. <strong>Александр Радулов</strong> в 39 лет третий в списке.</p>
+    <div class="panel">
+      <div class="table-scroll">
+        <table class="scorers">
+          <thead>
+            <tr>
+              <th class="pos">#</th><th class="who">Игрок</th><th class="shape">Очки</th>
+              <th>И</th><th>Г</th><th>П</th><th>О</th>
+            </tr>
+          </thead>
+          <tbody id="tbScorers"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="contenders">
+    <p class="eyebrow">Разбор по клубам</p>
+    <h2>Претенденты и их звёзды</h2>
+    <p class="lede">Три эшелона по оценкам букмекеров и экспертов. Деление — не оформление: у первого эшелона есть и состав, и опыт плей-офф; у второго не хватает одного из двух.</p>
+
+    <div class="tier tier-1">
+      <div class="tier-head"><span class="bar"></span><span>Первый эшелон · 12–20% на титул</span></div>
+      <div class="panel" id="tier1"></div>
+    </div>
+    <div class="tier tier-2">
+      <div class="tier-head"><span class="bar"></span><span>Второй эшелон · 5–10%</span></div>
+      <div class="panel" id="tier2"></div>
+    </div>
+    <div class="tier tier-3">
+      <div class="tier-head"><span class="bar"></span><span>Тёмные лошадки · до 5%</span></div>
+      <div class="panel" id="tier3"></div>
+    </div>
+  </section>
+
+  <section id="picks">
+    <p class="eyebrow">Ставим и проверяем в мае</p>
+    <h2>Наши прогнозы на сезон</h2>
+    <p class="lede">Фиксируем сейчас, сверяем по ходу сезона. Твой прогноз сохраняется на странице — я увижу его, когда мы будем обновлять таблицу.</p>
+    <div class="picks-grid">
+      <div class="panel picks-card">
+        <h3>Прогноз Claude</h3>
+        <div class="who">Зафиксирован 17 сентября 2026</div>
+        <div class="pick-list" id="claudePicks"></div>
+      </div>
+      <div class="panel picks-card">
+        <h3>Твой прогноз</h3>
+        <div class="who" id="myPicksWho">Можно менять до старта плей-офф</div>
+        <form id="pickForm" autocomplete="off">
+          <div class="field">
+            <label for="pickChampion">Кубок Гагарина</label>
+            <select id="pickChampion" name="champion"></select>
+          </div>
+          <div class="field">
+            <label for="pickWest">Победитель Запада</label>
+            <select id="pickWest" name="west"></select>
+          </div>
+          <div class="field">
+            <label for="pickEast">Победитель Востока</label>
+            <select id="pickEast" name="east"></select>
+          </div>
+          <div class="field">
+            <label for="pickScorer">Лучший бомбардир</label>
+            <input type="text" id="pickScorer" name="scorer" placeholder="например, Джош Ливо">
+          </div>
+          <div class="field">
+            <label for="pickHorse">Тёмная лошадка</label>
+            <select id="pickHorse" name="darkhorse"></select>
+          </div>
+          <div class="row-actions">
+            <button type="submit" id="pickSave">Сохранить прогноз</button>
+            <span class="save-state" id="pickState">—</span>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="panel journal">
+      <h3 class="conf-name" style="margin-bottom:2px">Дневник сезона</h3>
+      <div class="who" style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.04em">Что заметили по ходу чемпионата</div>
+      <form id="noteForm" autocomplete="off" style="margin-top:12px">
+        <div class="field">
+          <label for="noteText">Новая запись</label>
+          <textarea id="noteText" name="note" placeholder="Например: Трактор выиграл четыре подряд, Хёйкеланн тянет всё."></textarea>
+        </div>
+        <div class="row-actions">
+          <button type="submit" id="noteSave">Добавить</button>
+          <span class="save-state" id="noteState">—</span>
+        </div>
+      </form>
+      <ul class="journal-list" id="journalList"></ul>
+      <p class="journal-empty" id="journalEmpty">Пока пусто. Первая запись появится, когда что-нибудь произойдёт.</p>
+    </div>
+  </section>
+
+  <footer>
+    <h3>Источники и даты</h3>
+    <p>Таблица и личная статистика — на 17 сентября 2026, после 4–6 матчей у каждого клуба. Коэффициенты — предсезонные. Регулярный чемпионат идёт до 20 марта 2027.</p>
+    <ul>
+      <li><a href="https://www.sports.ru/hockey/tournament/khl/table/">Турнирная таблица КХЛ 2026/27 — Sports.ru</a></li>
+      <li><a href="https://www.sports.ru/hockey/tournament/khl/stat/bombardiers/">Бомбардиры КХЛ 2026/27 — Sports.ru</a></li>
+      <li><a href="https://matchtv.ru/hockey/khl/stats/2026-27">Лидеры сезона — Матч ТВ</a></li>
+      <li><a href="https://www.sports.ru/hockey/blogs/3455600.html">Прогнозы на сезон КХЛ 2026/27 — Sports.ru</a></li>
+      <li><a href="https://www.sports.ru/betting/1117359240-startuet-sezon-kxl-avangard-i-lokomotiv-favority-u-bukmekerov-ska-net-.html">Коэффициенты на Кубок Гагарина — Sports.ru</a></li>
+      <li><a href="https://www.sovsport.ru/hockey/articles/v-khl-budet-novyj-chempion-est-pyat-pretendentov-na-mesto-lokomotiva">Пять претендентов на место «Локомотива» — Советский спорт</a></li>
+      <li><a href="https://life.ru/p/kto-favorit-kubka-gagarina-2027-shansy-lokomotiva-avangarda-tsska-i-metallurga">Кто фаворит Кубка Гагарина 2027 — Life.ru</a></li>
+      <li><a href="https://www.sport-express.net/hockey/khl/reviews/lokomotiv-zavoeval-kubok-gagarina-2026-kak-komande-udalos-vyigrat-vtoroy-titul-podryad-2424876/">«Локомотив» — Кубок Гагарина-2026 — Спорт-Экспресс</a></li>
+    </ul>
+  </footer>
+</main>
+
+<div id="tip" role="tooltip" aria-hidden="true"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ================= data ================= */
+
+  var ODDS = [
+    { team: "Авангард",      coef: 5.00 },
+    { team: "Локомотив",     coef: 5.50 },
+    { team: "Ак Барс",       coef: 7.00 },
+    { team: "Металлург Мг",  coef: 8.00 },
+    { team: "ЦСКА",          coef: 8.00 },
+    { team: "СКА",           coef: 10.00 },
+    { team: "Автомобилист",  coef: 13.00 },
+    { team: "Динамо Москва", coef: 20.00 },
+    { team: "Динамо Минск",  coef: 20.00 },
+    { team: "Спартак",       coef: 20.00 }
+  ];
+
+  var WEST = [
+    { club: "Локомотив",      g: 5, w: 5, p: 10, flag: "чемпион 2025 и 2026" },
+    { club: "СКА",            g: 6, w: 5, p: 10 },
+    { club: "Спартак",        g: 5, w: 4, p: 8 },
+    { club: "Торпедо",        g: 5, w: 4, p: 8 },
+    { club: "Динамо Москва",  g: 6, w: 4, p: 8 },
+    { club: "ЦСКА",           g: 5, w: 2, p: 4 },
+    { club: "Лада",           g: 6, w: 1, p: 4 },
+    { club: "Шанхай Дрэгонс", g: 4, w: 2, p: 4 },
+    { club: "Северсталь",     g: 5, w: 1, p: 3 },
+    { club: "Динамо Минск",   g: 4, w: 0, p: 3 },
+    { club: "Сочи",           g: 4, w: 0, p: 0 }
+  ];
+
+  var EAST = [
+    { club: "Нефтехимик",     g: 5, w: 4, p: 9 },
+    { club: "Ак Барс",        g: 6, w: 4, p: 9, flag: "финалист 2026" },
+    { club: "Металлург Мг",   g: 5, w: 3, p: 7, flag: "Кубок Континента" },
+    { club: "Барыс",          g: 4, w: 3, p: 6 },
+    { club: "Автомобилист",   g: 5, w: 2, p: 6 },
+    { club: "Авангард",       g: 4, w: 3, p: 6 },
+    { club: "Салават Юлаев",  g: 4, w: 2, p: 5 },
+    { club: "Адмирал",        g: 5, w: 1, p: 3 },
+    { club: "Амур",           g: 4, w: 1, p: 3 },
+    { club: "Сибирь",         g: 5, w: 1, p: 3 },
+    { club: "Трактор",        g: 4, w: 1, p: 2 }
+  ];
+
+  var SCORERS = [
+    { name: "Николай Голдобин",   club: "СКА",            g: 6, go: 1, a: 11, p: 12 },
+    { name: "Джастин Бэйли",      club: "Барыс",          g: 4, go: 5, a: 4,  p: 9 },
+    { name: "Александр Радулов",  club: "Локомотив",      g: 5, go: 3, a: 5,  p: 8 },
+    { name: "Кирилл Семёнов",     club: "Ак Барс",        g: 6, go: 1, a: 7,  p: 8 },
+    { name: "Александр Беляев",   club: "Спартак",        g: 4, go: 5, a: 2,  p: 7 },
+    { name: "Джек Родуолд",       club: "Салават Юлаев",  g: 4, go: 4, a: 3,  p: 7 },
+    { name: "Егор Сурин",         club: "Локомотив",      g: 5, go: 4, a: 3,  p: 7 },
+    { name: "Анатолий Голышев",   club: "Автомобилист",   g: 5, go: 3, a: 4,  p: 7 },
+    { name: "Райли Савчук",       club: "Лада",           g: 6, go: 5, a: 2,  p: 7 },
+    { name: "Сергей Плотников",   club: "СКА",            g: 6, go: 4, a: 3,  p: 7 }
+  ];
+
+  var TIERS = [
+    { id: "tier1", clubs: [
+      {
+        name: "Авангард", sub: "Омск · Восток · коэф. 5.00",
+        body: [
+          "Главный фаворит: в Омске собрали <strong>состав без слабых мест</strong>. Пришли <strong>Джош Ливо</strong> (65 очков в 62 матчах), <strong>Егор Афанасьев</strong>, <strong>Седрик Пакетт</strong>, а также Кирилл Адамчук и Артём Ильенко из «Динамо».",
+          "Ливо ставят в звено к <strong>Константину Окулову</strong>. В воротах <strong>Никита Серебряков</strong>, за ним выменянный у ЦСКА <strong>Иван Просветов</strong> — в Омске прямо говорят, что его место на скамейке."
+        ],
+        risk: "Характер Ливо: его называют человеком настроения, который может и провести матч на прямых ногах."
+      },
+      {
+        name: "Локомотив", sub: "Ярославль · Запад · коэф. 5.50",
+        body: [
+          "Действующий чемпион, <strong>два Кубка Гагарина подряд</strong> (2025, 2026). Костяк сохранён целиком: <strong>Александр Радулов</strong>, <strong>Егор Сурин</strong>, вратарь <strong>Даниил Исаев</strong>.",
+          "Боб Хартли ушёл с поста и остался консультантом, команду принял <strong>Дмитрий Квартальнов</strong> из минского «Динамо» — с помощниками Юрием Бабенко и Александром Перовым."
+        ],
+        risk: "Возраст и износ: все лидеры перешагнули 30, Радулову под 40, впереди третий длинный плей-офф подряд."
+      },
+      {
+        name: "Металлург", sub: "Магнитогорск · Восток · коэф. 8.00",
+        body: [
+          "Выиграл регулярку-2025/26 с <strong>рекордом лиги в 252 гола</strong> и взял бронзу. Система работает, адаптация не нужна — отсюда репутация самого надёжного варианта.",
+          "Летом добавили Провольнева, Старкова, <strong>Нэйтана Тодда</strong> и Зеленова."
+        ],
+        risk: "Потеряли двух топов в НХЛ: Роман Канцеров (36 голов, «Чикаго») и вратарь Илья Набоков («Колорадо»). Партнёра Владимиру Ткачёву ещё не нашли."
+      },
+      {
+        name: "Ак Барс", sub: "Казань · Восток · коэф. 7.00",
+        body: [
+          "Финалист прошлого сезона, тренер <strong>Анвар Гатиятулин</strong> сохранён. На старте идут хорошо: <strong>Кирилл Семёнов</strong> четвёртый бомбардир лиги, <strong>Тимур Билялов</strong> с сухим матчем.",
+          "Но часть экспертов уже записала казанцев в потенциальные разочарования сезона."
+        ],
+        risk: "Ушли Сафонов, Тодд и Барабанов — равноценной замены не нашли."
+      },
+      {
+        name: "ЦСКА", sub: "Москва · Запад · коэф. 8.00",
+        body: [
+          "Второй сезон <strong>Игоря Никитина</strong> — того самого тренера, который построил чемпионский «Локомотив». От команды ждут заметного шага вперёд.",
+          "Вернулся <strong>Максим Мамин</strong>, добавили защитников Коттона и Хэмилтона, форвардов Хайруллина и Барака. <strong>Егор Замула</strong> уже с шестью передачами."
+        ],
+        risk: "На старте всего 4 очка в 5 матчах при прогнозе 29% на победу в конференции."
+      }
+    ]},
+    { id: "tier2", clubs: [
+      {
+        name: "СКА", sub: "Санкт-Петербург · Запад · коэф. 10.00",
+        body: [
+          "Главное разочарование межсезонья по оценкам букмекеров — худший расклад за годы, а <strong>Игорь Ларионов</strong> попал в список кандидатов на первое увольнение.",
+          "Ирония в том, что на старте СКА делит первое место на Западе, а <strong>Николай Голдобин</strong> лидирует в гонке бомбардиров с отрывом."
+        ],
+        risk: "Ожидания против результата: если старт был случайностью, давление на Ларионова вернётся мгновенно."
+      },
+      {
+        name: "Автомобилист", sub: "Екатеринбург · Восток · коэф. 13.00",
+        body: [
+          "Третий по вероятности на Востоке (20%) — тихий, но стабильный претендент. <strong>Анатолий Голышев</strong> и <strong>Александр Шаров</strong> оба в топ-10 бомбардиров уже на старте."
+        ],
+        risk: "Ни разу не проходил дальше определённой стадии — вопрос плей-офф, а не регулярки."
+      },
+      {
+        name: "Трактор", sub: "Челябинск · Восток · коэф. вне топ-6",
+        body: [
+          "Взяли <strong>Хенрика Хёйкеланна</strong> — лучшего вратаря чемпионата мира 2026. Обсуждается возвращение <strong>Евгения Дадонова</strong> и <strong>Евгения Кузнецова</strong>.",
+          "Прогноз на победу в конференции — 18%, то есть выше, чем кажется по нынешнему последнему месту."
+        ],
+        risk: "Пока последние на Востоке: 2 очка в 4 матчах."
+      }
+    ]},
+    { id: "tier3", clubs: [
+      {
+        name: "Шанхай Дрэгонс", sub: "Запад · сюрприз межсезонья",
+        body: [
+          "Шансы на титул выросли <strong>с 0,2% до 1%</strong> за одно межсезонье — самый большой относительный рост в лиге. Все опрошенные эксперты ждут первый в истории клуба выход в плей-офф.",
+          "<strong>Бреннан Менелл</strong> уже в топ-10 бомбардиров."
+        ],
+        risk: "Пока 4 очка в 4 матчах — запас прочности отсутствует."
+      },
+      {
+        name: "Динамо Минск", sub: "Запад · коэф. 20.00",
+        body: [
+          "Отпустили тренера в Ярославль, но состав интересный: <strong>Сэм Анас</strong> и <strong>Тай Смит</strong> оба в топ-15 бомбардиров, в воротах <strong>Зак Фукале</strong>."
+        ],
+        risk: "3 очка в 4 матчах и потеря Квартальнова — худший старт среди претендентов на плей-офф."
+      }
+    ]}
+  ];
+
+  var CLAUDE_PICKS = [
+    { label: "Кубок Гагарина", val: "Авангард" },
+    { label: "Запад",          val: "Локомотив" },
+    { label: "Восток",         val: "Авангард" },
+    { label: "Бомбардир",      val: "Джош Ливо" },
+    { label: "Тёмная лошадка", val: "Шанхай Дрэгонс" }
+  ];
+
+  var ALL_CLUBS = WEST.map(function (r) { return r.club; })
+    .concat(EAST.map(function (r) { return r.club; })).sort(function (a, b) {
+      return a.localeCompare(b, "ru");
+    });
+
+  /* ================= helpers ================= */
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+
+  /* ================= season rail ================= */
+
+  (function rail() {
+    var start = new Date(2026, 8, 5);
+    var end = new Date(2027, 2, 20);
+    var now = new Date();
+    var total = end - start;
+    var done = Math.min(Math.max(now - start, 0), total);
+    var pct = total > 0 ? (done / total) * 100 : 0;
+    var days = Math.round(done / 86400000);
+    var left = Math.max(Math.round((total - done) / 86400000), 0);
+    $("railFill").style.width = pct.toFixed(1) + "%";
+    $("railNow").textContent = "день " + days + " · " + pct.toFixed(0) + "% пройдено · " + left + " дн. до плей-офф";
+  }());
+
+  /* ================= tooltip ================= */
+
+  var tip = $("tip");
+  var tipOn = false;
+
+  function showTip(html, ev) {
+    tip.innerHTML = html;
+    tip.classList.add("on");
+    tip.setAttribute("aria-hidden", "false");
+    tipOn = true;
+    moveTip(ev);
+  }
+  function moveTip(ev) {
+    if (!tipOn) return;
+    var pad = 12;
+    var r = tip.getBoundingClientRect();
+    var x = ev.clientX + pad;
+    var y = ev.clientY + pad;
+    if (x + r.width > window.innerWidth - 8) x = ev.clientX - r.width - pad;
+    if (y + r.height > window.innerHeight - 8) y = ev.clientY - r.height - pad;
+    tip.style.left = Math.max(8, x) + "px";
+    tip.style.top = Math.max(8, y) + "px";
+  }
+  function hideTip() {
+    tip.classList.remove("on");
+    tip.setAttribute("aria-hidden", "true");
+    tipOn = false;
+  }
+  document.addEventListener("mousemove", moveTip, { passive: true });
+  document.addEventListener("scroll", hideTip, { passive: true });
+
+  function wireTip(node, html) {
+    node.addEventListener("mouseenter", function (ev) { showTip(html, ev); });
+    node.addEventListener("mouseleave", hideTip);
+    node.addEventListener("focus", function () {
+      var r = node.getBoundingClientRect();
+      showTip(html, { clientX: r.left + r.width / 2, clientY: r.bottom });
+    });
+    node.addEventListener("blur", hideTip);
+  }
+
+  /* ================= odds chart ================= */
+
+  (function renderOdds() {
+    var rows = ODDS.map(function (d) {
+      return { team: d.team, coef: d.coef, prob: 100 / d.coef };
+    });
+    var max = 22; // headroom above the 20% leader so the axis reads round
+    var ticks = [0, 5, 10, 15, 20];
+
+    var tickHost = $("oddsTicks");
+    ticks.forEach(function (t) {
+      var n = el("span", "odds-tick" + (t === 0 ? " zero" : ""), t + "%");
+      n.style.left = (t / max) * 100 + "%";
+      tickHost.appendChild(n);
+    });
+
+    function step(prob) {
+      if (prob >= 18) return "var(--odds-5)";
+      if (prob >= 12) return "var(--odds-4)";
+      if (prob >= 9.5) return "var(--odds-3)";
+      if (prob >= 7) return "var(--odds-2)";
+      return "var(--odds-1)";
+    }
+
+    var host = $("oddsRows");
+    rows.forEach(function (d) {
+      host.appendChild(el("div", "odds-team", d.team));
+
+      var cell = el("div", "odds-bar-cell");
+      cell.tabIndex = 0;
+      var bar = el("div", "odds-bar");
+      bar.style.width = ((d.prob / max) * 100).toFixed(2) + "%";
+      bar.style.background = step(d.prob);
+      var val = el("span", "odds-val");
+      val.innerHTML = d.prob.toFixed(1) + "% <span class=\"coef\">· " + d.coef.toFixed(2) + "</span>";
+      cell.appendChild(bar);
+      cell.appendChild(val);
+      wireTip(cell, "<b>" + d.team + "</b><span class=\"num\">коэффициент " + d.coef.toFixed(2) +
+        "<br>вес " + d.prob.toFixed(1) + "% (1/коэф.)</span>");
+      host.appendChild(cell);
+    });
+  }());
+
+  /* ================= standings ================= */
+
+  function renderConf(tbodyId, rows) {
+    var host = $(tbodyId);
+    rows.forEach(function (r, i) {
+      var tr = el("tr");
+      if (i === 7) tr.className = "cut";
+      tr.appendChild(el("td", "pos", String(i + 1)));
+
+      var club = el("td", "club");
+      club.appendChild(document.createTextNode(r.club));
+      if (r.flag) club.appendChild(el("span", "flag", r.flag));
+      tr.appendChild(club);
+
+      tr.appendChild(el("td", null, String(r.g)));
+      tr.appendChild(el("td", null, String(r.w)));
+      tr.appendChild(el("td", "pts", String(r.p)));
+      host.appendChild(tr);
+
+      if (i === 7) {
+        var line = el("tr", "cutline");
+        var td = el("td");
+        td.colSpan = 5;
+        td.appendChild(el("div", "cutline-label", "линия плей-офф"));
+        line.appendChild(td);
+        host.appendChild(line);
+      }
+    });
+  }
+  renderConf("tbWest", WEST);
+  renderConf("tbEast", EAST);
+
+  /* ================= scorers ================= */
+
+  (function renderScorers() {
+    var host = $("tbScorers");
+    var max = SCORERS[0].p;
+    SCORERS.forEach(function (s, i) {
+      var tr = el("tr");
+      tr.appendChild(el("td", "pos", String(i + 1)));
+
+      var who = el("td", "who");
+      who.appendChild(document.createTextNode(s.name));
+      who.appendChild(el("span", "club", s.club));
+      tr.appendChild(who);
+
+      var shape = el("td", "shape");
+      var track = el("div", "minibar-track");
+      track.tabIndex = 0;
+      var fill = el("div", "minibar-fill");
+      fill.style.width = ((s.p / max) * 100).toFixed(1) + "%";
+      track.appendChild(fill);
+      wireTip(track, "<b>" + s.name + "</b><span class=\"num\">" + s.p + " очков за " + s.g +
+        " матчей<br>" + s.go + " гол. + " + s.a + " пас</span>");
+      shape.appendChild(track);
+      tr.appendChild(shape);
+
+      tr.appendChild(el("td", null, String(s.g)));
+      tr.appendChild(el("td", null, String(s.go)));
+      tr.appendChild(el("td", null, String(s.a)));
+      tr.appendChild(el("td", "pts", String(s.p)));
+      host.appendChild(tr);
+    });
+  }());
+
+  /* ================= contenders ================= */
+
+  TIERS.forEach(function (tier) {
+    var host = $(tier.id);
+    tier.clubs.forEach(function (c) {
+      var row = el("div", "club-row");
+
+      var id = el("div", "club-id");
+      id.appendChild(el("h3", "club-title", c.name));
+      id.appendChild(el("div", "club-sub", c.sub));
+      row.appendChild(id);
+
+      var body = el("div", "club-body");
+      c.body.forEach(function (p) {
+        var n = el("p");
+        n.innerHTML = p;
+        body.appendChild(n);
+      });
+      var risk = el("p");
+      var wrap = el("span", "risk");
+      wrap.appendChild(el("b", null, "риск"));
+      wrap.appendChild(document.createTextNode(c.risk));
+      risk.appendChild(wrap);
+      body.appendChild(risk);
+      row.appendChild(body);
+
+      host.appendChild(row);
+    });
+  });
+
+  /* ================= claude picks ================= */
+
+  (function renderClaudePicks() {
+    var host = $("claudePicks");
+    CLAUDE_PICKS.forEach(function (p) {
+      var line = el("div", "pick-line");
+      line.appendChild(el("span", "pick-label", p.label));
+      line.appendChild(el("span", "pick-val", p.val));
+      host.appendChild(line);
+    });
+  }());
+
+  /* ================= pick form (static shell, db optional) ================= */
+
+  function fillSelect(sel, items, placeholder) {
+    sel.appendChild(new Option(placeholder, ""));
+    items.forEach(function (t) { sel.appendChild(new Option(t, t)); });
+  }
+  fillSelect($("pickChampion"), ALL_CLUBS, "— выбрать клуб —");
+  fillSelect($("pickWest"), WEST.map(function (r) { return r.club; }).sort(function (a, b) { return a.localeCompare(b, "ru"); }), "— выбрать клуб —");
+  fillSelect($("pickEast"), EAST.map(function (r) { return r.club; }).sort(function (a, b) { return a.localeCompare(b, "ru"); }), "— выбрать клуб —");
+  fillSelect($("pickHorse"), ALL_CLUBS, "— выбрать клуб —");
+
+  var pickForm = $("pickForm");
+  var pickState = $("pickState");
+  var noteForm = $("noteForm");
+  var noteState = $("noteState");
+  var journalList = $("journalList");
+  var journalEmpty = $("journalEmpty");
+
+  function setState(node, msg, ok) {
+    node.textContent = msg;
+    node.classList.toggle("ok", !!ok);
+  }
+
+  function lockForms(msg) {
+    [$("pickSave"), $("noteSave")].forEach(function (b) { b.disabled = true; });
+    setState(pickState, msg, false);
+    setState(noteState, msg, false);
+  }
+
+  var DATE_FMT = new Intl.DateTimeFormat("ru-RU", { day: "numeric", month: "short" });
+
+  function renderJournal(entries) {
+    journalList.textContent = "";
+    var list = (entries || []).slice().sort(function (a, b) {
+      return String(b.at || "").localeCompare(String(a.at || ""));
+    });
+    journalEmpty.hidden = list.length > 0;
+    list.forEach(function (e) {
+      var li = el("li");
+      var t = el("time");
+      var d = new Date(e.at);
+      t.dateTime = e.at || "";
+      t.textContent = isNaN(d) ? "—" : DATE_FMT.format(d);
+      li.appendChild(t);
+      li.appendChild(el("span", null, e.text || ""));
+      journalList.appendChild(li);
+    });
+  }
+  renderJournal([]);
+
+  /* ================= db wiring ================= */
+
+  var db = null;
+  var picksDoc = null;
+  var journalDoc = null;
+  var journalCache = [];
+  var writable = true;
+  var dirty = false;
+
+  ["pickChampion", "pickWest", "pickEast", "pickScorer", "pickHorse"].forEach(function (id) {
+    $(id).addEventListener("input", function () {
+      dirty = true;
+      setState(pickState, "не сохранено", false);
+    });
+  });
+
+  function applyPicks(data) {
+    if (dirty) return; // never clobber what is being typed right now
+    var map = { pickChampion: "champion", pickWest: "west", pickEast: "east", pickScorer: "scorer", pickHorse: "darkhorse" };
+    Object.keys(map).forEach(function (id) {
+      var v = data && typeof data[map[id]] === "string" ? data[map[id]] : "";
+      var node = $(id);
+      if (node.tagName === "SELECT") {
+        var has = Array.prototype.some.call(node.options, function (o) { return o.value === v; });
+        node.value = has ? v : "";
+      } else {
+        node.value = v;
+      }
+    });
+    if (data && data.updatedAt) {
+      var d = new Date(data.updatedAt);
+      $("myPicksWho").textContent = isNaN(d)
+        ? "Можно менять до старта плей-офф"
+        : "Обновлён " + DATE_FMT.format(d) + " · можно менять до плей-офф";
+    }
+  }
+
+  function markUnavailable() {
+    lockForms("сохранение недоступно в этом просмотре");
+  }
+
+  if (!window.claude || typeof window.claude.use !== "function") {
+    markUnavailable();
+  } else {
+    setState(pickState, "подключение…", false);
+    setState(noteState, "подключение…", false);
+
+    window.claude.use("db").then(function (store) {
+      if (!store) { markUnavailable(); return; }
+      db = store;
+      picksDoc = db.doc("season/picks");
+      journalDoc = db.doc("season/journal");
+
+      setState(pickState, "готово", false);
+      setState(noteState, "готово", false);
+
+      picksDoc.onSnapshot(function (snap) {
+        applyPicks(snap.exists ? snap.data() : null);
+      }, function () {
+        markUnavailable();
+      });
+
+      journalDoc.onSnapshot(function (snap) {
+        var d = snap.exists ? snap.data() : null;
+        journalCache = d && Array.isArray(d.entries) ? d.entries : [];
+        renderJournal(journalCache);
+      }, function () {
+        setState(noteState, "дневник недоступен", false);
+        $("noteSave").disabled = true;
+      });
+    }).catch(function () {
+      markUnavailable();
+    });
+  }
+
+  function handleWriteError(node, err) {
+    var code = err && err.code;
+    if (code === "invalid_argument" || code === "not_granted" || code === "revoked" ||
+        code === "capability_disabled" || code === "capability_removed") {
+      writable = false;
+      lockForms("только чтение");
+      return;
+    }
+    if (code === "resource_exhausted" || code === "quota_exceeded") {
+      setState(node, "лимит хранилища — попробуй позже", false);
+      return;
+    }
+    setState(node, "не сохранилось, попробуй ещё раз", false);
+  }
+
+  pickForm.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    if (!picksDoc || !writable) return;
+    var btn = $("pickSave");
+    btn.disabled = true;
+    setState(pickState, "сохраняю…", false);
+    picksDoc.set({
+      champion: $("pickChampion").value,
+      west: $("pickWest").value,
+      east: $("pickEast").value,
+      scorer: $("pickScorer").value.trim(),
+      darkhorse: $("pickHorse").value,
+      updatedAt: new Date().toISOString()
+    }).then(function () {
+      dirty = false;
+      setState(pickState, "сохранено", true);
+    }).catch(function (e) {
+      handleWriteError(pickState, e);
+    }).then(function () {
+      if (writable) btn.disabled = false;
+    });
+  });
+
+  noteForm.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    if (!journalDoc || !writable) return;
+    var text = $("noteText").value.trim();
+    if (!text) { setState(noteState, "пустая запись", false); return; }
+    var btn = $("noteSave");
+    btn.disabled = true;
+    setState(noteState, "сохраняю…", false);
+    var next = journalCache.concat([{
+      id: "n" + Date.now().toString(36),
+      at: new Date().toISOString(),
+      text: text.slice(0, 600)
+    }]).slice(-120);
+    journalDoc.set({ entries: next }).then(function () {
+      journalCache = next;
+      renderJournal(next);
+      $("noteText").value = "";
+      setState(noteState, "добавлено", true);
+    }).catch(function (e) {
+      handleWriteError(noteState, e);
+    }).then(function () {
+      if (writable) btn.disabled = false;
+    });
+  });
+}());
+</script>

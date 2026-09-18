@@ -1,0 +1,5 @@
+{
+  "public_url": "https://claude.ai/artifact/MJCQF2eSyLMjWJQaTvt9pm",
+  "page": "publish/khl-tracker.html",
+  "note": "Публичная версия. Страница пересобирается командой `python run.py --no-serve` и публикуется по этому адресу. Код, стили и логотипы опубликованы рядом со страницей отдельными файлами (site_pages.web_asset_map) — их нужно переопубликовать только если менялись web/app.css, web/app.js или логотипы."
+}
