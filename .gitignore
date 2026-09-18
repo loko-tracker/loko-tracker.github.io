@@ -1,6 +1,7 @@
 # Секреты — НИКОГДА не должны попасть в историю.
 # Здесь лежит отпечаток пароля и ключ подписи сессий.
 data/auth.json
+data/web_key.json
 
 # Скачивается и пересобирается само при запуске refresh.bat,
 # поэтому в истории хранить незачем.
@@ -8,6 +9,11 @@ data/season.json
 data/site_data.json
 web/vendor/
 web/logos/
+
+# Собирается из web/shell.html при каждом запуске
+web/index.html
+web/logos.css
+publish/
 
 # Служебное
 __pycache__/

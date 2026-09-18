@@ -103,8 +103,13 @@ def check_password(login: str, password: str) -> bool:
         "sha256", password.encode("utf-8"), salt, data.get("rounds", PBKDF2_ROUNDS)
     )
     # Оба сравнения выполняем всегда, чтобы время ответа не выдавало,
-    # что именно не сошлось — логин или пароль.
-    login_ok = hmac.compare_digest(login.encode("utf-8"), data["login"].encode("utf-8"))
+    # что именно не сошлось — логин или пароль. Регистр логина не важен:
+    # так же устроен вход в публичную версию, и телефонная клавиатура,
+    # поставившая заглавную букву, не должна мешать войти.
+    login_ok = hmac.compare_digest(
+        login.strip().lower().encode("utf-8"),
+        data["login"].strip().lower().encode("utf-8"),
+    )
     password_ok = hmac.compare_digest(digest, expected)
     return login_ok and password_ok
 

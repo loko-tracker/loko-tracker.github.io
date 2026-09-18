@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-09-18T00:47:32",
+ "updated_at": "2026-09-19T00:45:09",
  "manual": [],
  "auto": [
   {
@@ -11,7 +11,9 @@
    "url": "https://www.sports.ru/hockey/1117373680-dinamo-pomestilo-tertyshnogo-v-spisok-travmirovannyx-do-serediny-oktya.html",
    "term": "до середины октября",
    "confidence": "высокая",
-   "found_at": "2026-09-18T00:47:14"
+   "found_at": "2026-09-18T00:47:14",
+   "first_seen": "2026-09-18T00:47:14",
+   "last_seen": "2026-09-18T00:47:14"
   }
  ]
 }

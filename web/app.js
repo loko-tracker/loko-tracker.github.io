@@ -1,20 +1,26 @@
 /* ===========================================================================
-   Трекер сезона КХЛ — логика страницы.
+   Трекер сезона КХЛ — логика страницы. Один файл на обе версии сайта.
 
-   Данные приходят одним файлом /data.json, который готовит build.py.
-   Здесь: отображение, фильтры, графики, анимации и правка лазарета.
+   Локальная версия (refresh.bat): данные берутся с сервера — /data.json,
+   отметки о травмах сохраняются через /api/injuries.
 
-   Стек: GSAP + ScrollTrigger (движение), ECharts (графики),
-   Lenis (инерционный скролл), Alpine (состояние фильтров и формы).
-   Все библиотеки лежат локально в web/vendor — сайт работает без сети.
+   Публичная версия (ссылка): данные зашифрованы и лежат прямо в странице
+   (<script id="vault">). Логин и пароль превращаются в ключ PBKDF2-SHA256,
+   им расшифровывается AES-GCM, затем распаковывается gzip. Никуда по сети
+   ни пароль, ни ключ не уходят.
+
+   Стек: GSAP + ScrollTrigger (движение), ECharts (графики), Lenis (скролл).
+   Без Alpine намеренно: он вычисляет выражения через eval, а политика
+   безопасности публичной страницы может это запрещать.
    =========================================================================== */
 
 (function () {
   "use strict";
 
-  var APP = { data: null, alpine: null, charts: {} };
+  var APP = { data: null, charts: {} };
   var $ = function (id) { return document.getElementById(id); };
 
+  var MODE = $("vault") ? "web" : "local";
   var HAS_GSAP = typeof window.gsap !== "undefined";
   var HAS_ECHARTS = typeof window.echarts !== "undefined";
   var REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -63,6 +69,10 @@
     var d = parseDate(iso);
     return d ? WEEKDAYS[d.getDay()] : "";
   }
+  function monthKey(iso) {
+    var d = parseDate(iso);
+    return d ? d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") : "";
+  }
   function pct(value) {
     var n = Number(value) || 0;
     if (n >= 99.95) return "100";
@@ -78,6 +88,9 @@
   }
   function cssVar(name) {
     return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+  function byName(a, b) {
+    return String(a.name).localeCompare(String(b.name), "ru");
   }
 
   var RAMP = [];
@@ -95,10 +108,13 @@
     return steps[0];
   }
 
+  // Логотип — пустой блок с классом logo-<id>. Сама картинка описана один
+  // раз в стилях: локально ссылкой на файл, в публичной версии встроенной.
   function crest(teamId, size) {
-    if (!teamId) return "";
-    return '<img class="' + (size === "big" ? "crest" : "crest-sm") +
-      '" src="/logos/' + encodeURIComponent(teamId) + '.png" alt="" loading="lazy">';
+    var id = String(teamId || "").replace(/[^0-9]/g, "");
+    if (!id) return "";
+    return '<span class="' + (size === "big" ? "crest" : "crest-sm") +
+      " logo-" + id + '" aria-hidden="true"></span>';
   }
 
   /* ============================== подсказка ============================== */
@@ -142,7 +158,7 @@
     if (REDUCED) return;
     var spec = $("spec");
     if (!spec) return;
-    var raf = null, x = window.innerWidth / 2, y = window.innerHeight * 0.4;
+    var raf = null, x = 0, y = 0;
     window.addEventListener("pointermove", function (event) {
       x = event.clientX; y = event.clientY;
       if (raf) return;
@@ -175,20 +191,17 @@
 
   /* Анимировать имеет смысл только когда браузер выдаёт кадры. На скрытой
      или фоновой вкладке requestAnimationFrame не вызывается вовсе, твины
-     GSAP просто стоят — а страницу в фоновой вкладке как раз и открывает
-     refresh.bat. Поэтому: покой = готовое состояние, анимация поверх. */
+     GSAP просто стоят. Поэтому: покой = готовое состояние, анимация поверх. */
   function canAnimate() {
     return HAS_GSAP && !REDUCED && !document.hidden;
   }
 
-  if (canAnimate()) {
-    // anim-on включает плавные переходы, reveal-armed прячет блоки
-    // до появления. Классы разные: первый остаётся, второй снимается.
-    document.body.classList.add("anim-on", "reveal-armed");
+  function armAnimations() {
+    if (canAnimate()) document.body.classList.add("anim-on", "reveal-armed");
   }
 
-  // Если вкладка была скрыта при загрузке, а потом её открыли — снимаем
-  // подготовку, чтобы блоки не остались спрятанными навсегда.
+  // Вкладку открыли уже после загрузки — снимаем подготовку, чтобы блоки
+  // не остались спрятанными навсегда.
   document.addEventListener("visibilitychange", function () {
     if (!document.hidden) unarmReveals();
   });
@@ -209,20 +222,19 @@
       opacity: 1, y: 0, duration: 0.7, ease: "power2.out", stagger: 0.07,
       scrollTrigger: { trigger: container, start: "top 92%", once: true }
     });
+    // Страховка: что бы ни случилось с анимацией, через 2.5 с всё видно.
+    setTimeout(function () {
+      items.forEach(function (node) {
+        if (Number(getComputedStyle(node).opacity) < 0.05) {
+          node.style.opacity = 1;
+          node.style.transform = "none";
+        }
+      });
+    }, 2500);
   }
 
-  // Страховка: что бы ни случилось с анимацией, через 2.5 с всё видно.
-  setTimeout(function () {
-    document.querySelectorAll("[data-reveal]").forEach(function (node) {
-      if (Number(getComputedStyle(node).opacity) < 0.05) {
-        node.style.opacity = 1;
-        node.style.transform = "none";
-      }
-    });
-  }, 2500);
-
-  // Итоговое значение ставится сразу, и только потом отматывается к нулю
-  // и набегает обратно. Если кадров не будет, на экране уже верное число.
+  // Итоговое значение ставится сразу и только потом набегает от нуля.
+  // Если кадров не будет, на экране уже верное число.
   function countUp(node, target, suffix) {
     var value = Number(target) || 0;
     node.textContent = value + (suffix || "");
@@ -247,7 +259,7 @@
     if (start && end) {
       var total = end - start, done = Math.min(Math.max(Date.now() - start, 0), total);
       var share = total ? (done / total) * 100 : 0;
-      // Через таймер, а не кадр отрисовки: на фоновой вкладке кадров нет.
+      // Таймер, а не кадр отрисовки: на фоновой вкладке кадров нет.
       setTimeout(function () { $("railFill").style.width = share.toFixed(2) + "%"; }, 30);
       $("heroProgress").textContent = "пройдено " + share.toFixed(0) + "%";
     }
@@ -262,19 +274,18 @@
     pill.style.transform = "translateX(" + link.offsetLeft + "px)";
   }
 
-  /* =============================== обратный отсчёт =============================== */
+  /* =========================== обратный отсчёт =========================== */
 
   var countdownTimer = null;
 
   function startCountdown() {
-    var upcoming = (APP.data.games || []).filter(function (g) { return g.state !== "finished"; });
-    var next = upcoming[0];
+    var next = (APP.data.games || []).filter(function (g) { return g.state !== "finished"; })[0];
     if (!next) {
       $("cdGame").textContent = "Матчей впереди нет.";
       return;
     }
     $("cdGame").innerHTML = crest(next.home_id) + esc(next.home) +
-      ' <span style="color:var(--muted)">—</span> ' + esc(next.away) +
+      ' <span style="color:var(--muted)">—</span> ' + crest(next.away_id) + esc(next.away) +
       ' <span style="color:var(--muted)">· ' + esc(fmtDayFull(next.start_at)) +
       ", " + esc(fmtTime(next.start_at)) + "</span>";
 
@@ -286,9 +297,8 @@
       var s = Math.floor(left / 1000);
       var parts = [Math.floor(s / 86400), Math.floor(s % 86400 / 3600), Math.floor(s % 3600 / 60), s % 60];
       ["cdD","cdH","cdM","cdS"].forEach(function (id, index) {
-        var node = $(id);
         var value = index ? String(parts[index]).padStart(2, "0") : String(parts[index]);
-        if (node.textContent !== value) node.textContent = value;
+        if ($(id).textContent !== value) $(id).textContent = value;
       });
       if (left === 0 && countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
     }
@@ -326,10 +336,10 @@
     ];
     $("statRow").innerHTML = tiles.map(function (t, i) {
       return '<div class="stat"><div class="k">' + esc(t.k) + '</div>' +
-             '<div class="v" id="tile' + i + '">' + (t.num ? "0" : esc(t.v)) + '</div>' +
+             '<div class="v" id="tile' + i + '">' + esc(t.v) + '</div>' +
              '<div class="sub">' + esc(t.sub) + '</div></div>';
     }).join("");
-    tiles.forEach(function (t, i) { if (t.num) countUp($("tile" + i), Number(t.v) || 0); });
+    tiles.forEach(function (t, i) { if (t.num) countUp($("tile" + i), t.v); });
 
     $("oddsNote").textContent =
       "Доля из " + odds.sims.toLocaleString("ru-RU") + " симуляций остатка сезона (" +
@@ -373,28 +383,32 @@
     // from() прячет элементы на старте, поэтому без кадров герой остался бы
     // невидимым. Нет анимации — нет и вступления, блок и так на месте.
     if (!canAnimate()) return;
-    var timeline = window.gsap.timeline();
-    timeline.from(".hero .eyebrow", { opacity: 0, y: 10, duration: 0.5, ease: "power2.out" })
+    window.gsap.timeline()
+      .from(".hero .eyebrow", { opacity: 0, y: 10, duration: 0.5, ease: "power2.out" })
       .from(".hero-title", { opacity: 0, y: 26, duration: 0.8, ease: "power3.out" }, "-=0.25")
       .from(".countdown", { opacity: 0, y: 16, duration: 0.6, ease: "power2.out" }, "-=0.45")
       .from(".hero-side", { opacity: 0, x: 24, duration: 0.7, ease: "power3.out" }, "-=0.55")
       .from(".stat", { opacity: 0, y: 18, duration: 0.55, ease: "power2.out", stagger: 0.06 }, "-=0.35");
   }
 
-  function gameRow(game) {
-    var finished = game.state === "finished";
+  function periodsText(game) {
     var periods = game.periods || {};
     var parts = ["p1","p2","p3"].map(function (k) { return periods[k]; }).filter(Boolean);
     if (periods.ot) parts.push("ОТ " + periods.ot);
     if (periods.so) parts.push("Б " + periods.so);
+    return parts.join(" · ");
+  }
 
+  function gameRow(game) {
+    var finished = game.state === "finished";
+    var periods = periodsText(game);
     return '<div class="game">' +
       '<div class="when">' + esc(fmtDay(game.start_at)) + '<br>' + esc(fmtTime(game.start_at)) + '</div>' +
       '<div class="who">' + crest(game.home_id) + esc(game.home) +
         ' <span class="vs">—</span> ' + crest(game.away_id) + esc(game.away) + '</div>' +
       (finished ? '<div class="sc">' + esc(game.score || "") + '</div>'
                 : '<div class="sc pending">' + esc(fmtWeekday(game.start_at)) + '</div>') +
-      (finished && parts.length ? '<div class="per">' + esc(parts.join(" · ")) + '</div>' : '') +
+      (finished && periods ? '<div class="per">' + esc(periods) + '</div>' : '') +
       '</div>';
   }
 
@@ -413,7 +427,6 @@
       '</div>';
     }).join("");
 
-    // Полосы наливаются после вставки: анимируется свойство --fill.
     // Через setTimeout, а не requestAnimationFrame: на скрытой вкладке
     // кадров нет, и полосы остались бы пустыми навсегда.
     setTimeout(function () {
@@ -427,18 +440,13 @@
 
   /* =============================== графики =============================== */
 
-  function chartBase() {
+  function tooltipBase() {
     return {
-      backgroundColor: "transparent",
-      textStyle: { fontFamily: '"IBM Plex Sans", system-ui, sans-serif', color: cssVar("--ink-2") },
-      grid: { left: 8, right: 22, top: 26, bottom: 8, containLabel: true },
-      tooltip: {
-        backgroundColor: "#0b111a",
-        borderColor: cssVar("--rule-strong"),
-        borderWidth: 1,
-        textStyle: { color: cssVar("--ink"), fontSize: 12.5 },
-        extraCssText: "border-radius:9px;box-shadow:0 16px 40px -14px rgba(0,0,0,.95);"
-      }
+      backgroundColor: "#0b111a",
+      borderColor: cssVar("--rule-strong"),
+      borderWidth: 1,
+      textStyle: { color: cssVar("--ink"), fontSize: 12.5 },
+      extraCssText: "border-radius:9px;box-shadow:0 16px 40px -14px rgba(0,0,0,.95);"
     };
   }
 
@@ -457,6 +465,9 @@
     if (!host) return null;
     var chart = APP.charts[id] || window.echarts.init(host, null, { renderer: "canvas" });
     APP.charts[id] = chart;
+    option.backgroundColor = "transparent";
+    option.textStyle = { fontFamily: '"IBM Plex Sans", system-ui, sans-serif', color: cssVar("--ink-2") };
+    option.animationDuration = REDUCED ? 0 : (option.animationDuration || 900);
     chart.setOption(option, true);
     chart.resize();
     return chart;
@@ -465,17 +476,11 @@
   // Прогноз очков: точка — набрано сейчас, полоса — вероятный интервал,
   // засечка — средний прогноз. Одна шкала (очки) на все три серии.
   function chartProjection() {
-    if (!HAS_ECHARTS) return;
     var rows = (APP.data.odds.teams || []).slice().sort(function (a, b) {
       return a.proj_pts - b.proj_pts;
     });
-    var names = rows.map(function (r) { return r.name; });
-    var base = chartBase();
-
     makeChart("chartProjection", {
-      backgroundColor: base.backgroundColor,
-      textStyle: base.textStyle,
-      tooltip: Object.assign({}, base.tooltip, {
+      tooltip: Object.assign(tooltipBase(), {
         trigger: "axis",
         axisPointer: { type: "shadow", shadowStyle: { color: "rgba(79,216,255,.06)" } },
         formatter: function (items) {
@@ -494,7 +499,7 @@
       },
       grid: { left: 8, right: 30, top: 34, bottom: 6, containLabel: true },
       xAxis: Object.assign({ type: "value", name: "очки", nameTextStyle: { color: cssVar("--muted"), fontSize: 10 } }, axisStyle()),
-      yAxis: Object.assign({ type: "category", data: names }, axisStyle(), {
+      yAxis: Object.assign({ type: "category", data: rows.map(function (r) { return r.name; }) }, axisStyle(), {
         axisLabel: { color: cssVar("--ink-2"), fontSize: 11.5, fontFamily: "Oswald, sans-serif" },
         splitLine: { show: false }
       }),
@@ -535,7 +540,6 @@
           z: 4
         }
       ],
-      animationDuration: REDUCED ? 0 : 900,
       animationEasing: "cubicOut"
     });
   }
@@ -543,14 +547,9 @@
   // Атака против обороны. Обе оси в голах за матч — это облако точек,
   // а не совмещение двух разных шкал. Цвет кодирует шанс на плей-офф.
   function chartScatter() {
-    if (!HAS_ECHARTS) return;
     var rows = APP.data.odds.teams || [];
-    var base = chartBase();
-
     makeChart("chartScatter", {
-      backgroundColor: base.backgroundColor,
-      textStyle: base.textStyle,
-      tooltip: Object.assign({}, base.tooltip, {
+      tooltip: Object.assign(tooltipBase(), {
         formatter: function (item) {
           var row = rows[item.dataIndex];
           return "<b style='font-family:Oswald,sans-serif;font-size:14px'>" + esc(row.name) + "</b>" +
@@ -580,22 +579,16 @@
           formatter: function (params) { return params.value[3]; }
         },
         data: rows.map(function (r) { return [r.attack, r.defence, r.playoff_pct, r.name]; })
-      }],
-      animationDuration: REDUCED ? 0 : 900
+      }]
     });
   }
 
   function chartOdds() {
-    if (!HAS_ECHARTS) return;
     var rows = (APP.data.odds.teams || []).slice().sort(function (a, b) {
       return a.playoff_pct - b.playoff_pct;
     });
-    var base = chartBase();
-
     makeChart("chartOdds", {
-      backgroundColor: base.backgroundColor,
-      textStyle: base.textStyle,
-      tooltip: Object.assign({}, base.tooltip, {
+      tooltip: Object.assign(tooltipBase(), {
         formatter: function (item) {
           var row = rows[item.dataIndex];
           return "<b style='font-family:Oswald,sans-serif;font-size:14px'>" + esc(row.name) + "</b>" +
@@ -623,7 +616,7 @@
         },
         data: rows.map(function (r) { return r.playoff_pct; })
       }],
-      animationDuration: REDUCED ? 0 : 1000,
+      animationDuration: 1000,
       animationEasing: "cubicOut"
     });
   }
@@ -633,11 +626,9 @@
   function renderTable() {
     ["west","east"].forEach(function (key) {
       var rows = APP.data.standings[key] || [];
-      var host = $(key === "west" ? "tableWest" : "tableEast");
       var head = "<thead><tr><th class='l'>#</th><th class='l'>Клуб</th>" +
         "<th>И</th><th>В</th><th>ВО</th><th>ВБ</th><th>ПБ</th><th>ПО</th><th>П</th>" +
         "<th>Ш</th><th>О</th><th>П-О</th></tr></thead>";
-
       var body = rows.map(function (r) {
         return "<tr" + (r.position === 8 ? " class='cut'" : "") + ">" +
           "<td class='l dim'>" + r.position + "</td>" +
@@ -649,8 +640,7 @@
           "<td style='color:" + oddsColor(r.playoff_pct) + ";font-weight:600'>" + pct(r.playoff_pct) + "%</td>" +
         "</tr>";
       }).join("");
-
-      host.innerHTML = head + "<tbody>" + body + "</tbody>";
+      $(key === "west" ? "tableWest" : "tableEast").innerHTML = head + "<tbody>" + body + "</tbody>";
     });
   }
 
@@ -659,8 +649,8 @@
   var oddsSort = { field: "playoff_pct", asc: false };
 
   var ODDS_COLS = [
-    { field: "name",            label: "Клуб",   cls: "l", text: true, logo: true },
-    { field: "conference",      label: "Конф.",  cls: "l", text: true, dim: true },
+    { field: "name",            label: "Клуб",   cls: "l", logo: true },
+    { field: "conference",      label: "Конф.",  cls: "l", dim: true },
     { field: "gp",              label: "И" },
     { field: "pts",             label: "О сейчас" },
     { field: "proj_pts",        label: "Прогноз О", decimals: 1, strong: true },
@@ -671,10 +661,42 @@
     { field: "defence",         label: "Оборона", decimals: 2, dim: true }
   ];
 
+  function sortRows(rows, sort) {
+    var field = sort.field, asc = sort.asc;
+    return rows.sort(function (a, b) {
+      var x = a[field], y = b[field];
+      if (typeof x === "string" || typeof y === "string") {
+        var cmp = String(x || "").localeCompare(String(y || ""), "ru");
+        return asc ? cmp : -cmp;
+      }
+      var diff = (Number(x) || 0) - (Number(y) || 0);
+      if (diff === 0 && a.pts !== undefined) diff = (Number(a.pts) || 0) - (Number(b.pts) || 0);
+      return asc ? diff : -diff;
+    });
+  }
+
+  function sortableHead(columns, sort, leading) {
+    return "<thead><tr>" + (leading || "") + columns.map(function (c) {
+      var sorted = c.field === sort.field ? " sorted" + (sort.asc ? " asc" : "") : "";
+      return "<th class='" + (c.cls || "") + sorted + "' data-field='" + c.field + "'>" + esc(c.label) + "</th>";
+    }).join("") + "</tr></thead>";
+  }
+
+  function wireSort(table, sort, rerender) {
+    table.querySelectorAll("th[data-field]").forEach(function (th) {
+      th.addEventListener("click", function () {
+        var next = th.getAttribute("data-field");
+        if (sort.field === next) sort.asc = !sort.asc;
+        else { sort.field = next; sort.asc = false; }
+        rerender();
+      });
+    });
+  }
+
   function renderOdds() {
     var odds = APP.data.odds;
     $("oddsMethod").textContent =
-      "Посчитано локально: " + odds.sims.toLocaleString("ru-RU") + " прогонов остатка календаря (" +
+      "Посчитано: " + odds.sims.toLocaleString("ru-RU") + " прогонов остатка календаря (" +
       odds.games_remaining + " матчей). Средняя результативность лиги — " +
       dec(odds.league_avg_goals, 2) + " гола за матч.";
     $("priorGames").textContent = odds.prior_games;
@@ -682,22 +704,14 @@
     $("homeAdv").textContent = "×" + dec(odds.home_advantage, 3);
     $("simCount").textContent = odds.sims.toLocaleString("ru-RU");
 
-    var rows = (odds.teams || []).slice();
-    var field = oddsSort.field, asc = oddsSort.asc;
-    rows.sort(function (a, b) {
-      var x = a[field], y = b[field];
-      if (typeof x === "string" || typeof y === "string") {
-        var cmp = String(x || "").localeCompare(String(y || ""), "ru");
-        return asc ? cmp : -cmp;
-      }
-      return asc ? (x - y) : (y - x);
-    });
+    renderOddsTable();
+    chartScatter();
+    chartOdds();
+    revealIn($("view-odds"));
+  }
 
-    var head = "<thead><tr>" + ODDS_COLS.map(function (c) {
-      var sorted = c.field === field ? " sorted" + (asc ? " asc" : "") : "";
-      return "<th class='" + (c.cls || "") + sorted + "' data-field='" + c.field + "'>" + esc(c.label) + "</th>";
-    }).join("") + "</tr></thead>";
-
+  function renderOddsTable() {
+    var rows = sortRows((APP.data.odds.teams || []).slice(), oddsSort);
     var body = rows.map(function (r) {
       return "<tr>" + ODDS_COLS.map(function (c) {
         var value = r[c.field], style = "";
@@ -708,41 +722,26 @@
           value = dec(value, c.decimals);
         }
         var cls = [c.cls || "", c.dim ? "dim" : "", c.strong ? "strong" : ""].join(" ").trim();
-        var inner = (c.logo ? crest(r.team_id) : "") + esc(value);
-        return "<td class='" + cls + "'" + style + ">" + inner + "</td>";
+        return "<td class='" + cls + "'" + style + ">" + (c.logo ? crest(r.team_id) : "") + esc(value) + "</td>";
       }).join("") + "</tr>";
     }).join("");
 
-    $("oddsTable").innerHTML = head + "<tbody>" + body + "</tbody>";
-    $("oddsTable").querySelectorAll("th[data-field]").forEach(function (th) {
-      th.addEventListener("click", function () {
-        var next = th.getAttribute("data-field");
-        if (oddsSort.field === next) oddsSort.asc = !oddsSort.asc;
-        else { oddsSort.field = next; oddsSort.asc = false; }
-        renderOdds();
-      });
-    });
-
-    chartScatter();
-    chartOdds();
-    revealIn($("view-odds"));
+    $("oddsTable").innerHTML = sortableHead(ODDS_COLS, oddsSort) + "<tbody>" + body + "</tbody>";
+    wireSort($("oddsTable"), oddsSort, renderOddsTable);
   }
 
   /* ================================ матчи ================================ */
 
   function renderGames() {
-    var filters = APP.alpine ? APP.alpine.games : { team: "", state: "all", month: "" };
+    var team = $("gameTeam").value;
+    var state = $("gameState").value;
+    var month = $("gameMonth").value;
 
     var list = (APP.data.games || []).filter(function (g) {
-      if (filters.team && String(g.home_id) !== filters.team && String(g.away_id) !== filters.team) return false;
-      if (filters.state === "finished" && g.state !== "finished") return false;
-      if (filters.state === "upcoming" && g.state === "finished") return false;
-      if (filters.month) {
-        var d = parseDate(g.start_at);
-        if (!d) return false;
-        var key = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
-        if (key !== filters.month) return false;
-      }
+      if (team && String(g.home_id) !== team && String(g.away_id) !== team) return false;
+      if (state === "finished" && g.state !== "finished") return false;
+      if (state === "upcoming" && g.state === "finished") return false;
+      if (month && monthKey(g.start_at) !== month) return false;
       return true;
     });
 
@@ -753,10 +752,6 @@
       "<th class='l'>По периодам</th><th class='l'>Арена</th></tr></thead>";
 
     var body = list.map(function (g) {
-      var periods = g.periods || {};
-      var parts = ["p1","p2","p3"].map(function (k) { return periods[k]; }).filter(Boolean);
-      if (periods.ot) parts.push("ОТ " + periods.ot);
-      if (periods.so) parts.push("Б " + periods.so);
       var finished = g.state === "finished";
       return "<tr>" +
         "<td class='l dim'>" + esc(fmtDayFull(g.start_at)) + ", " + esc(fmtWeekday(g.start_at)) + "</td>" +
@@ -764,7 +759,7 @@
         "<td class='l'>" + crest(g.home_id) + esc(g.home) + "</td>" +
         "<td class='strong'>" + (finished ? esc(g.score || "") : "<span class='pill dim'>скоро</span>") + "</td>" +
         "<td class='l'>" + crest(g.away_id) + esc(g.away) + "</td>" +
-        "<td class='l dim'>" + esc(parts.join(" · ")) + "</td>" +
+        "<td class='l dim'>" + esc(periodsText(g)) + "</td>" +
         "<td class='l dim'>" + esc(g.location || "") + "</td>" +
       "</tr>";
     }).join("");
@@ -778,9 +773,9 @@
   var playerSort = { field: "pts", asc: false };
 
   var PLAYER_COLS = [
-    { field: "name",       label: "Игрок", cls: "l", text: true },
-    { field: "team",       label: "Клуб",  cls: "l", text: true, dim: true, logo: true },
-    { field: "role",       label: "Поз.", cls: "l", text: true, dim: true, short: true },
+    { field: "name",       label: "Игрок", cls: "l" },
+    { field: "team",       label: "Клуб",  cls: "l", dim: true, logo: true },
+    { field: "role",       label: "Поз.", cls: "l", dim: true, short: true },
     { field: "gp",         label: "И" },
     { field: "g",          label: "Г" },
     { field: "a",          label: "П" },
@@ -794,36 +789,20 @@
   var ROLE_SHORT = { "нападающий": "нап", "защитник": "защ", "вратарь": "вр" };
 
   function renderPlayers() {
-    var filters = APP.alpine ? APP.alpine.players : { team: "", role: "", query: "" };
-    var query = String(filters.query || "").trim().toLowerCase();
+    var team = $("playerTeam").value;
+    var role = $("playerRole").value;
+    var query = $("playerSearch").value.trim().toLowerCase();
 
     var list = (APP.data.players || []).filter(function (p) {
-      if (filters.team && String(p.team_id) !== filters.team) return false;
-      if (filters.role && p.role_key !== filters.role) return false;
+      if (team && String(p.team_id) !== team) return false;
+      if (role && p.role_key !== role) return false;
       if (query && String(p.name || "").toLowerCase().indexOf(query) === -1) return false;
       return true;
     });
-
-    var field = playerSort.field, asc = playerSort.asc;
-    list.sort(function (a, b) {
-      var x = a[field], y = b[field];
-      if (typeof x === "string" || typeof y === "string") {
-        var cmp = String(x || "").localeCompare(String(y || ""), "ru");
-        return asc ? cmp : -cmp;
-      }
-      var diff = (Number(x) || 0) - (Number(y) || 0);
-      if (diff === 0) diff = (Number(a.pts) || 0) - (Number(b.pts) || 0);
-      return asc ? diff : -diff;
-    });
+    sortRows(list, playerSort);
 
     var shown = list.slice(0, 400);
-    $("playersCount").textContent = list.length + " игр." +
-      (list.length > 400 ? " (показаны первые 400)" : "");
-
-    var head = "<thead><tr><th class='l'>#</th>" + PLAYER_COLS.map(function (c) {
-      var sorted = c.field === field ? " sorted" + (asc ? " asc" : "") : "";
-      return "<th class='" + (c.cls || "") + sorted + "' data-field='" + c.field + "'>" + esc(c.label) + "</th>";
-    }).join("") + "</tr></thead>";
+    $("playersCount").textContent = list.length + " игр." + (list.length > 400 ? " (показаны первые 400)" : "");
 
     var body = shown.map(function (p, index) {
       var cells = PLAYER_COLS.map(function (c) {
@@ -837,17 +816,9 @@
       return "<tr><td class='l dim'>" + (index + 1) + "</td>" + cells + "</tr>";
     }).join("");
 
-    $("playersTable").innerHTML = head + "<tbody>" +
-      (body || "<tr><td class='l dim' colspan='12'>Никого не нашлось.</td></tr>") + "</tbody>";
-
-    $("playersTable").querySelectorAll("th[data-field]").forEach(function (th) {
-      th.addEventListener("click", function () {
-        var next = th.getAttribute("data-field");
-        if (playerSort.field === next) playerSort.asc = !playerSort.asc;
-        else { playerSort.field = next; playerSort.asc = false; }
-        renderPlayers();
-      });
-    });
+    $("playersTable").innerHTML = sortableHead(PLAYER_COLS, playerSort, "<th class='l'>#</th>") +
+      "<tbody>" + (body || "<tr><td class='l dim' colspan='12'>Никого не нашлось.</td></tr>") + "</tbody>";
+    wireSort($("playersTable"), playerSort, renderPlayers);
   }
 
   /* =============================== лазарет =============================== */
@@ -857,11 +828,13 @@
   }
 
   function renderInjuries() {
+    var editable = MODE === "local";
     var manual = manualList();
     var auto = (APP.data.injuries || []).filter(function (i) { return i.source === "auto"; });
 
     var manualHead = "<thead><tr><th class='l'>Игрок</th><th class='l'>Клуб</th>" +
-      "<th class='l'>Статус</th><th class='l'>До</th><th class='l'>Заметка</th><th></th></tr></thead>";
+      "<th class='l'>Статус</th><th class='l'>До</th><th class='l'>Заметка</th>" +
+      (editable ? "<th></th>" : "") + "</tr></thead>";
     var manualBody = manual.map(function (item, index) {
       return "<tr>" +
         "<td class='l'>" + esc(item.player) + "</td>" +
@@ -869,23 +842,26 @@
         "<td class='l'><span class='pill hot'>" + esc(item.status || "травма") + "</span></td>" +
         "<td class='l dim'>" + esc(item.until || "—") + "</td>" +
         "<td class='l dim'>" + esc(item.note || "") + "</td>" +
-        "<td><button class='link' data-remove='" + index + "'>убрать</button></td>" +
+        (editable ? "<td><button class='link' data-remove='" + index + "'>убрать</button></td>" : "") +
       "</tr>";
     }).join("");
+    var emptyManual = editable ? "Пока пусто — добавь первого через форму выше." : "Отметок пока нет.";
     $("manualTable").innerHTML = manualHead + "<tbody>" +
-      (manualBody || "<tr><td class='l dim' colspan='6'>Пока пусто — добавь первого через форму выше.</td></tr>") +
-      "</tbody>";
+      (manualBody || "<tr><td class='l dim' colspan='6'>" + emptyManual + "</td></tr>") + "</tbody>";
 
-    $("manualTable").querySelectorAll("[data-remove]").forEach(function (button) {
-      button.addEventListener("click", function () {
-        var next = manualList().slice();
-        next.splice(Number(button.getAttribute("data-remove")), 1);
-        saveManual(next);
+    if (editable) {
+      $("manualTable").querySelectorAll("[data-remove]").forEach(function (button) {
+        button.addEventListener("click", function () {
+          var next = manualList().slice();
+          next.splice(Number(button.getAttribute("data-remove")), 1);
+          saveManual(next);
+        });
       });
-    });
+    }
 
     var autoHead = "<thead><tr><th class='l'>Игрок</th><th class='l'>Клуб</th>" +
-      "<th class='l'>Срок</th><th class='l'>Надёжность</th><th class='l'>Новость</th></tr></thead>";
+      "<th class='l'>Срок</th><th class='l'>Замечено</th><th class='l'>Надёжность</th>" +
+      "<th class='l'>Новость</th></tr></thead>";
     var autoBody = auto.map(function (item) {
       var url = safeUrl(item.url);
       var headline = esc(item.headline || "");
@@ -896,19 +872,28 @@
         "<td class='l'>" + esc(item.player) + "</td>" +
         "<td class='l dim'>" + crest(item.team_id) + esc(item.team) + "</td>" +
         "<td class='l dim'>" + esc(item.term || "—") + "</td>" +
+        "<td class='l dim'>" + esc(fmtDay(item.first_seen || item.found_at)) + "</td>" +
         "<td class='l'><span class='pill " + (item.confidence === "высокая" ? "cool" : "dim") + "'>" +
           esc(item.confidence || "") + "</span></td>" +
         "<td class='l dim'>" + link + "</td>" +
       "</tr>";
     }).join("");
     $("autoTable").innerHTML = autoHead + "<tbody>" +
-      (autoBody || "<tr><td class='l dim' colspan='5'>В свежих новостях упоминаний о травмах игроков КХЛ не нашлось.</td></tr>") +
+      (autoBody || "<tr><td class='l dim' colspan='6'>За последние три недели упоминаний о травмах игроков КХЛ не нашлось.</td></tr>") +
       "</tbody>";
   }
 
+  function setInjuryState(message, kind) {
+    var node = $("injState");
+    if (!node) return;
+    node.textContent = message || "";
+    node.className = "save-state" + (kind ? " " + kind : "");
+  }
+
   function saveManual(entries) {
-    var state = APP.alpine ? APP.alpine.injury : null;
-    if (state) { state.saving = true; state.state = "сохраняю…"; state.stateKind = ""; }
+    var button = $("injSave");
+    if (button) button.disabled = true;
+    setInjuryState("сохраняю…");
 
     return fetch("/api/injuries", {
       method: "POST",
@@ -923,11 +908,91 @@
       APP.data.injuries = result.injuries || [];
       renderInjuries();
       rendered.overview = false;
-      if (state) { state.state = "сохранено"; state.stateKind = "ok"; }
+      setInjuryState("сохранено", "ok");
     }).catch(function () {
-      if (state) { state.state = "не сохранилось — сервер не ответил"; state.stateKind = "bad"; }
+      setInjuryState("не сохранилось — сервер не ответил", "bad");
     }).then(function () {
-      if (state) state.saving = false;
+      if (button) button.disabled = false;
+    });
+  }
+
+  function wireInjuryForm() {
+    var form = $("injuryForm");
+    if (!form) return;                           // публичная версия — только чтение
+
+    var names = $("playerNames");
+    (APP.data.players || []).slice().sort(byName).forEach(function (p) {
+      var option = document.createElement("option");
+      option.value = p.name;
+      option.label = p.team || "";
+      names.appendChild(option);
+    });
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      var name = $("injPlayer").value.trim();
+      if (!name) return;
+      // Подтягиваем клуб и id из состава: так запись связывается
+      // с реальным игроком, а не остаётся просто строкой.
+      var match = (APP.data.players || []).filter(function (p) {
+        return String(p.name).toLowerCase() === name.toLowerCase();
+      })[0];
+
+      saveManual(manualList().concat([{
+        player: match ? match.name : name,
+        player_id: match ? match.id : null,
+        team: match ? match.team : "",
+        team_id: match ? match.team_id : null,
+        status: $("injStatus").value,
+        until: $("injUntil").value.trim(),
+        note: $("injNote").value.trim(),
+        added_at: new Date().toISOString().slice(0, 19)
+      }])).then(function () {
+        $("injPlayer").value = "";
+        $("injUntil").value = "";
+        $("injNote").value = "";
+      });
+    });
+  }
+
+  /* =============================== фильтры =============================== */
+
+  function fillSelect(select, options) {
+    options.forEach(function (item) {
+      var option = document.createElement("option");
+      option.value = item.value;
+      option.textContent = item.label;
+      select.appendChild(option);
+    });
+  }
+
+  function wireFilters() {
+    var teams = (APP.data.teams || []).slice().sort(byName).map(function (t) {
+      return { value: String(t.id), label: t.name };
+    });
+    fillSelect($("gameTeam"), teams);
+    fillSelect($("playerTeam"), teams);
+
+    var seen = {}, months = [];
+    (APP.data.games || []).forEach(function (g) {
+      var key = monthKey(g.start_at), d = parseDate(g.start_at);
+      if (key && !seen[key]) {
+        seen[key] = true;
+        months.push({ value: key, label: MONTHS_NOM[d.getMonth()] + " " + d.getFullYear() });
+      }
+    });
+    fillSelect($("gameMonth"), months);
+
+    ["gameTeam","gameState","gameMonth"].forEach(function (id) {
+      $(id).addEventListener("change", renderGames);
+    });
+    ["playerTeam","playerRole"].forEach(function (id) {
+      $(id).addEventListener("change", renderPlayers);
+    });
+    var searchTimer = null;
+    $("playerSearch").addEventListener("input", function () {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(renderPlayers, 180);
     });
   }
 
@@ -937,8 +1002,7 @@
   var rendered = {};
 
   function currentView() {
-    var hash = (window.location.hash || "#/").replace(/^#\/?/, "");
-    var name = hash.split("/")[0] || "overview";
+    var name = (window.location.hash || "#/").replace(/^#\/?/, "").split("/")[0] || "overview";
     return VIEWS.indexOf(name) === -1 ? "overview" : name;
   }
 
@@ -971,112 +1035,207 @@
         { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.42, ease: "power2.out" });
     }
     if (lenis) lenis.scrollTo(0, { immediate: true });
-    else window.scrollTo({ top: 0, behavior: "instant" });
+    else window.scrollTo(0, 0);
   }
 
-  window.addEventListener("hashchange", function () { show(currentView()); });
+  window.addEventListener("hashchange", function () {
+    if (APP.data) show(currentView());
+  });
   window.addEventListener("resize", function () {
+    if (!APP.data) return;
     moveTabPill(currentView());
     Object.keys(APP.charts).forEach(function (id) {
       if ($(id) && $(id).offsetParent !== null) APP.charts[id].resize();
     });
   });
 
-  /* ============================ состояние Alpine ============================ */
-
-  document.addEventListener("alpine:init", function () {
-    window.Alpine.data("tracker", function () {
-      return {
-        teams: [], months: [], playerNameList: [],
-        games:   { team: "", state: "all", month: "" },
-        players: { team: "", role: "", query: "" },
-        injury:  { player: "", status: "травма", until: "", note: "", saving: false, state: "", stateKind: "" },
-
-        init: function () {
-          APP.alpine = this;
-          if (APP.data) this.hydrate();
-        },
-
-        hydrate: function () {
-          this.teams = (APP.data.teams || []).slice().sort(function (a, b) {
-            return String(a.name).localeCompare(String(b.name), "ru");
-          });
-          this.playerNameList = (APP.data.players || []).slice().sort(function (a, b) {
-            return String(a.name).localeCompare(String(b.name), "ru");
-          });
-          var seen = {}, months = [];
-          (APP.data.games || []).forEach(function (g) {
-            var d = parseDate(g.start_at);
-            if (!d) return;
-            var key = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
-            if (!seen[key]) {
-              seen[key] = true;
-              months.push({ key: key, label: MONTHS_NOM[d.getMonth()] + " " + d.getFullYear() });
-            }
-          });
-          this.months = months;
-        },
-
-        addInjury: function () {
-          var name = String(this.injury.player || "").trim();
-          if (!name) return;
-          // Подтягиваем клуб и id из состава: так запись связывается
-          // с реальным игроком, а не остаётся просто строкой.
-          var match = (APP.data.players || []).filter(function (p) {
-            return String(p.name).toLowerCase() === name.toLowerCase();
-          })[0];
-
-          var entry = {
-            player: match ? match.name : name,
-            player_id: match ? match.id : null,
-            team: match ? match.team : "",
-            team_id: match ? match.team_id : null,
-            status: this.injury.status,
-            until: String(this.injury.until || "").trim(),
-            note: String(this.injury.note || "").trim(),
-            added_at: new Date().toISOString().slice(0, 19)
-          };
-
-          var self = this;
-          saveManual(manualList().concat([entry])).then(function () {
-            self.injury.player = "";
-            self.injury.until = "";
-            self.injury.note = "";
-          });
-        }
-      };
-    });
-  });
-
-  document.addEventListener("filters-games", function () { renderGames(); });
-  document.addEventListener("filters-players", function () { renderPlayers(); });
-
   /* ================================ старт ================================ */
 
   function start(data) {
     APP.data = data;
+    if ($("app")) $("app").hidden = false;
     $("loading").hidden = true;
-    if (APP.alpine) APP.alpine.hydrate();
+    armAnimations();
     renderHeader();
+    wireFilters();
+    wireInjuryForm();
     show(currentView());
   }
 
-  fetch("/data.json", { headers: { "Accept": "application/json" } })
-    .then(function (response) {
-      if (response.status === 401) { window.location.href = "/login"; return null; }
-      if (!response.ok) throw new Error("http " + response.status);
-      return response.json();
-    })
-    .then(function (data) {
-      if (!data) return;
-      if (data.error) throw new Error(data.error);
-      start(data);
-    })
-    .catch(function (error) {
-      $("loading").hidden = true;
-      var box = $("errorBox");
-      box.hidden = false;
-      box.textContent = "Данные не загрузились: " + error.message +
-        ". Запусти refresh.bat, чтобы собрать их заново.";
+  function fail(message) {
+    if ($("app")) $("app").hidden = false;
+    $("loading").hidden = true;
+    var box = $("errorBox");
+    box.hidden = false;
+    box.textContent = message;
+  }
+
+  /* ---------------------- локальная версия: с сервера ---------------------- */
+
+  function bootLocal() {
+    fetch("/data.json", { headers: { "Accept": "application/json" } })
+      .then(function (response) {
+        if (response.status === 401) { window.location.href = "/login"; return null; }
+        if (!response.ok) throw new Error("http " + response.status);
+        return response.json();
+      })
+      .then(function (data) {
+        if (!data) return;
+        if (data.error) throw new Error(data.error);
+        start(data);
+      })
+      .catch(function (error) {
+        fail("Данные не загрузились: " + error.message + ". Запусти refresh.bat, чтобы собрать их заново.");
+      });
+  }
+
+  /* -------------------- публичная версия: расшифровка -------------------- */
+
+  var KEY_STORAGE = "khl-tracker-key-v1";
+
+  function b64ToBytes(text) {
+    var binary = atob(text), bytes = new Uint8Array(binary.length);
+    for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return bytes;
+  }
+  function bytesToB64(buffer) {
+    var bytes = new Uint8Array(buffer), binary = "";
+    for (var i = 0; i < bytes.length; i += 0x8000) {
+      binary += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    }
+    return btoa(binary);
+  }
+
+  function readVault() {
+    return JSON.parse($("vault").textContent);
+  }
+
+  // Тот же вывод ключа, что в webkey.py: логин в нижнем регистре,
+  // перевод строки, пароль как есть; PBKDF2-SHA256 → 256-битный ключ.
+  function deriveKey(login, password, vault) {
+    var material = new TextEncoder().encode(String(login).trim().toLowerCase() + "\n" + password);
+    return crypto.subtle.importKey("raw", material, "PBKDF2", false, ["deriveKey"])
+      .then(function (base) {
+        return crypto.subtle.deriveKey(
+          { name: "PBKDF2", hash: "SHA-256", salt: b64ToBytes(vault.salt), iterations: vault.iterations },
+          base, { name: "AES-GCM", length: 256 }, true, ["decrypt"]);
+      });
+  }
+
+  function importStoredKey(raw) {
+    return crypto.subtle.importKey("raw", b64ToBytes(raw), { name: "AES-GCM" }, true, ["decrypt"]);
+  }
+
+  // Неверный ключ здесь не даёт мусор: AES-GCM проверяет целостность
+  // и честно отказывает. Это и есть проверка пароля.
+  function openVault(key, vault) {
+    return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64ToBytes(vault.iv) }, key, b64ToBytes(vault.data))
+      .then(function (packed) {
+        var stream = new Blob([packed]).stream().pipeThrough(new DecompressionStream("gzip"));
+        return new Response(stream).text();
+      })
+      .then(function (text) { return JSON.parse(text); });
+  }
+
+  function storage(action, value) {
+    // Хранилище браузера бывает недоступно (приватный режим, запреты) —
+    // тогда просто не запоминаем, вход всё равно работает.
+    try {
+      if (action === "get") return window.localStorage.getItem(KEY_STORAGE);
+      if (action === "set") window.localStorage.setItem(KEY_STORAGE, value);
+      if (action === "del") window.localStorage.removeItem(KEY_STORAGE);
+    } catch (error) { /* нет хранилища — нет запоминания */ }
+    return null;
+  }
+
+  function showGate(message) {
+    $("gate").hidden = false;
+    $("app").hidden = true;
+    var error = $("gateError");
+    error.hidden = !message;
+    error.textContent = message || "";
+    setTimeout(function () { $("gateLogin").focus(); }, 50);
+  }
+
+  function unlock(data) {
+    $("gate").hidden = true;
+    $("loading").hidden = true;
+    start(data);
+  }
+
+  function bootWeb() {
+    if (!window.crypto || !crypto.subtle || typeof DecompressionStream === "undefined") {
+      showGate("Этот браузер слишком старый для расшифровки. Обнови его или открой в Chrome, Safari или Firefox.");
+      $("gateSubmit").disabled = true;
+      return;
+    }
+
+    var vault;
+    try { vault = readVault(); }
+    catch (error) { fail("Страница повреждена: не читаются зашифрованные данные."); return; }
+
+    $("webLogout").addEventListener("click", function () {
+      storage("del");
+      window.location.reload();
     });
+
+    var form = $("gateForm"), button = $("gateSubmit");
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      var login = $("gateLogin").value, password = $("gatePassword").value;
+      if (!login.trim() || !password) return;
+
+      button.disabled = true;
+      button.textContent = "Проверяю…";
+      $("gateError").hidden = true;
+
+      var key;
+      deriveKey(login, password, vault)
+        .then(function (derived) { key = derived; return openVault(derived, vault); })
+        .then(function (data) {
+          $("gatePassword").value = "";
+          if ($("gateRemember").checked) {
+            return crypto.subtle.exportKey("raw", key).then(function (raw) {
+              storage("set", bytesToB64(raw));
+              return data;
+            });
+          }
+          storage("del");
+          return data;
+        })
+        .then(unlock)
+        .catch(function () {
+          // Небольшая пауза после неудачи: перебирать руками неудобно.
+          setTimeout(function () {
+            button.disabled = false;
+            button.textContent = "Войти";
+            showGate("Неверный логин или пароль.");
+            $("gatePassword").value = "";
+            var gate = $("gate");
+            gate.classList.remove("shake");
+            void gate.offsetWidth;
+            gate.classList.add("shake");
+          }, 700);
+        });
+    });
+
+    // Запомненный ключ: пробуем открыть сразу. Если пароль с тех пор
+    // сменили, ключ не подойдёт — забываем его и просим войти заново.
+    var remembered = storage("get");
+    if (!remembered) { showGate(); return; }
+
+    $("gate").hidden = true;
+    $("loadingText").textContent = "Расшифровываю…";
+    $("app").hidden = false;
+    importStoredKey(remembered)
+      .then(function (key) { return openVault(key, vault); })
+      .then(unlock)
+      .catch(function () {
+        storage("del");
+        showGate("Пароль был изменён — войди заново.");
+      });
+  }
+
+  if (MODE === "web") bootWeb();
+  else bootLocal();
 }());

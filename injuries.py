@@ -267,11 +267,58 @@ def save(data: dict) -> Path:
     return INJURIES_FILE
 
 
+# Сколько дней помнить травму после последнего упоминания в новостях.
+# Лента живёт сутки-двое: без памяти игрок, выбывший на месяц, исчезал
+# из списка, как только заголовок уходил с первой страницы.
+RETAIN_DAYS = 21
+
+
+def _auto_key(item: dict) -> str:
+    if item.get("player_id") is not None:
+        return f"id:{item['player_id']}"
+    return "name:" + (item.get("player") or "").strip().lower()
+
+
+def _parse_moment(value) -> dt.datetime | None:
+    try:
+        return dt.datetime.fromisoformat(str(value))
+    except (TypeError, ValueError):
+        return None
+
+
 def refresh_auto(players: list[dict], teams: list[dict] | None = None,
                  progress=print) -> dict:
-    """Пересобирает автоматическую часть, ручную оставляет как есть."""
+    """Обновляет автоматическую часть, ручную оставляет как есть.
+
+    Свежие находки добавляются к прежним, а не заменяют их: запись живёт,
+    пока о травме писали не позже RETAIN_DAYS дней назад.
+    """
     data = load()
-    data["auto"] = scan_news(players, teams, progress=progress)
+    now = dt.datetime.now()
+    stamp = now.isoformat(timespec="seconds")
+
+    kept: dict[str, dict] = {}
+    for item in data.get("auto", []):
+        seen = _parse_moment(item.get("last_seen") or item.get("found_at"))
+        if seen and (now - seen).days <= RETAIN_DAYS:
+            kept[_auto_key(item)] = item
+
+    fresh = scan_news(players, teams, progress=progress)
+    for item in fresh:
+        key = _auto_key(item)
+        previous = kept.get(key, {})
+        item["first_seen"] = previous.get("first_seen") or previous.get("found_at") or stamp
+        item["last_seen"] = stamp
+        kept[key] = item
+
+    rank = {"высокая": 0, "средняя": 1, "низкая": 2}
+    data["auto"] = sorted(
+        kept.values(),
+        key=lambda r: (rank.get(r.get("confidence"), 3), r.get("player") or ""),
+    )
+    remembered = len(data["auto"]) - len(fresh)
+    if remembered > 0:
+        progress(f"  из прошлых обновлений помню ещё: {remembered}")
     save(data)
     return data
 

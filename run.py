@@ -20,7 +20,9 @@ import build
 import collect
 import injuries as injuries_module
 import serve
+import site_pages
 import vendor
+import webkey
 
 
 def step(title: str) -> None:
@@ -84,6 +86,17 @@ def main() -> int:
     payload = build.build(season, sims=args.sims)
     path = build.save(payload)
     print(f"  готово: {path.name}, {path.stat().st_size / 1024:.0f} КБ")
+
+    step("Страницы сайта")
+    site_pages.write_local()
+    print("  локальная версия: web/index.html")
+    if webkey.is_configured():
+        page = site_pages.write_web(payload)
+        check = site_pages.self_check()
+        print(f"  публичная версия: {page.relative_to(page.parents[1])}, {check['size_kb']} КБ, "
+              f"данные зашифрованы и проверены ({check['games']} матчей)")
+    else:
+        print("  публичная версия не собрана: пароль для сайта ещё не задан (setup-login.bat)")
 
     summary = payload["summary"]
     print()
