@@ -17,6 +17,7 @@ import traceback
 
 import auth
 import build
+import club_media
 import club_roster
 import collect
 import injuries as injuries_module
@@ -62,6 +63,7 @@ def main() -> int:
             season = collect.collect()
             step("Официальные составы клубов")
             club_roster.apply(season)
+            club_media.sync(season)
             collect.save(season)
         except Exception:
             traceback.print_exc()

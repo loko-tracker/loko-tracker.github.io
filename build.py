@@ -12,6 +12,7 @@ import json
 import sys
 from pathlib import Path
 
+import club_roster
 import collect
 import injuries as injuries_module
 import odds as odds_module
@@ -165,7 +166,12 @@ def build(season: dict | None = None, *, sims: int = 10_000, progress=print) -> 
         # Травмы по данным самих клубов — первыми: они надёжнее новостей.
         "injuries": season.get("club_injuries", []) + injuries_module.merged(injuries_data),
         "my_team_id": my_team_id(season["teams"]),
-        "club_rosters": season.get("club_rosters", {}),
+        # Ссылки на сайт клуба странице не нужны — только имена скачанных фото.
+        "club_rosters": {
+            team: [{k: v for k, v in m.items() if not k.endswith("_url")} for m in roster]
+            for team, roster in season.get("club_rosters", {}).items()
+        },
+        "club_facts": {str(team): facts for team, facts in club_roster.FACTS.items()},
         "injuries_updated_at": injuries_data.get("updated_at"),
     }
 

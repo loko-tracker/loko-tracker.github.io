@@ -44,7 +44,7 @@ MAX_BODY = 256 * 1024
 CSRF_HEADER = "X-Requested-With"
 CSRF_VALUE = "khl-tracker"
 
-# Каталоги, отдаваемые целиком: библиотеки и логотипы клубов.
+# Каталоги, отдаваемые целиком: библиотеки, логотипы клубов, фото игроков.
 # Имя файла проверяется по шаблону и ещё раз — по итоговому пути,
 # так что «../» и абсолютные пути не пройдут.
 ASSET_DIRS = {
@@ -53,6 +53,8 @@ ASSET_DIRS = {
                                   ".map": "application/json; charset=utf-8"}),
     "/logos/":  (WEB / "logos",  {".png": "image/png",
                                   ".svg": "image/svg+xml",
+                                  ".webp": "image/webp"}),
+    "/photos/": (WEB / "photos", {".jpg": "image/jpeg",
                                   ".webp": "image/webp"}),
 }
 
@@ -173,7 +175,7 @@ class Handler(BaseHTTPRequestHandler):
         self._send(HTTPStatus.NOT_FOUND, b"not found")
 
     def _serve_asset(self, path: str) -> bool:
-        """Отдаёт файл из /vendor/ или /logos/, если путь безопасен."""
+        """Отдаёт файл из /vendor/, /logos/ или /photos/, если путь безопасен."""
         for prefix, (directory, types) in ASSET_DIRS.items():
             if not path.startswith(prefix):
                 continue

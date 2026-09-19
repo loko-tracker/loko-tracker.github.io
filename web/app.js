@@ -568,7 +568,8 @@
     $("clubInjuries").innerHTML = club.injuries.length
       ? "<div class='table-scroll'><table class='grid'><tbody>" + club.injuries.map(function (i) {
           var source = i.source === "club" ? "данные клуба" : i.source === "manual" ? "твоя отметка" : "из новостей";
-          return "<tr><td class='l'>" + esc(i.player) + "</td>" +
+          var note = i.source === "manual" && i.note ? "<div class='inj-note'>" + esc(i.note) + "</div>" : "";
+          return "<tr><td class='l'>" + esc(i.player) + note + "</td>" +
             "<td class='l'><span class='pill hot'>" + esc(i.status || "травма") + "</span></td>" +
             "<td class='l dim'>" + esc(i.until || i.term || "") + "</td>" +
             "<td class='l dim'>" + esc(source) + "</td></tr>";
@@ -588,6 +589,7 @@
       ? "Состав — по данным официального сайта клуба (" + club.roster.length + " игроков), статистика — по данным лиги. У тех, кто ещё не выходил на лёд, нули."
       : "Состав — по данным лиги: в нём только игроки, у которых уже есть статистика в сезоне.";
 
+    var photos = clubPhotos(club.team.id), hurt = hurtKeys(club);
     $("clubRoster").innerHTML = ROLE_GROUPS.map(function (group) {
       var list = club.roster.filter(function (p) { return p.role_key === group.key; });
       if (!list.length) return "";
@@ -600,10 +602,13 @@
       var headRow = "<thead><tr><th class='l'>№</th><th class='l'>Игрок</th><th>И</th>" +
         (goalie ? "" : "<th>Г</th><th>П</th><th>О</th><th>+/−</th>") + "</tr></thead>";
       var rows = list.map(function (p) {
-        var flags = (p.injured ? " <span class='pill hot'>травма</span>" : "") +
+        var media = photos[nameKey(p.name)] || {};
+        var flags = (p.injured || hurt[nameKey(p.name)] ? " <span class='pill hot'>травма</span>" : "") +
                     (p.farm_club ? " <span class='pill dim'>фарм</span>" : "");
-        return "<tr><td class='l'><span class='num-badge'>" + esc(p.number != null ? p.number : "") + "</span></td>" +
-          "<td class='l'>" + esc(p.name) + flags + "</td><td>" + (p.gp || 0) + "</td>" +
+        var face = media.photo
+          ? "<img class='ava' src='" + esc(photoUrl(media.photo)) + "' alt='' loading='lazy' decoding='async'>" : "";
+        return "<tr data-player='" + esc(p.name) + "'><td class='l'><span class='num-badge'>" + esc(p.number != null ? p.number : "") + "</span></td>" +
+          "<td class='l'>" + face + esc(p.name) + flags + "</td><td>" + (p.gp || 0) + "</td>" +
           (goalie ? ""
                   : "<td>" + (p.g || 0) + "</td><td>" + (p.a || 0) + "</td><td class='strong'>" + (p.pts || 0) +
                     "</td><td>" + signed(p.plus_minus) + "</td>") +
@@ -633,6 +638,7 @@
       // Клуб влияет на подсветку во всех разделах — перерисуем их заново.
       rendered = {};
       paint(currentView());
+      renderWings();
     });
   }
 
@@ -640,6 +646,254 @@
     var team = APP.myTeam ? teamById(APP.myTeam) : null;
     $("clubTab").textContent = team ? team.name : "Мой клуб";
     moveTabPill(currentView());
+  }
+
+  /* ================================ крылья ================================ */
+
+  // Свободные поля по бокам широкого экрана отданы моему клубу: слева лента
+  // портретов, справа снимки с матчей вперемешку с фактами о клубе. Ленты
+  // плывут навстречу друг другу и откликаются на прокрутку страницы.
+  // Строятся, только когда экран достаточно широк, — телефон фото не качает.
+  var WIDE = window.matchMedia("(min-width: 1500px)");
+  var WING_SPEED = 0.022;      // пикселей в миллисекунду — около 22 в секунду
+  var WING_SCROLL = 0.35;      // какую долю прокрутки страницы повторяют ленты
+  var wingState = { lanes: [], running: false, last: 0, wide: null };
+
+  function photoUrl(name) {
+    return (MODE === "web" ? "photos/" : "/photos/") + encodeURIComponent(name);
+  }
+
+  // Клуб пишет «Берёзкин», лига иногда «Березкин» — сравниваем без «ё».
+  function nameKey(name) {
+    return String(name || "").toLowerCase().replace(/ё/g, "е").trim();
+  }
+
+  function clubPhotos(teamId) {
+    var map = {};
+    ((APP.data.club_rosters || {})[String(teamId)] || []).forEach(function (m) {
+      map[nameKey(m.name)] = m;
+    });
+    return map;
+  }
+
+  // Травмирован — если так считает клуб или игрок есть в лазарете.
+  function hurtKeys(club) {
+    var keys = {};
+    club.injuries.forEach(function (i) { keys[nameKey(i.player)] = true; });
+    return keys;
+  }
+
+  function roleShort(key) {
+    return key === "goaltender" ? "вр" : key === "defenseman" ? "защ" : "нап";
+  }
+
+  function wordForm(n, one, few, many) {
+    var mod10 = n % 10, mod100 = n % 100;
+    if (mod10 === 1 && mod100 !== 11) return one;
+    if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return few;
+    return many;
+  }
+
+  function playerLine(x) {
+    var p = x.p, role = roleShort(p.role_key);
+    if (x.hurt) return role + " · лечится";
+    if (!p.gp) return role + " · ещё не играл";
+    var line = role + " · " + p.gp + " И";
+    return p.role_key === "goaltender" ? line : line + " · " + (p.g || 0) + "+" + (p.a || 0);
+  }
+
+  function wingPlayers(club) {
+    var photos = clubPhotos(club.team.id), hurt = hurtKeys(club);
+    return club.roster.map(function (p) {
+      var media = photos[nameKey(p.name)] || {};
+      return { p: p, photo: media.photo, action: media.action, hurt: !!(p.injured || hurt[nameKey(p.name)]) };
+    });
+  }
+
+  function portraitCard(x) {
+    var p = x.p;
+    return '<figure class="pcard' + (x.hurt ? " hurt" : "") + '" data-player="' + esc(p.name) + '">' +
+      '<img src="' + esc(photoUrl(x.photo)) + '" alt="" loading="lazy" decoding="async" draggable="false">' +
+      (p.number != null ? '<span class="pno">' + esc(p.number) + '</span>' : "") +
+      (x.hurt ? '<span class="ptag">травма</span>' : "") +
+      '<figcaption class="pname">' + esc(String(p.name).split(" ")[0]) +
+        '<small>' + esc(playerLine(x)) + '</small></figcaption>' +
+    '</figure>';
+  }
+
+  function actionCard(x) {
+    var p = x.p;
+    return '<figure class="acard" data-player="' + esc(p.name) + '">' +
+      '<img src="' + esc(photoUrl(x.action)) + '" alt="" loading="lazy" decoding="async" draggable="false">' +
+      '<figcaption>' + (p.number != null ? '<b>' + esc(p.number) + '</b>' : "") + esc(p.name) + '</figcaption>' +
+    '</figure>';
+  }
+
+  function factTile(f) {
+    return '<div class="fact' + (f.tone ? " " + esc(f.tone) : "") + '">' + (f.html || "") +
+      (f.k ? '<span class="k">' + esc(f.k) + '</span>' : "") +
+      '<span class="v">' + esc(f.v) + '</span></div>';
+  }
+
+  // Живые факты из данных сезона плюс постоянные из club_facts.
+  function wingFacts(club) {
+    var row = club.row || {}, facts = [];
+    facts.push({
+      tone: "crest", k: club.team.location || "", v: club.team.name,
+      html: crest(club.team.id, "big").replace('class="crest ', 'class="club-crest ')
+    });
+    if (row.position) {
+      facts.push({ k: "Сейчас", v: row.position + "-е на " + (row.conference_key === "east" ? "Востоке" : "Западе") });
+      facts.push({ k: "В таблице", v: row.pts + " " + wordForm(row.pts, "очко", "очка", "очков") });
+    }
+    if (club.streak.count >= 2) {
+      facts.push({ k: "Серия", v: streakText(club.streak), tone: club.streak.win ? "good" : "" });
+    }
+    ((APP.data.club_facts || {})[String(club.team.id)] || []).forEach(function (f) { facts.push(f); });
+    if (club.next) {
+      var home = club.next.home_id === club.team.id;
+      facts.push({
+        k: "Дальше · " + fmtDay(club.next.start_at) + (home ? " · дома" : " · в гостях"),
+        v: home ? club.next.away : club.next.home
+      });
+    }
+    return facts;
+  }
+
+  function buildLane(el, html, count, down) {
+    var track = el.querySelector(".wing-track");
+    track.innerHTML = html + html;           // вторая копия — для бесшовной петли
+    track.style.transform = "";
+    el.onmouseenter = function () { lane.hover = true; };
+    el.onmouseleave = function () { lane.hover = false; };
+    el.onclick = function (event) {
+      var card = event.target.closest("[data-player]");
+      if (card) focusPlayer(card.getAttribute("data-player"));
+    };
+    var lane = { el: el, track: track, count: count, down: down, half: 0, t: 0, speed: 1, hover: false };
+    return lane;
+  }
+
+  // Высота одной копии ленты = отступ первой карточки второй копии.
+  function measureWings() {
+    var mast = document.querySelector(".masthead");
+    if (mast) document.documentElement.style.setProperty("--mast-h", mast.offsetHeight + "px");
+    wingState.lanes.forEach(function (lane) {
+      var first = lane.track.children[lane.count];
+      lane.half = first ? first.offsetTop - lane.track.children[0].offsetTop : 0;
+    });
+  }
+
+  function renderWings() {
+    var host = $("wings");
+    if (!host) return;
+    wingState.wide = WIDE.matches;
+    var club = APP.myTeam && WIDE.matches ? clubModel(APP.myTeam) : null;
+    var list = club ? wingPlayers(club) : [];
+    var portraits = list.filter(function (x) { return x.photo; });
+    if (portraits.length < 4) {
+      host.hidden = true;
+      stopWings();
+      wingState.lanes = [];
+      return;
+    }
+    host.hidden = false;
+
+    portraits.sort(function (a, b) { return (a.p.number == null ? 999 : a.p.number) - (b.p.number == null ? 999 : b.p.number); });
+    // Справа сначала лидеры по очкам; через каждые три снимка — факт о клубе.
+    var actions = list.filter(function (x) { return x.action; }).sort(function (a, b) {
+      return ((b.p.pts || 0) - (a.p.pts || 0)) || ((b.p.gp || 0) - (a.p.gp || 0));
+    });
+    var facts = wingFacts(club), right = [], f = 0;
+    actions.forEach(function (x, i) {
+      if (i % 3 === 0 && f < facts.length) right.push(factTile(facts[f++]));
+      right.push(actionCard(x));
+    });
+    while (f < facts.length) right.push(factTile(facts[f++]));
+
+    wingState.lanes = [
+      buildLane($("wingL"), portraits.map(portraitCard).join(""), portraits.length, false),
+      buildLane($("wingR"), right.join(""), right.length, true)
+    ];
+
+    var edge = [club.team.name, club.team.location, "мой клуб"].filter(Boolean).join("  ·  ");
+    $("edgeL").textContent = $("edgeR").textContent = [edge, edge, edge].join("  ·  ");
+
+    measureWings();
+    // Шрифты догружаются позже и меняют высоту подписей — перемеряем.
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureWings);
+    startWings();
+  }
+
+  function wingsFrame(now) {
+    var dt = Math.min(100, Math.max(0, now - (wingState.last || now)));
+    wingState.last = now;
+    var scroll = (lenis ? lenis.scroll : window.pageYOffset) * WING_SCROLL;
+    wingState.lanes.forEach(function (lane) {
+      if (!lane.half) return;
+      // Под курсором лента плавно замирает, после — так же плавно трогается.
+      lane.speed += ((lane.hover ? 0 : 1) - lane.speed) * Math.min(1, dt / 220);
+      lane.t += dt * WING_SPEED * lane.speed;
+      var offset = ((lane.t + scroll) % lane.half + lane.half) % lane.half;
+      var y = lane.down ? offset - lane.half : -offset;
+      lane.track.style.transform = "translate3d(0," + y.toFixed(1) + "px,0)";
+    });
+  }
+
+  function wingsTick(time) { wingsFrame(time * 1000); }
+
+  function startWings() {
+    // Без движения — ленты просто стоят, но смотреть на них можно.
+    if (REDUCED || wingState.running) return;
+    wingState.running = true;
+    wingState.last = 0;
+    if (HAS_GSAP) { window.gsap.ticker.add(wingsTick); return; }
+    var loop = function (now) {
+      if (!wingState.running) return;
+      wingsFrame(now);
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+  }
+
+  function stopWings() {
+    if (!wingState.running) return;
+    wingState.running = false;
+    if (HAS_GSAP) window.gsap.ticker.remove(wingsTick);
+  }
+
+  // Экран сузился или расширился через границу — собрать или убрать крылья.
+  function syncWings() {
+    if (WIDE.matches !== wingState.wide) renderWings();
+    else if (wingState.lanes.length) measureWings();
+  }
+
+  function setupWings() {
+    if (WIDE.addEventListener) WIDE.addEventListener("change", syncWings);
+    else if (WIDE.addListener) WIDE.addListener(syncWings);
+    renderWings();
+  }
+
+  // Клик по карточке на крыле — к этому игроку в составе клуба.
+  function focusPlayer(name) {
+    APP.focusPlayer = name;
+    if (currentView() === "club") focusPlayerRow();
+    else window.location.hash = "#/club";
+  }
+
+  function focusPlayerRow() {
+    var name = APP.focusPlayer, row = null;
+    APP.focusPlayer = null;
+    if (!name) return;
+    $("clubRoster").querySelectorAll("tr[data-player]").forEach(function (tr) {
+      if (tr.getAttribute("data-player") === name) row = tr;
+    });
+    if (!row) return;
+    if (lenis) lenis.scrollTo(row, { offset: -Math.round(window.innerHeight / 2 - 40) });
+    else row.scrollIntoView({ block: "center", behavior: REDUCED ? "auto" : "smooth" });
+    row.classList.remove("flash");
+    void row.offsetWidth;
+    row.classList.add("flash");
   }
 
   /* ================================= обзор ================================= */
@@ -1392,6 +1646,9 @@
     }
     if (lenis) lenis.scrollTo(0, { immediate: true });
     else window.scrollTo(0, 0);
+
+    // Пришли с крыла — докручиваем к игроку, когда раздел уже на месте.
+    if (view === "club" && APP.focusPlayer) setTimeout(focusPlayerRow, 120);
   }
 
   window.addEventListener("hashchange", function () {
@@ -1403,6 +1660,7 @@
     Object.keys(APP.charts).forEach(function (id) {
       if ($(id) && $(id).offsetParent !== null) APP.charts[id].resize();
     });
+    syncWings();
   });
 
   /* ================================ старт ================================ */
@@ -1418,6 +1676,7 @@
     wireInjuryForm();
     updateClubTab();
     show(currentView());
+    setupWings();
   }
 
   function fail(message) {

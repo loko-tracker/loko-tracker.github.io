@@ -9,6 +9,7 @@ data/season.json
 data/site_data.json
 web/vendor/
 web/logos/
+web/photos/
 
 # Собирается из web/shell.html при каждом запуске
 web/index.html

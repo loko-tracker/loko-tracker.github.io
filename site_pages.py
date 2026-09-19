@@ -2,8 +2,8 @@
 
   * web/index.html + web/logos.css — локальная версия (её отдаёт serve.py);
   * publish/khl-tracker.html      — публичная: данные зашифрованы паролем
-                                    (см. webkey.py), код, стили и логотипы —
-                                    отдельными файлами рядом;
+                                    (см. webkey.py), код, стили, логотипы
+                                    и фото игроков — отдельными файлами рядом;
   * publish/preview.html          — та же публичная страница, обёрнутая
                                     в полный документ для проверки у себя.
 
@@ -24,7 +24,9 @@ import webkey
 ROOT = Path(__file__).parent
 WEB = ROOT / "web"
 LOGOS = WEB / "logos"
+PHOTOS = WEB / "photos"
 PUBLISH = ROOT / "publish"
+SITE_DATA = ROOT / "data" / "site_data.json"
 
 WEB_PAGE = PUBLISH / "khl-tracker.html"
 PREVIEW_PAGE = PUBLISH / "preview.html"
@@ -72,6 +74,26 @@ def _logo_ids() -> list[str]:
     if not LOGOS.exists():
         return []
     return sorted(p.stem for p in LOGOS.glob("*.png") if p.stem.isdigit())
+
+
+def _photo_names(payload: dict | None = None) -> list[str]:
+    """Фото, на которые ссылается текущая сборка, — и только они.
+
+    Старые снимки остаются в web/photos как кэш, но на сайт не попадают.
+    """
+    if payload is None:
+        try:
+            payload = json.loads(SITE_DATA.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return []
+    names = set()
+    for roster in (payload.get("club_rosters") or {}).values():
+        for member in roster:
+            for field in ("photo", "action"):
+                name = member.get(field)
+                if name and (PHOTOS / name).is_file():
+                    names.add(name)
+    return sorted(names)
 
 
 # ----------------------------------------------------------------- локальная
@@ -122,6 +144,8 @@ def web_asset_map() -> dict[str, str]:
     files = {name: str(PUBLISH / name) for name in STATIC_FILES}
     for team_id in _logo_ids():
         files[f"logos/{team_id}.png"] = str(PUBLISH / "logos" / f"{team_id}.png")
+    for name in _photo_names():
+        files[f"photos/{name}"] = str(PUBLISH / "photos" / name)
     return files
 
 
@@ -151,10 +175,11 @@ def build_web_page(payload: dict) -> str:
     ])
 
 
-def _write_web_assets() -> None:
+def _write_web_assets(payload: dict) -> None:
     import shutil
 
     (PUBLISH / "logos").mkdir(parents=True, exist_ok=True)
+    (PUBLISH / "photos").mkdir(parents=True, exist_ok=True)
     shutil.copyfile(WEB / "app.css", PUBLISH / "app.css")
     shutil.copyfile(WEB / "app.js", PUBLISH / "app.js")
     # Пути к логотипам относительные: файлы опубликованы рядом со страницей.
@@ -164,11 +189,15 @@ def _write_web_assets() -> None:
     )
     for team_id in _logo_ids():
         shutil.copyfile(LOGOS / f"{team_id}.png", PUBLISH / "logos" / f"{team_id}.png")
+    for name in _photo_names(payload):
+        target = PUBLISH / "photos" / name
+        if not target.exists():                  # имя = отпечаток: не меняется
+            shutil.copyfile(PHOTOS / name, target)
 
 
 def write_web(payload: dict) -> Path:
     PUBLISH.mkdir(exist_ok=True)
-    _write_web_assets()
+    _write_web_assets(payload)
     page = build_web_page(payload)
     WEB_PAGE.write_text(page, encoding="utf-8")
 

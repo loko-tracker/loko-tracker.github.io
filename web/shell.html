@@ -73,6 +73,17 @@
   <div class="rail"><div class="rail-fill" id="railFill"></div></div>
 </header>
 
+<!-- Крылья: свободные поля широкого экрана отданы моему клубу —
+     слева портреты игроков, справа снимки с матчей и факты. Наполняет
+     app.js и только на широком экране; дублируют состав, поэтому скрыты
+     от экранных чтецов. -->
+<div class="wings" id="wings" aria-hidden="true" hidden>
+  <span class="wing-edge edge-l" id="edgeL"></span>
+  <div class="wing wing-l" id="wingL"><div class="wing-track"></div></div>
+  <div class="wing wing-r" id="wingR"><div class="wing-track"></div></div>
+  <span class="wing-edge edge-r" id="edgeR"></span>
+</div>
+
 <main class="wrap">
 
   <p class="loading" id="loading"><span class="spin"></span> <span id="loadingText">Загружаю сезон…</span></p>

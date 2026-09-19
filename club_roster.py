@@ -6,8 +6,12 @@
 трое в заявке. Поэтому для клубов с открытыми данными состав берётся у
 самого клуба, а статистика — из API лиги по совпадению имени.
 
-Заодно клуб честно отмечает травмированных и отправленных в фарм-клуб —
-это надёжнее любого разбора новостей.
+Клуб отмечает отправленных в фарм-клуб. Отметку «травма» в заявке он,
+похоже, не обновляет: Каюмов и Берёзкин в сентябре 2026 были травмированы,
+а флаг стоял false. Поэтому травмы клуба — только дополнение к лазарету.
+
+Отсюда же берутся фото игроков (портрет на сезон и снимок с матча) —
+их скачивает и ужимает club_media.py.
 
 Сейчас подключён «Локомотив» (api.hclokomotiv.ru — оттуда же берёт данные
 официальный сайт клуба). Другие клубы добавляются в OFFICIAL по образцу.
@@ -39,6 +43,19 @@ def _attrs(node) -> dict:
     """Strapi кладёт связи как {"data": {"attributes": {...}}}."""
     data = node.get("data") if isinstance(node, dict) else None
     return (data or {}).get("attributes") or {}
+
+
+def _media_url(node, prefer: tuple[str, ...] = ()) -> str | None:
+    """Адрес картинки из поля-медиа Strapi: нужный размер или оригинал."""
+    media = _attrs(node)
+    if not media:
+        return None
+    formats = media.get("formats") or {}
+    for size in prefer:
+        url = (formats.get(size) or {}).get("url")
+        if url:
+            return url
+    return media.get("url")
 
 
 ROLES = {
@@ -94,6 +111,9 @@ def fetch_lokomotiv(season: str) -> list[dict]:
     query = urllib.parse.urlencode(
         {
             "populate[player][populate][0]": "position",
+            "populate[player][populate][1]": "photo",
+            "populate[player][populate][2]": "bg_photo",
+            "populate[player][populate][3]": "main_bg_photo",
             "populate[assignment]": "*",
             "filters[season][name][$eq]": _loko_season_code(season),
             "filters[active][$eq]": "true",
@@ -119,6 +139,11 @@ def fetch_lokomotiv(season: str) -> list[dict]:
                 "role_key": _role(position.get("position") or position.get("name") or ""),
                 "injured": bool(entry.get("trauma")),
                 "farm_club": bool(entry.get("farm_club")),
+                # Портрет — квадрат 425 px на текущий сезон; снимок с матча —
+                # готовый уменьшенный вариант, оригиналы там по мегабайту.
+                "photo_url": _media_url(player.get("photo")),
+                "action_url": _media_url(player.get("bg_photo"), ("medium", "small"))
+                              or _media_url(player.get("main_bg_photo"), ("medium", "small")),
             }
         )
     return roster
@@ -127,6 +152,17 @@ def fetch_lokomotiv(season: str) -> list[dict]:
 # KHL team id -> (название, функция загрузки состава)
 OFFICIAL = {
     26: ("Локомотив", fetch_lokomotiv),
+}
+
+# Для боковых «крыльев» сайта: что показать о клубе, кроме игроков.
+# Только проверенное: оба Кубка Гагарина клуб называет в биографиях
+# игроков на своём сайте, чемпионства и арена — общеизвестны.
+FACTS = {
+    26: [
+        {"k": "Кубок Гагарина", "v": "2025 · 2026", "tone": "gold"},
+        {"k": "Чемпион России", "v": "1997 · 2002 · 2003"},
+        {"k": "Домашний лёд", "v": "Арена-2000"},
+    ],
 }
 
 
@@ -203,9 +239,14 @@ def apply(season_data: dict, season: str = "2026/2027", progress=print) -> dict:
             kept.append(p)
 
         players = kept + merged
+        # merged идёт строго по порядку official: одна запись на игрока.
         season_data["club_rosters"][str(team_id)] = [
-            {k: m[k] for k in ("name", "number", "role_key", "role", "injured", "farm_club")}
-            for m in merged
+            {
+                **{k: m[k] for k in ("name", "number", "role_key", "role", "injured", "farm_club")},
+                "photo_url": member.get("photo_url"),
+                "action_url": member.get("action_url"),
+            }
+            for m, member in zip(merged, official)
         ]
         for m in merged:
             if m["injured"]:
