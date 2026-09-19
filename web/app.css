@@ -988,9 +988,9 @@ table.grid tr.flash td { animation: row-flash 2.2s ease-out; }
 
 /* ================================ крылья ================================ */
 
-/* Свободные поля по бокам широкого экрана — моему клубу. Слева лента
-   портретов, справа снимки с матчей вперемешку с фактами о клубе. Ленты
-   плывут навстречу друг другу; положение каждый кадр задаёт app.js.
+/* На вкладке клуба свободные поля по бокам широкого экрана — ему. Слева
+   лента портретов, справа снимки с матчей вперемешку с фактами о клубе.
+   Ленты плывут навстречу друг другу; положение каждый кадр задаёт app.js.
    Колонка контента — 1240 px; крыло занимает середину свободного поля. */
 .wings { display: none; }
 
@@ -1020,6 +1020,14 @@ table.grid tr.flash td { animation: row-flash 2.2s ease-out; }
 }
 .wing-l { left:  calc((var(--side) - var(--w)) / 2); }
 .wing-r { right: calc((var(--side) - var(--w)) / 2); }
+
+/* Вход на вкладку клуба: крылья выезжают снизу и проявляются. */
+.wing, .wing-edge { animation: wing-in .9s cubic-bezier(.2,.8,.2,1) both; }
+.wing-r, .edge-r { animation-delay: .1s; }
+@keyframes wing-in {
+  from { opacity: 0; translate: 0 40px; }
+  to   { opacity: 1; translate: 0 0; }
+}
 
 .wing-track { will-change: transform; padding-top: 18px; }
 
@@ -1187,6 +1195,7 @@ table.grid tr.flash td { animation: row-flash 2.2s ease-out; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .wing, .wing-edge { animation: none; }
   .fact.gold .v { animation: none; }
   .pcard:hover::before, .acard:hover::before { animation: none; }
   .pcard, .acard, .pcard img, .acard img { transition: none; }

@@ -650,14 +650,15 @@
 
   /* ================================ крылья ================================ */
 
-  // Свободные поля по бокам широкого экрана отданы моему клубу: слева лента
-  // портретов, справа снимки с матчей вперемешку с фактами о клубе. Ленты
-  // плывут навстречу друг другу и откликаются на прокрутку страницы.
-  // Строятся, только когда экран достаточно широк, — телефон фото не качает.
+  // На вкладке клуба свободные поля по бокам широкого экрана отданы ему:
+  // слева лента портретов, справа снимки с матчей вперемешку с фактами.
+  // Ленты плывут навстречу друг другу и откликаются на прокрутку страницы.
+  // Строятся, только когда открыта вкладка клуба и экран достаточно широк:
+  // на других вкладках и на телефоне фото не качаются.
   var WIDE = window.matchMedia("(min-width: 1500px)");
   var WING_SPEED = 0.022;      // пикселей в миллисекунду — около 22 в секунду
   var WING_SCROLL = 0.35;      // какую долю прокрутки страницы повторяют ленты
-  var wingState = { lanes: [], running: false, last: 0, wide: null };
+  var wingState = { lanes: [], running: false, last: 0, shown: null };
 
   function photoUrl(name) {
     return (MODE === "web" ? "photos/" : "/photos/") + encodeURIComponent(name);
@@ -787,8 +788,8 @@
   function renderWings() {
     var host = $("wings");
     if (!host) return;
-    wingState.wide = WIDE.matches;
-    var club = APP.myTeam && WIDE.matches ? clubModel(APP.myTeam) : null;
+    wingState.shown = wingsWanted();
+    var club = APP.myTeam && wingState.shown ? clubModel(APP.myTeam) : null;
     var list = club ? wingPlayers(club) : [];
     var portraits = list.filter(function (x) { return x.photo; });
     if (portraits.length < 4) {
@@ -862,16 +863,19 @@
     if (HAS_GSAP) window.gsap.ticker.remove(wingsTick);
   }
 
-  // Экран сузился или расширился через границу — собрать или убрать крылья.
+  function wingsWanted() {
+    return WIDE.matches && currentView() === "club";
+  }
+
+  // Сменилась вкладка или экран перешёл границу ширины — собрать или убрать крылья.
   function syncWings() {
-    if (WIDE.matches !== wingState.wide) renderWings();
+    if (wingsWanted() !== wingState.shown) renderWings();
     else if (wingState.lanes.length) measureWings();
   }
 
   function setupWings() {
     if (WIDE.addEventListener) WIDE.addEventListener("change", syncWings);
     else if (WIDE.addListener) WIDE.addListener(syncWings);
-    renderWings();
   }
 
   // Клик по карточке на крыле — к этому игроку в составе клуба.
@@ -1634,6 +1638,7 @@
     });
     moveTabPill(view);
     paint(view);
+    syncWings();
 
     // Графики нельзя разложить в скрытом контейнере — подгоняем после показа.
     Object.keys(APP.charts).forEach(function (id) {
@@ -1675,8 +1680,8 @@
     wireFilters();
     wireInjuryForm();
     updateClubTab();
-    show(currentView());
     setupWings();
+    show(currentView());
   }
 
   function fail(message) {
