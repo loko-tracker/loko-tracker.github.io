@@ -269,17 +269,60 @@
     var pill = $("tabPill");
     var link = $("tabs").querySelector('a[data-view="' + view + '"]');
     if (!pill || !link) return;
+    // На узком экране вкладки переносятся на вторую строку, поэтому пилюля
+    // встаёт и по горизонтали, и по вертикали — ровно под нужную ссылку.
     pill.style.opacity = "1";
     pill.style.width = link.offsetWidth + "px";
-    pill.style.transform = "translateX(" + link.offsetLeft + "px)";
+    pill.style.height = link.offsetHeight + "px";
+    pill.style.transform = "translate(" + link.offsetLeft + "px," + link.offsetTop + "px)";
   }
 
   /* =========================== обратный отсчёт =========================== */
 
-  var countdownTimer = null;
+  // Отсчётов на странице два — до ближайшего матча лиги и до матча клуба,
+  // поэтому таймеры хранятся по имени и перезапускаются независимо.
+  var countdownTimers = {};
+
+  function runCountdown(name, targetIso, ids) {
+    if (countdownTimers[name]) { clearInterval(countdownTimers[name]); delete countdownTimers[name]; }
+    var target = parseDate(targetIso);
+    if (!target) return;
+
+    function tick() {
+      var left = Math.max(0, target - Date.now());
+      var s = Math.floor(left / 1000);
+      var parts = [Math.floor(s / 86400), Math.floor(s % 86400 / 3600), Math.floor(s % 3600 / 60), s % 60];
+      ids.forEach(function (id, index) {
+        var node = $(id);
+        if (!node) return;
+        var value = index ? String(parts[index]).padStart(2, "0") : String(parts[index]);
+        if (node.textContent !== value) node.textContent = value;
+      });
+      if (left === 0 && countdownTimers[name]) {
+        clearInterval(countdownTimers[name]);
+        delete countdownTimers[name];
+      }
+    }
+    tick();
+    countdownTimers[name] = setInterval(tick, 1000);
+  }
+
+  // «Впереди» — это не просто «не отмечен сыгранным»: данные обновляются
+  // раз в сутки, и к вечеру утренние матчи в них ещё числятся несыгранными.
+  // Поэтому смотрим на часы зрителя: матч впереди, только если он не начался.
+  function isAhead(game) {
+    if (game.state === "finished") return false;
+    var start = parseDate(game.start_at);
+    return !start || start.getTime() > Date.now();
+  }
+
+  // Прошёл по времени, но итога в данных ещё нет (ждёт утреннего обновления).
+  function isAwaitingResult(game) {
+    return game.state !== "finished" && !isAhead(game);
+  }
 
   function startCountdown() {
-    var next = (APP.data.games || []).filter(function (g) { return g.state !== "finished"; })[0];
+    var next = (APP.data.games || []).filter(isAhead)[0];
     if (!next) {
       $("cdGame").textContent = "Матчей впереди нет.";
       return;
@@ -288,28 +331,321 @@
       ' <span style="color:var(--muted)">—</span> ' + crest(next.away_id) + esc(next.away) +
       ' <span style="color:var(--muted)">· ' + esc(fmtDayFull(next.start_at)) +
       ", " + esc(fmtTime(next.start_at)) + "</span>";
+    runCountdown("league", next.start_at, ["cdD","cdH","cdM","cdS"]);
+  }
 
-    var target = parseDate(next.start_at);
-    if (!target) return;
+  /* ============================== мой клуб ============================== */
 
-    function tick() {
-      var left = Math.max(0, target - Date.now());
-      var s = Math.floor(left / 1000);
-      var parts = [Math.floor(s / 86400), Math.floor(s % 86400 / 3600), Math.floor(s % 3600 / 60), s % 60];
-      ["cdD","cdH","cdM","cdS"].forEach(function (id, index) {
-        var value = index ? String(parts[index]).padStart(2, "0") : String(parts[index]);
-        if ($(id).textContent !== value) $(id).textContent = value;
-      });
-      if (left === 0 && countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+  // Клуб по умолчанию задаётся при сборке (site.json), но у каждого
+  // посетителя может быть свой — выбор хранится в его браузере.
+  var TEAM_KEY = "khl-tracker-my-team-v1";
+
+  function myTeamId() {
+    try {
+      var stored = window.localStorage.getItem(TEAM_KEY);
+      if (stored && teamById(Number(stored))) return Number(stored);
+    } catch (error) { /* хранилище недоступно — берём клуб по умолчанию */ }
+    return APP.data.my_team_id || null;
+  }
+
+  function setMyTeam(teamId) {
+    try { window.localStorage.setItem(TEAM_KEY, String(teamId)); }
+    catch (error) { /* не запомнится, но на эту сессию сработает */ }
+    APP.myTeam = Number(teamId);
+  }
+
+  function isMine(teamId) {
+    return APP.myTeam != null && Number(teamId) === APP.myTeam;
+  }
+
+  function teamById(teamId) {
+    return (APP.data.teams || []).filter(function (t) { return t.id === teamId; })[0] || null;
+  }
+
+  // Исход матча глазами клуба. Счёт в данных итоговый: решающая шайба
+  // в овертайме или по буллитам уже в нём, а как кончилось — видно по периодам.
+  function outcome(game, teamId) {
+    var parts = String(game.score || "").split(":");
+    if (parts.length !== 2) return null;
+    var home = game.home_id === teamId;
+    var mine = Number(home ? parts[0] : parts[1]);
+    var theirs = Number(home ? parts[1] : parts[0]);
+    var periods = game.periods || {};
+    var extra = periods.so ? "Б" : periods.ot ? "ОТ" : "";
+    var win = mine > theirs;
+    return {
+      win: win,
+      extra: extra,
+      mine: mine,
+      theirs: theirs,
+      home: home,
+      points: win ? 2 : (extra ? 1 : 0),
+      code: win ? "w" : (extra ? "otl" : "l"),
+      // Как в таблице КХЛ: ВО/ВБ — победа в овертайме/по буллитам, ПО/ПБ — поражение.
+      label: (win ? "В" : "П") + (extra === "ОТ" ? "О" : extra === "Б" ? "Б" : ""),
+      opponentId: home ? game.away_id : game.home_id,
+      opponent: home ? game.away : game.home
+    };
+  }
+
+  function clubModel(teamId) {
+    var team = teamById(teamId);
+    if (!team) return null;
+
+    var row = null;
+    ["west","east"].forEach(function (key) {
+      (APP.data.standings[key] || []).forEach(function (r) { if (r.team_id === teamId) row = r; });
+    });
+    var odds = (APP.data.odds.teams || []).filter(function (t) { return t.team_id === teamId; })[0] || null;
+
+    var games = (APP.data.games || []).filter(function (g) {
+      return g.home_id === teamId || g.away_id === teamId;
+    });
+    var played = games.filter(function (g) { return g.state === "finished"; })
+      .map(function (g) { return { game: g, result: outcome(g, teamId) }; })
+      .filter(function (x) { return x.result; });
+    var upcoming = games.filter(isAhead);
+
+    // Текущая серия: сколько последних матчей подряд с одним исходом.
+    var streak = { count: 0, win: null };
+    for (var i = played.length - 1; i >= 0; i--) {
+      var won = played[i].result.win;
+      if (streak.win === null) streak.win = won;
+      if (won !== streak.win) break;
+      streak.count++;
     }
-    tick();
-    if (countdownTimer) clearInterval(countdownTimer);
-    countdownTimer = setInterval(tick, 1000);
+
+    var roster = (APP.data.players || []).filter(function (p) { return p.team_id === teamId; });
+    var official = !!(APP.data.club_rosters || {})[String(teamId)];
+    var injuries = (APP.data.injuries || []).filter(function (i) {
+      return i.team_id === teamId || i.team === team.name;
+    });
+
+    return {
+      team: team, row: row, odds: odds, games: games, played: played,
+      upcoming: upcoming, next: upcoming[0] || null, streak: streak,
+      roster: roster, official: official, injuries: injuries
+    };
+  }
+
+  function streakText(streak) {
+    if (!streak.count) return "—";
+    var n = streak.count, word;
+    var mod10 = n % 10, mod100 = n % 100;
+    if (streak.win) word = (mod10 === 1 && mod100 !== 11) ? "победа" : (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) ? "победы" : "побед";
+    else word = (mod10 === 1 && mod100 !== 11) ? "поражение" : (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) ? "поражения" : "поражений";
+    return n + " " + word + " подряд";
+  }
+
+  function formChip(item) {
+    var r = item.result;
+    return '<span class="chip ' + r.code + '" title="' + esc(fmtDayFull(item.game.start_at) + " · " +
+      (r.home ? "дома" : "в гостях") + " · " + item.game.home + " " + item.game.score + " " + item.game.away) + '">' +
+      "<b>" + esc(r.label) + "</b>" + crest(r.opponentId) + r.mine + ":" + r.theirs + "</span>";
+  }
+
+  function renderClubHero() {
+    var host = $("clubHero");
+    var club = APP.myTeam ? clubModel(APP.myTeam) : null;
+    if (!club) { host.hidden = true; return; }
+    host.hidden = false;
+
+    var row = club.row || {}, odds = club.odds || {};
+    var place = row.position ? row.position + "-е место на " + (row.conference_key === "east" ? "Востоке" : "Западе") : "";
+    var meta = [club.team.location, place, row.coach ? "тренер " + row.coach.split(" ").slice(0, 2).reverse().join(" ") : ""]
+      .filter(Boolean).join(" · ");
+
+    var kpis = [
+      { k: "Очки", v: row.pts != null ? row.pts : "—" },
+      { k: "Матчи", v: row.gp != null ? row.gp : "—" },
+      { k: "Шайбы", v: row.gf != null ? row.gf + "–" + row.ga : "—" },
+      { k: "Плей-офф", v: odds.playoff_pct != null ? pct(odds.playoff_pct) + "%" : "—" },
+      { k: "Серия", v: streakText(club.streak), hot: club.streak.win && club.streak.count >= 3 }
+    ];
+
+    var form = club.played.slice(-6).map(formChip).join("") ||
+      '<span class="chip">сезон ещё не начался</span>';
+
+    var next = club.next, nextHtml;
+    if (next) {
+      var home = next.home_id === club.team.id;
+      var oppId = home ? next.away_id : next.home_id;
+      var opp = home ? next.away : next.home;
+      nextHtml =
+        '<span class="k">Следующий матч · ' + (home ? "дома" : "в гостях") + '</span>' +
+        '<div class="vs">' + crest(oppId) + esc(opp) + '</div>' +
+        '<div class="when">' + esc(fmtDayFull(next.start_at)) + ", " + esc(fmtWeekday(next.start_at)) +
+          ", " + esc(fmtTime(next.start_at)) + '</div>' +
+        '<div class="cd-clock">' +
+          '<span class="cd-unit"><b id="ccD">—</b><i>дн</i></span>' +
+          '<span class="cd-unit"><b id="ccH">—</b><i>ч</i></span>' +
+          '<span class="cd-unit"><b id="ccM">—</b><i>мин</i></span>' +
+          '<span class="cd-unit"><b id="ccS">—</b><i>с</i></span>' +
+        '</div>';
+    } else {
+      nextHtml = '<span class="k">Следующий матч</span><div class="when">Матчей впереди нет.</div>';
+    }
+
+    host.innerHTML =
+      '<div>' +
+        '<div class="club-id">' + crest(club.team.id, "big").replace('class="crest ', 'class="club-crest ') +
+          '<div><p class="club-eyebrow">Мой клуб</p>' +
+          '<h2 class="club-name">' + esc(club.team.name) + '</h2>' +
+          '<p class="club-meta">' + esc(meta) + '</p></div>' +
+        '</div>' +
+        '<div class="club-kpis">' + kpis.map(function (x) {
+          return '<div class="club-kpi"><span class="k">' + esc(x.k) + '</span>' +
+            '<span class="v' + (x.hot ? " hot" : "") + '">' + esc(x.v) + '</span></div>';
+        }).join("") + '</div>' +
+        '<div class="form-strip" aria-label="Последние матчи">' + form + '</div>' +
+      '</div>' +
+      '<div class="club-next">' + nextHtml +
+        '<a class="club-link" href="#/club">Календарь и состав →</a>' +
+      '</div>';
+
+    if (next) runCountdown("club", next.start_at, ["ccD","ccH","ccM","ccS"]);
+  }
+
+  var ROLE_GROUPS = [
+    { key: "goaltender", title: "Вратари" },
+    { key: "defenseman", title: "Защитники" },
+    { key: "forward",    title: "Нападающие" }
+  ];
+
+  function renderClub() {
+    var club = APP.myTeam ? clubModel(APP.myTeam) : null;
+    if (!club) {
+      $("clubHead").innerHTML = '<p class="empty">Клуб не выбран — выбери его ниже.</p>';
+      fillClubSelect();
+      return;
+    }
+    var row = club.row || {}, odds = club.odds || {};
+
+    $("clubHead").innerHTML =
+      crest(club.team.id, "big").replace('class="crest ', 'class="club-crest ') +
+      '<div><p class="club-eyebrow">Мой клуб</p><h1 class="club-name">' + esc(club.team.name) + '</h1>' +
+      '<p class="club-meta">' + esc([club.team.location, club.team.division ? "дивизион " + club.team.division : "",
+        row.coach ? "тренер " + row.coach : ""].filter(Boolean).join(" · ")) + '</p></div>';
+
+    var tiles = [
+      { k: "Место", v: row.position ? row.position : "—", sub: row.conference_key === "east" ? "на Востоке" : "на Западе" },
+      { k: "Очки", v: row.pts != null ? row.pts : "—", sub: row.gp != null ? "за " + row.gp + " матч." : "" },
+      { k: "Плей-офф", v: odds.playoff_pct != null ? pct(odds.playoff_pct) + "%" : "—", sub: "шанс по симуляции" },
+      { k: "Прогноз очков", v: odds.proj_pts != null ? dec(odds.proj_pts, 0) : "—",
+        sub: odds.proj_pts_low != null ? "вероятно " + odds.proj_pts_low + "–" + odds.proj_pts_high : "" },
+      { k: "Серия", v: club.streak.count || "—", sub: club.streak.count ? streakText(club.streak).replace(/^\d+ /, "") : "" }
+    ];
+    $("clubTiles").innerHTML = tiles.map(function (t) {
+      return '<div class="stat"><div class="k">' + esc(t.k) + '</div><div class="v">' + esc(t.v) +
+        '</div><div class="sub">' + esc(t.sub) + '</div></div>';
+    }).join("");
+
+    // Календарь: сыгранные сверху вниз по времени, затем предстоящие.
+    var head = "<thead><tr><th class='l'>Дата</th><th class='l'></th><th class='l'>Соперник</th>" +
+      "<th>Счёт</th><th class='l'>Итог</th></tr></thead>";
+    var body = club.games.map(function (g) {
+      var home = g.home_id === club.team.id;
+      var oppId = home ? g.away_id : g.home_id, opp = home ? g.away : g.home;
+      var r = g.state === "finished" ? outcome(g, club.team.id) : null;
+      var result = r
+        ? "<span class='pill " + (r.code === "w" ? "zone" : r.code === "otl" ? "dim" : "hot") + "'>" +
+            (r.win ? "победа" : "поражение") + (r.extra ? " · " + r.extra : "") + "</span>"
+        : isAwaitingResult(g)
+          ? "<span class='pill dim'>ждём итог</span>"
+          : "<span class='pill dim'>" + esc(fmtTime(g.start_at)) + "</span>";
+      return "<tr" + (g === club.next ? " class='mine'" : "") + ">" +
+        "<td class='l dim'>" + esc(fmtDay(g.start_at)) + ", " + esc(fmtWeekday(g.start_at)) + "</td>" +
+        "<td class='l dim'>" + (home ? "дома" : "в гостях") + "</td>" +
+        "<td class='l'>" + crest(oppId) + esc(opp) + "</td>" +
+        "<td class='strong'>" + (r ? r.mine + ":" + r.theirs : "—") + "</td>" +
+        "<td class='l'>" + result + "</td>" +
+      "</tr>";
+    }).join("");
+    $("clubGames").innerHTML = head + "<tbody>" +
+      (body || "<tr><td class='l dim' colspan='5'>Матчей нет.</td></tr>") + "</tbody>";
+
+    // Лазарет клуба: данные клуба, твои отметки и новости вместе.
+    $("clubInjuries").innerHTML = club.injuries.length
+      ? "<div class='table-scroll'><table class='grid'><tbody>" + club.injuries.map(function (i) {
+          var source = i.source === "club" ? "данные клуба" : i.source === "manual" ? "твоя отметка" : "из новостей";
+          return "<tr><td class='l'>" + esc(i.player) + "</td>" +
+            "<td class='l'><span class='pill hot'>" + esc(i.status || "травма") + "</span></td>" +
+            "<td class='l dim'>" + esc(i.until || i.term || "") + "</td>" +
+            "<td class='l dim'>" + esc(source) + "</td></tr>";
+        }).join("") + "</tbody></table></div>"
+      : '<p class="empty">Травмированных нет' + (club.official ? " — по данным клуба." : ".") + '</p>';
+
+    var leaders = club.roster.filter(function (p) { return p.gp; })
+      .sort(function (a, b) { return (b.pts - a.pts) || (b.g - a.g); }).slice(0, 5);
+    $("clubLeaders").innerHTML = leaders.length
+      ? "<div class='table-scroll'><table class='grid'><tbody>" + leaders.map(function (p, i) {
+          return "<tr><td class='dim'>" + (i + 1) + "</td><td class='l'>" + esc(p.name) + "</td>" +
+            "<td class='dim'>" + p.g + "+" + p.a + "</td><td class='strong'>" + p.pts + "</td></tr>";
+        }).join("") + "</tbody></table></div>"
+      : '<p class="empty">Статистики пока нет.</p>';
+
+    $("clubRosterNote").textContent = club.official
+      ? "Состав — по данным официального сайта клуба (" + club.roster.length + " игроков), статистика — по данным лиги. У тех, кто ещё не выходил на лёд, нули."
+      : "Состав — по данным лиги: в нём только игроки, у которых уже есть статистика в сезоне.";
+
+    $("clubRoster").innerHTML = ROLE_GROUPS.map(function (group) {
+      var list = club.roster.filter(function (p) { return p.role_key === group.key; });
+      if (!list.length) return "";
+      list.sort(function (a, b) {
+        return group.key === "goaltender" ? (b.gp - a.gp) : ((b.pts - a.pts) || (b.gp - a.gp));
+      });
+      var goalie = group.key === "goaltender";
+      // У вратарей лига отдаёт только число игр: время на льду у них нулевое,
+      // а сейвов в данных нет — показывать нечего, кроме матчей.
+      var headRow = "<thead><tr><th class='l'>№</th><th class='l'>Игрок</th><th>И</th>" +
+        (goalie ? "" : "<th>Г</th><th>П</th><th>О</th><th>+/−</th>") + "</tr></thead>";
+      var rows = list.map(function (p) {
+        var flags = (p.injured ? " <span class='pill hot'>травма</span>" : "") +
+                    (p.farm_club ? " <span class='pill dim'>фарм</span>" : "");
+        return "<tr><td class='l'><span class='num-badge'>" + esc(p.number != null ? p.number : "") + "</span></td>" +
+          "<td class='l'>" + esc(p.name) + flags + "</td><td>" + (p.gp || 0) + "</td>" +
+          (goalie ? ""
+                  : "<td>" + (p.g || 0) + "</td><td>" + (p.a || 0) + "</td><td class='strong'>" + (p.pts || 0) +
+                    "</td><td>" + signed(p.plus_minus) + "</td>") +
+          "</tr>";
+      }).join("");
+      return '<div class="panel"><h3 class="panel-head">' + esc(group.title) +
+        ' <span style="color:var(--muted);font-weight:400">' + list.length + '</span></h3>' +
+        '<div class="table-scroll"><table class="grid">' + headRow + "<tbody>" + rows + "</tbody></table></div></div>";
+    }).join("");
+
+    fillClubSelect();
+  }
+
+  function fillClubSelect() {
+    var select = $("clubSelect");
+    if (select.options.length) { select.value = String(APP.myTeam || ""); return; }
+    (APP.data.teams || []).slice().sort(byName).forEach(function (t) {
+      var option = document.createElement("option");
+      option.value = String(t.id);
+      option.textContent = t.name;
+      select.appendChild(option);
+    });
+    select.value = String(APP.myTeam || "");
+    select.addEventListener("change", function () {
+      setMyTeam(select.value);
+      updateClubTab();
+      // Клуб влияет на подсветку во всех разделах — перерисуем их заново.
+      rendered = {};
+      paint(currentView());
+    });
+  }
+
+  function updateClubTab() {
+    var team = APP.myTeam ? teamById(APP.myTeam) : null;
+    $("clubTab").textContent = team ? team.name : "Мой клуб";
+    moveTabPill(currentView());
   }
 
   /* ================================= обзор ================================= */
 
   function renderOverview() {
+    renderClubHero();
     var summary = APP.data.summary, odds = APP.data.odds;
     var leader = (APP.data.leaders.pts || [])[0];
     var favourite = (odds.teams || []).slice().sort(function (a, b) {
@@ -345,7 +681,7 @@
       "Доля из " + odds.sims.toLocaleString("ru-RU") + " симуляций остатка сезона (" +
       odds.games_remaining + " матчей). Раннему сезону верить нельзя: рейтинги стянуты к среднему.";
 
-    var upcoming = (APP.data.games || []).filter(function (g) { return g.state !== "finished"; }).slice(0, 8);
+    var upcoming = (APP.data.games || []).filter(isAhead).slice(0, 8);
     $("nextGames").innerHTML = upcoming.length ? upcoming.map(gameRow).join("")
       : '<p class="empty">Матчей впереди нет.</p>';
 
@@ -402,7 +738,8 @@
   function gameRow(game) {
     var finished = game.state === "finished";
     var periods = periodsText(game);
-    return '<div class="game">' +
+    var mine = isMine(game.home_id) || isMine(game.away_id);
+    return '<div class="game' + (mine ? " mine" : "") + '">' +
       '<div class="when">' + esc(fmtDay(game.start_at)) + '<br>' + esc(fmtTime(game.start_at)) + '</div>' +
       '<div class="who">' + crest(game.home_id) + esc(game.home) +
         ' <span class="vs">—</span> ' + crest(game.away_id) + esc(game.away) + '</div>' +
@@ -420,7 +757,8 @@
       var tipText = "<b>" + esc(r.name) + "</b><span class='num'>плей-офф " + pct(r.playoff_pct) +
         "%<br>1-е в конференции " + pct(r.conf_first_pct) +
         "%<br>прогноз очков " + dec(r.proj_pts) + " (вероятно " + r.proj_pts_low + "–" + r.proj_pts_high + ")</span>";
-      return '<div class="obar" data-tip="' + esc(tipText) + '" data-pct="' + r.playoff_pct + '">' +
+      return '<div class="obar' + (isMine(r.team_id) ? " mine" : "") + '" data-tip="' + esc(tipText) +
+        '" data-pct="' + r.playoff_pct + '">' +
         '<div class="nm">' + crest(r.team_id) + esc(r.name) + '</div>' +
         '<div class="track"><div class="fill" style="background:' + oddsColor(r.playoff_pct) + '"></div></div>' +
         '<div class="val"><b>' + pct(r.playoff_pct) + '%</b></div>' +
@@ -630,7 +968,8 @@
         "<th>И</th><th>В</th><th>ВО</th><th>ВБ</th><th>ПБ</th><th>ПО</th><th>П</th>" +
         "<th>Ш</th><th>О</th><th>П-О</th></tr></thead>";
       var body = rows.map(function (r) {
-        return "<tr" + (r.position === 8 ? " class='cut'" : "") + ">" +
+        var cls = [r.position === 8 ? "cut" : "", isMine(r.team_id) ? "mine" : ""].join(" ").trim();
+        return "<tr" + (cls ? " class='" + cls + "'" : "") + ">" +
           "<td class='l dim'>" + r.position + "</td>" +
           "<td class='l'>" + crest(r.team_id) + esc(r.name) + "</td>" +
           "<td>" + r.gp + "</td><td>" + r.w + "</td><td>" + r.otw + "</td><td>" + r.sow + "</td>" +
@@ -713,7 +1052,7 @@
   function renderOddsTable() {
     var rows = sortRows((APP.data.odds.teams || []).slice(), oddsSort);
     var body = rows.map(function (r) {
-      return "<tr>" + ODDS_COLS.map(function (c) {
+      return "<tr" + (isMine(r.team_id) ? " class='mine'" : "") + ">" + ODDS_COLS.map(function (c) {
         var value = r[c.field], style = "";
         if (c.percent) {
           if (c.field === "playoff_pct") style = " style='color:" + oddsColor(value) + ";font-weight:600'";
@@ -740,7 +1079,7 @@
     var list = (APP.data.games || []).filter(function (g) {
       if (team && String(g.home_id) !== team && String(g.away_id) !== team) return false;
       if (state === "finished" && g.state !== "finished") return false;
-      if (state === "upcoming" && g.state === "finished") return false;
+      if (state === "upcoming" && !isAhead(g)) return false;
       if (month && monthKey(g.start_at) !== month) return false;
       return true;
     });
@@ -753,11 +1092,13 @@
 
     var body = list.map(function (g) {
       var finished = g.state === "finished";
-      return "<tr>" +
+      var mine = isMine(g.home_id) || isMine(g.away_id);
+      return "<tr" + (mine ? " class='mine'" : "") + ">" +
         "<td class='l dim'>" + esc(fmtDayFull(g.start_at)) + ", " + esc(fmtWeekday(g.start_at)) + "</td>" +
         "<td class='dim'>" + esc(fmtTime(g.start_at)) + "</td>" +
         "<td class='l'>" + crest(g.home_id) + esc(g.home) + "</td>" +
-        "<td class='strong'>" + (finished ? esc(g.score || "") : "<span class='pill dim'>скоро</span>") + "</td>" +
+        "<td class='strong'>" + (finished ? esc(g.score || "")
+          : "<span class='pill dim'>" + (isAwaitingResult(g) ? "ждём итог" : "скоро") + "</span>") + "</td>" +
         "<td class='l'>" + crest(g.away_id) + esc(g.away) + "</td>" +
         "<td class='l dim'>" + esc(periodsText(g)) + "</td>" +
         "<td class='l dim'>" + esc(g.location || "") + "</td>" +
@@ -813,7 +1154,8 @@
         var cls = [c.cls || "", c.dim ? "dim" : "", c.strong ? "strong" : ""].join(" ").trim();
         return "<td class='" + cls + "'>" + (c.logo ? crest(p.team_id) : "") + esc(value) + "</td>";
       }).join("");
-      return "<tr><td class='l dim'>" + (index + 1) + "</td>" + cells + "</tr>";
+      return "<tr" + (isMine(p.team_id) ? " class='mine'" : "") + "><td class='l dim'>" +
+        (index + 1) + "</td>" + cells + "</tr>";
     }).join("");
 
     $("playersTable").innerHTML = sortableHead(PLAYER_COLS, playerSort, "<th class='l'>#</th>") +
@@ -835,8 +1177,21 @@
     var manualHead = "<thead><tr><th class='l'>Игрок</th><th class='l'>Клуб</th>" +
       "<th class='l'>Статус</th><th class='l'>До</th><th class='l'>Заметка</th>" +
       (editable ? "<th></th>" : "") + "</tr></thead>";
-    var manualBody = manual.map(function (item, index) {
-      return "<tr>" +
+    // Травмы по данным самих клубов — первыми и без кнопки «убрать»:
+    // их снимает клуб, а не мы. Индексы удаления считаются только по своим.
+    var clubRows = (APP.data.injuries || []).filter(function (i) { return i.source === "club"; })
+      .map(function (item) {
+        return "<tr" + (isMine(item.team_id) ? " class='mine'" : "") + ">" +
+          "<td class='l'>" + esc(item.player) + "</td>" +
+          "<td class='l dim'>" + crest(item.team_id) + esc(item.team) + "</td>" +
+          "<td class='l'><span class='pill hot'>" + esc(item.status || "травма") + "</span></td>" +
+          "<td class='l dim'>" + esc(item.until || "—") + "</td>" +
+          "<td class='l dim'>по данным клуба</td>" +
+          (editable ? "<td></td>" : "") +
+        "</tr>";
+      }).join("");
+    var manualBody = clubRows + manual.map(function (item, index) {
+      return "<tr" + (isMine(item.team_id) ? " class='mine'" : "") + ">" +
         "<td class='l'>" + esc(item.player) + "</td>" +
         "<td class='l dim'>" + crest(item.team_id) + esc(item.team) + "</td>" +
         "<td class='l'><span class='pill hot'>" + esc(item.status || "травма") + "</span></td>" +
@@ -998,7 +1353,7 @@
 
   /* ============================== навигация ============================== */
 
-  var VIEWS = ["overview","games","table","odds","players","injuries"];
+  var VIEWS = ["overview","club","games","table","odds","players","injuries"];
   var rendered = {};
 
   function currentView() {
@@ -1009,6 +1364,7 @@
   function paint(view) {
     if (rendered[view]) return;
     if (view === "overview") renderOverview();
+    if (view === "club") renderClub();
     if (view === "games") renderGames();
     if (view === "table") renderTable();
     if (view === "odds") renderOdds();
@@ -1053,12 +1409,14 @@
 
   function start(data) {
     APP.data = data;
+    APP.myTeam = myTeamId();
     if ($("app")) $("app").hidden = false;
     $("loading").hidden = true;
     armAnimations();
     renderHeader();
     wireFilters();
     wireInjuryForm();
+    updateClubTab();
     show(currentView());
   }
 

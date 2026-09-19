@@ -52,6 +52,7 @@
     <nav class="tabs" id="tabs" aria-label="Разделы">
       <span class="tab-pill" id="tabPill" aria-hidden="true"></span>
       <a href="#/"         data-view="overview">Обзор</a>
+      <a href="#/club"     data-view="club" id="clubTab">Мой клуб</a>
       <a href="#/games"    data-view="games">Матчи</a>
       <a href="#/table"    data-view="table">Таблица</a>
       <a href="#/odds"     data-view="odds">Шансы</a>
@@ -79,6 +80,9 @@
 
   <!-- ============================== ОБЗОР ============================== -->
   <section class="view" id="view-overview" hidden>
+
+    <!-- Мой клуб: то, ради чего открывают сайт, — первым. -->
+    <div class="club-hero" id="clubHero" hidden></div>
 
     <div class="hero">
       <div class="hero-main">
@@ -130,6 +134,36 @@
 
     <h2 class="sec" data-reveal>Лидеры сезона</h2>
     <div class="cols-3" id="miniLeaders"></div>
+  </section>
+
+  <!-- ============================ МОЙ КЛУБ ============================ -->
+  <section class="view" id="view-club" hidden>
+    <div class="club-head" id="clubHead"></div>
+
+    <div class="stat-row" id="clubTiles"></div>
+
+    <div class="cols-2">
+      <div>
+        <h2 class="sec">Календарь</h2>
+        <div class="panel"><div class="table-scroll club-calendar"><table class="grid" id="clubGames"></table></div></div>
+      </div>
+      <div>
+        <h2 class="sec">Лазарет клуба</h2>
+        <div class="panel" id="clubInjuries"></div>
+        <h2 class="sec">Лучшие в клубе</h2>
+        <div class="panel" id="clubLeaders"></div>
+      </div>
+    </div>
+
+    <h2 class="sec">Состав</h2>
+    <p class="note" id="clubRosterNote"></p>
+    <div class="club-roster" id="clubRoster"></div>
+
+    <div class="club-pick">
+      <label for="clubSelect">Мой клуб</label>
+      <select id="clubSelect"></select>
+      <span class="club-pick-note">Выбор запоминается на этом устройстве.</span>
+    </div>
   </section>
 
   <!-- ============================== МАТЧИ ============================== -->

@@ -18,6 +18,7 @@ import odds as odds_module
 
 DATA = Path(__file__).parent / "data"
 SITE_DATA = DATA / "site_data.json"
+SITE_CONFIG = Path(__file__).parent / "site.json"
 
 LEADER_LIMIT = 40
 
@@ -49,6 +50,21 @@ def _leaders(players: list[dict], field: str, *, limit: int = LEADER_LIMIT,
         }
         for p in pool[:limit]
     ]
+
+
+def my_team_id(teams: list[dict]) -> int | None:
+    """Клуб, который сайт показывает первым. Задаётся названием в site.json."""
+    try:
+        name = json.loads(SITE_CONFIG.read_text(encoding="utf-8")).get("my_team")
+    except (OSError, json.JSONDecodeError):
+        return None
+    if not name:
+        return None
+    wanted = name.strip().lower()
+    for team in teams:
+        if (team.get("name") or "").strip().lower() == wanted:
+            return team["id"]
+    return None
 
 
 def build(season: dict | None = None, *, sims: int = 10_000, progress=print) -> dict:
@@ -146,7 +162,10 @@ def build(season: dict | None = None, *, sims: int = 10_000, progress=print) -> 
             "top_speed": _leaders(season["players"], "top_speed", min_games=2),
             "pim": _leaders(season["players"], "pim"),
         },
-        "injuries": injuries_module.merged(injuries_data),
+        # Травмы по данным самих клубов — первыми: они надёжнее новостей.
+        "injuries": season.get("club_injuries", []) + injuries_module.merged(injuries_data),
+        "my_team_id": my_team_id(season["teams"]),
+        "club_rosters": season.get("club_rosters", {}),
         "injuries_updated_at": injuries_data.get("updated_at"),
     }
 

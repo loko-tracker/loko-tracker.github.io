@@ -17,6 +17,7 @@ import traceback
 
 import auth
 import build
+import club_roster
 import collect
 import injuries as injuries_module
 import serve
@@ -59,6 +60,8 @@ def main() -> int:
         step("Данные из API КХЛ")
         try:
             season = collect.collect()
+            step("Официальные составы клубов")
+            club_roster.apply(season)
             collect.save(season)
         except Exception:
             traceback.print_exc()

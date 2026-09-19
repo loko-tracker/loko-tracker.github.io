@@ -43,7 +43,7 @@ HEADERS = {
 }
 
 INJURY_WORDS = re.compile(
-    r"травм|выбы|пропустит|пропуска|лазарет|операц|поврежд|сломал|"
+    r"травм|выбы|пропустит|лазарет|операц|поврежд|сломал|"
     r"дисквалифи|вне игры|не сыграет|восстанов|разрыв|перелом|сотрясен",
     re.IGNORECASE,
 )
@@ -149,9 +149,18 @@ def _find_term(text: str) -> str | None:
     return None
 
 
-def scan_news(players: list[dict], teams: list[dict] | None = None,
-              progress=print) -> list[dict]:
-    """Ищет в новостях упоминания травм игроков КХЛ."""
+# Заголовок начинается с фамилии, а дальше «о том», двоеточие или глагол
+# речи — значит, человек здесь говорит, а не выбыл: «Кожевников о том, что
+# Гусев пропускает…» — травмы у Кожевникова нет.
+SPEAKER_AFTER = re.compile(
+    r"^\s*(?:о том|об?\s|про\s|:|—|–|считает|рассказал|заявил|уверен|признался|"
+    r"ответил|оценил|прокомментировал|высказался|объяснил|сравнил|назвал|"
+    r"пожаловался|поделился|отметил|вспомнил|отреагировал|раскритиковал|похвалил)",
+    re.IGNORECASE,
+)
+
+
+def _indexes(players: list[dict], teams: list[dict] | None):
     # Основа фамилии -> игроки с такой фамилией (бывают полные тёзки)
     by_stem: dict[str, list[dict]] = {}
     for player in players:
@@ -162,22 +171,21 @@ def scan_news(players: list[dict], teams: list[dict] | None = None,
                 by_stem.setdefault(stem, []).append(player)
 
     # Ключи клубов берём из справочника команд: у части игроков поле team
-    # приходит пустым, и строить список по ним было бы ненадёжно.
-    club_keys: dict[str, str] = {}             # ключ в тексте -> имя клуба
+    # приходит пустым, и строить список по ним было бы ненадёжно. Ищем их
+    # только как отдельные слова: иначе «СКА» находился внутри «пропуСКАет».
+    club_patterns = []
     for team in teams or ():
         for key in _club_keys(team):
-            club_keys.setdefault(key, team.get("name") or "")
+            pattern = re.compile(rf"(?<!\w){re.escape(key)}\w{{0,3}}(?!\w)")
+            club_patterns.append((pattern, team.get("name") or ""))
+    return by_stem, club_patterns
 
-    headlines: dict[str, str] = {}
-    for url in SOURCES:
-        try:
-            page = _fetch(url)
-        except Exception as error:
-            progress(f"  не прочитал {url}: {type(error).__name__}")
-            continue
-        for text, href in _headlines(page):
-            headlines.setdefault(text, href)
-    progress(f"  заголовков просмотрено: {len(headlines)}")
+
+def match_headlines(headlines: dict[str, str], players: list[dict],
+                    teams: list[dict] | None = None) -> list[dict]:
+    """Все совпадения «заголовок о травме ↔ игрок КХЛ», без отбора лучших."""
+    by_stem, club_patterns = _indexes(players, teams)
+    found_at = dt.datetime.now().isoformat(timespec="seconds")
 
     results: list[dict] = []
     for text, href in headlines.items():
@@ -185,11 +193,15 @@ def scan_news(players: list[dict], teams: list[dict] | None = None,
             continue
 
         lowered = text.lower().replace("\xa0", " ")
-        mentioned_clubs = {club_keys[k] for k in club_keys if k in lowered}
+        mentioned_clubs = {name for pattern, name in club_patterns if pattern.search(lowered)}
 
         for stem, candidates in by_stem.items():
             # Основа фамилии плюс до четырёх букв падежного окончания
-            if not re.search(rf"\b{re.escape(stem)}\w{{0,4}}\b", lowered):
+            match = re.search(rf"\b{re.escape(stem)}\w{{0,4}}\b", lowered)
+            if not match:
+                continue
+            # Фамилия в начале заголовка и дальше «о том…» — это говорящий.
+            if match.start() <= 25 and SPEAKER_AFTER.match(lowered[match.end():]):
                 continue
 
             # Если в заголовке назван клуб, оставляем игроков этого клуба
@@ -201,10 +213,10 @@ def scan_news(players: list[dict], teams: list[dict] | None = None,
 
             if len(narrowed) == 1 and (mentioned_clubs or not NOISE_WORDS.search(text)):
                 confidence = "высокая" if mentioned_clubs else "средняя"
-            elif mentioned_clubs:
-                confidence = "средняя"
             else:
-                confidence = "низкая"
+                # Несколько однофамильцев и ничто не указывает, о ком речь, —
+                # такая догадка только путает, в список она не попадает.
+                continue
 
             for player in narrowed:
                 # У части игроков API не отдаёт клуб. Если в заголовке
@@ -223,19 +235,37 @@ def scan_news(players: list[dict], teams: list[dict] | None = None,
                         "url": href,
                         "term": _find_term(text),
                         "confidence": confidence,
-                        "found_at": dt.datetime.now().isoformat(timespec="seconds"),
+                        "found_at": found_at,
                     }
                 )
+    return results
+
+
+RANK = {"высокая": 0, "средняя": 1, "низкая": 2}
+
+
+def scan_news(players: list[dict], teams: list[dict] | None = None,
+              progress=print) -> list[dict]:
+    """Ищет в свежих новостях упоминания травм игроков КХЛ."""
+    headlines: dict[str, str] = {}
+    for url in SOURCES:
+        try:
+            page = _fetch(url)
+        except Exception as error:
+            progress(f"  не прочитал {url}: {type(error).__name__}")
+            continue
+        for text, href in _headlines(page):
+            headlines.setdefault(text, href)
+    progress(f"  заголовков просмотрено: {len(headlines)}")
 
     # Один игрок — одна запись: оставляем самую надёжную
-    rank = {"высокая": 0, "средняя": 1, "низкая": 2}
-    best: dict[int, dict] = {}
-    for item in results:
+    best: dict = {}
+    for item in match_headlines(headlines, players, teams):
         key = item["player_id"]
-        if key not in best or rank[item["confidence"]] < rank[best[key]["confidence"]]:
+        if key not in best or RANK[item["confidence"]] < RANK[best[key]["confidence"]]:
             best[key] = item
 
-    out = sorted(best.values(), key=lambda r: (rank[r["confidence"]], r["player"] or ""))
+    out = sorted(best.values(), key=lambda r: (RANK[r["confidence"]], r["player"] or ""))
     progress(f"  похоже на травмы игроков КХЛ: {len(out)}")
     return out
 
@@ -302,6 +332,22 @@ def refresh_auto(players: list[dict], teams: list[dict] | None = None,
         seen = _parse_moment(item.get("last_seen") or item.get("found_at"))
         if seen and (now - seen).days <= RETAIN_DAYS:
             kept[_auto_key(item)] = item
+
+    # Правила разбора со временем уточняются. Прежние находки проверяем теми
+    # же правилами, что и свежие, — иначе однажды пойманная ошибка висела бы
+    # в лазарете ещё три недели.
+    if kept:
+        recheck = match_headlines(
+            {item["headline"]: item.get("url", "") for item in kept.values() if item.get("headline")},
+            players, teams,
+        )
+        valid = {(r["player_id"], r["headline"]) for r in recheck}
+        dropped = [key for key, item in kept.items()
+                   if (item.get("player_id"), item.get("headline")) not in valid]
+        for key in dropped:
+            del kept[key]
+        if dropped:
+            progress(f"  прежних находок снято после перепроверки: {len(dropped)}")
 
     fresh = scan_news(players, teams, progress=progress)
     for item in fresh:

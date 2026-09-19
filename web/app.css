@@ -207,7 +207,7 @@ body {
   background: var(--ice);
   box-shadow: 0 0 18px -4px rgba(79,216,255,.6);
   opacity: 0;
-  transition: transform .34s cubic-bezier(.34,1.32,.5,1), width .34s cubic-bezier(.34,1.32,.5,1), opacity .2s;
+  transition: transform .34s cubic-bezier(.34,1.32,.5,1), width .34s cubic-bezier(.34,1.32,.5,1), height .34s ease, opacity .2s;
 }
 
 .masthead-right { display: flex; align-items: center; gap: 12px; margin-inline-start: auto; }
@@ -833,4 +833,136 @@ footer code {
 .readonly-note code {
   font-family: var(--mono); font-size: 12px;
   background: var(--raised); padding: 1px 5px; border-radius: 4px;
+}
+
+/* ============================== мой клуб ============================== */
+
+/* Карточка клуба наверху «Обзора». Слева — кто мы и как идём,
+   справа — ближайший матч с отсчётом. */
+.club-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 22px 28px;
+  margin-top: 30px;
+  padding: 22px 24px;
+  border: 1px solid var(--rule-strong);
+  border-radius: 18px;
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(79,216,255,.10), transparent 55%),
+    var(--glass);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.club-id { display: flex; align-items: center; gap: 18px; min-width: 0; }
+.club-crest {
+  width: 84px; height: 84px; flex: none;
+  background: center / contain no-repeat;
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,.65));
+}
+.club-eyebrow {
+  font-family: var(--mono); font-size: 10px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--ice); margin: 0 0 2px;
+}
+.club-name {
+  font-family: var(--disp); font-weight: 700;
+  font-size: clamp(28px, 4.4vw, 40px); line-height: 1;
+  text-transform: uppercase; letter-spacing: .01em; margin: 0;
+}
+.club-meta { font-size: 13px; color: var(--ink-2); margin: 6px 0 0; }
+
+.club-kpis { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 18px 0 0; }
+.club-kpi .k {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: .11em;
+  text-transform: uppercase; color: var(--muted); display: block;
+}
+.club-kpi .v {
+  font-family: var(--disp); font-weight: 600; font-size: 24px; line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.club-kpi .v.hot { color: var(--good); }
+
+/* Полоска формы: каждая игра — фишка с исходом, счётом и соперником.
+   Цвет дублируется буквой, так что исход читается и без цвета. */
+.form-strip { display: flex; flex-wrap: wrap; gap: 6px; margin: 18px 0 0; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 9px 4px 5px;
+  border-radius: 8px;
+  border: 1px solid var(--rule);
+  background: var(--raised);
+  font-family: var(--mono); font-size: 11.5px; font-variant-numeric: tabular-nums;
+  color: var(--ink-2); white-space: nowrap;
+}
+.chip b {
+  display: inline-grid; place-items: center;
+  min-width: 22px; height: 20px; padding: 0 4px;
+  border-radius: 5px; font-size: 10.5px; font-weight: 600; color: var(--plane);
+}
+.chip.w b   { background: var(--good); }
+.chip.l b   { background: var(--goal); }
+.chip.otl b { background: var(--warn); }
+.chip .crest-sm { margin-right: 0; }
+
+.club-next {
+  display: grid; align-content: center; gap: 10px;
+  padding: 16px 18px;
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  background: rgba(5, 8, 16, .45);
+}
+.club-next .k {
+  font-family: var(--mono); font-size: 10px; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--muted);
+}
+.club-next .vs {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--disp); font-size: 20px; font-weight: 500; line-height: 1.15;
+}
+.club-next .vs .crest-sm { width: 28px; height: 28px; margin: 0; }
+.club-next .when { font-size: 13px; color: var(--ink-2); }
+.club-next .cd-clock b { font-size: 28px; }
+.club-link {
+  justify-self: start;
+  font-family: var(--mono); font-size: 11px; letter-spacing: .06em;
+  text-transform: uppercase; text-decoration: none; color: var(--ice);
+  border-bottom: 1px solid rgba(79,216,255,.35); padding-bottom: 1px;
+}
+.club-link:hover { border-bottom-color: var(--ice); }
+
+/* Страница клуба */
+.club-head { display: flex; align-items: center; gap: 18px; padding: 34px 0 20px; }
+.club-head .club-crest { width: 72px; height: 72px; }
+
+.club-calendar { max-height: 560px; overflow-y: auto; }
+.club-roster { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; align-items: start; }
+
+.club-pick {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px;
+  margin-top: 30px; padding-top: 16px; border-top: 1px solid var(--rule);
+}
+.club-pick label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--muted);
+}
+.club-pick-note { font-size: 12px; color: var(--muted); }
+
+.num-badge {
+  display: inline-block; min-width: 24px;
+  font-family: var(--mono); font-size: 11px; color: var(--muted);
+}
+
+/* «Свои» строки подсвечены во всех таблицах и списках. */
+table.grid tr.mine td { background: rgba(79,216,255,.07); }
+table.grid tr.mine td:first-child { box-shadow: inset 3px 0 0 var(--ice); }
+.game.mine { box-shadow: inset 3px 0 0 var(--ice); background: rgba(79,216,255,.05); }
+.obar.mine .nm { color: var(--ice); font-weight: 500; }
+
+@media (max-width: 860px) {
+  .club-hero { grid-template-columns: 1fr; padding: 18px; }
+}
+@media (max-width: 620px) {
+  .club-crest { width: 64px; height: 64px; }
+  .club-kpi .v { font-size: 21px; }
 }
