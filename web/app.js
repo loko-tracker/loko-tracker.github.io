@@ -500,7 +500,10 @@
         '<div class="form-strip" aria-label="Последние матчи">' + form + '</div>' +
       '</div>' +
       '<div class="club-next">' + nextHtml +
-        '<a class="club-link" href="#/club">Календарь и состав →</a>' +
+        '<div class="club-next-links">' +
+          '<a class="club-link" href="#/club">Календарь и состав →</a>' +
+          (next ? watchLink(watchLinks().team, "Смотреть матч ↗") : "") +
+        '</div>' +
       '</div>';
 
     if (next) runCountdown("club", next.start_at, ["ccD","ccH","ccM","ccS"]);
@@ -567,6 +570,8 @@
     wireMatchRows($("clubGames"));
     $("clubGames").innerHTML = head + "<tbody>" +
       (body || "<tr><td class='l dim' colspan='5'>Матчей нет.</td></tr>") + "</tbody>";
+
+    renderClubWatch(club);
 
     // Лазарет клуба: данные клуба, твои отметки и новости вместе.
     $("clubInjuries").innerHTML = club.injuries.length
@@ -882,6 +887,41 @@
     else if (WIDE.addListener) WIDE.addListener(syncWings);
   }
 
+  /* ============================ где смотреть ============================ */
+
+  // Права на трансляции КХЛ у Кинопоиска: встроить их плеер в свою страницу
+  // нельзя (подписка и защита от копирования), поэтому даём прямые ссылки —
+  // на клуб и на матч. Адреса лежат в site.json, ключ «watch».
+  function watchLinks() { return APP.data.watch || {}; }
+
+  function watchLink(url, label) {
+    var safe = safeUrl(url);
+    if (!safe) return "";
+    return '<a class="watch-go" href="' + esc(safe) + '" target="_blank" rel="noopener noreferrer">' +
+      esc(label) + "</a>";
+  }
+
+  function khlGameLink(game, label) {
+    var stage = watchLinks().khl_stage;
+    if (!stage || !game.match_id) return "";
+    return watchLink("https://www.khl.ru/game/" + encodeURIComponent(stage) + "/" +
+      encodeURIComponent(game.match_id) + "/" + (game.state === "finished" ? "resume" : "preview") + "/", label);
+  }
+
+  function renderClubWatch(club) {
+    var host = $("clubWatch");
+    if (!host) return;
+    var links = watchLinks();
+    var parts = [
+      watchLink(links.team, "«" + club.team.name + "» на Кинопоиске"),
+      watchLink(links.league, "Вся КХЛ")
+    ].filter(Boolean);
+    host.innerHTML = parts.length
+      ? "Где смотреть: " + parts.join(" · ") +
+        '<span class="dim"> — трансляции идут на Кинопоиске, нужна подписка.</span>'
+      : "";
+  }
+
   /* ============================= лист матча ============================= */
 
   // Протокола матчей в API лиги нет, зато его выкладывает сам клуб: кто забил
@@ -1014,6 +1054,10 @@
           (result ? '<span class="pill ' + (result.code === "w" ? "zone" : result.code === "otl" ? "dim" : "hot") + '">' +
             (result.win ? "победа" : "поражение") + (result.extra ? " · " + result.extra : "") + '</span>' : "") +
           (coaches ? '<span class="dim">тренеры: ' + esc(coaches) + '</span>' : "") +
+        '</p>' +
+        '<p class="sheet-links">' +
+          watchLink(watchLinks().team, "Повтор на Кинопоиске ↗") +
+          khlGameLink(game, "Матч на сайте КХЛ ↗") +
         '</p>' +
       '</header>' +
       '<h2 class="sheet-sec">Голы</h2>' +

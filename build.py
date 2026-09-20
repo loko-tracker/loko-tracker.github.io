@@ -55,6 +55,15 @@ def _leaders(players: list[dict], field: str, *, limit: int = LEADER_LIMIT,
     ]
 
 
+def watch_links() -> dict:
+    """Ссылки «Смотреть» из site.json: трансляции идут у правообладателя."""
+    try:
+        config = json.loads(SITE_CONFIG.read_text(encoding="utf-8")).get("watch") or {}
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return {key: config[key] for key in ("team", "league", "khl_stage") if config.get(key)}
+
+
 def my_team_id(teams: list[dict]) -> int | None:
     """Клуб, который сайт показывает первым. Задаётся названием в site.json."""
     try:
@@ -168,6 +177,7 @@ def build(season: dict | None = None, *, sims: int = 10_000, progress=print) -> 
         # Травмы по данным самих клубов — первыми: они надёжнее новостей.
         "injuries": season.get("club_injuries", []) + injuries_module.merged(injuries_data),
         "my_team_id": my_team_id(season["teams"]),
+        "watch": watch_links(),
         # Ссылки на сайт клуба странице не нужны — только имена скачанных фото.
         "club_rosters": {
             team: [{k: v for k, v in m.items() if not k.endswith("_url")} for m in roster]
