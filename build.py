@@ -12,6 +12,7 @@ import json
 import sys
 from pathlib import Path
 
+import club_games
 import club_roster
 import collect
 import injuries as injuries_module
@@ -174,6 +175,7 @@ def build(season: dict | None = None, *, sims: int = 10_000, progress=print) -> 
         },
         "club_facts": {str(team): facts for team, facts in club_roster.FACTS.items()},
         "memorial": memorial.payload(),
+        "club_games": club_games.load(),
         "injuries_updated_at": injuries_data.get("updated_at"),
     }
 

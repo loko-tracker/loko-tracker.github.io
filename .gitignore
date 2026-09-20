@@ -8,6 +8,7 @@ data/web_key.json
 data/season.json
 data/site_data.json
 data/memorial.json
+data/club_games.json
 web/vendor/
 web/logos/
 web/photos/

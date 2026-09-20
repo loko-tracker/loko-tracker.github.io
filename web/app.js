@@ -547,20 +547,24 @@
       var home = g.home_id === club.team.id;
       var oppId = home ? g.away_id : g.home_id, opp = home ? g.away : g.home;
       var r = g.state === "finished" ? outcome(g, club.team.id) : null;
+      var info = matchInfo(g);
+      var classes = ((g === club.next ? "mine " : "") + (info ? "openable" : "")).trim();
       var result = r
         ? "<span class='pill " + (r.code === "w" ? "zone" : r.code === "otl" ? "dim" : "hot") + "'>" +
             (r.win ? "победа" : "поражение") + (r.extra ? " · " + r.extra : "") + "</span>"
         : isAwaitingResult(g)
           ? "<span class='pill dim'>ждём итог</span>"
           : "<span class='pill dim'>" + esc(fmtTime(g.start_at)) + "</span>";
-      return "<tr" + (g === club.next ? " class='mine'" : "") + ">" +
+      return "<tr" + (classes ? " class='" + classes + "'" : "") +
+        (info ? " data-day='" + esc(matchDay(g)) + "' title='Открыть разбор матча'" : "") + ">" +
         "<td class='l dim'>" + esc(fmtDay(g.start_at)) + ", " + esc(fmtWeekday(g.start_at)) + "</td>" +
         "<td class='l dim'>" + (home ? "дома" : "в гостях") + "</td>" +
         "<td class='l'>" + crest(oppId) + esc(opp) + "</td>" +
         "<td class='strong'>" + (r ? r.mine + ":" + r.theirs : "—") + "</td>" +
-        "<td class='l'>" + result + "</td>" +
+        "<td class='l'>" + result + (info ? " <span class='open-hint'>разбор</span>" : "") + "</td>" +
       "</tr>";
     }).join("");
+    wireMatchRows($("clubGames"));
     $("clubGames").innerHTML = head + "<tbody>" +
       (body || "<tr><td class='l dim' colspan='5'>Матчей нет.</td></tr>") + "</tbody>";
 
@@ -876,6 +880,197 @@
   function setupWings() {
     if (WIDE.addEventListener) WIDE.addEventListener("change", syncWings);
     else if (WIDE.addListener) WIDE.addListener(syncWings);
+  }
+
+  /* ============================= лист матча ============================= */
+
+  // Протокола матчей в API лиги нет, зато его выкладывает сам клуб: кто забил
+  // и с чьих передач, командные числа, отчёт о матче и стенограмма
+  // послематчевой пресс-конференции. Щелчок по сыгранной игре открывает это.
+  function matchDay(game) { return String(game.start_at || "").slice(0, 10); }
+
+  function matchInfo(game) {
+    var id = APP.data.my_team_id;
+    if (!game || game.state !== "finished" || id == null) return null;
+    if (game.home_id !== id && game.away_id !== id) return null;
+    return (APP.data.club_games || {})[matchDay(game)] || null;
+  }
+
+  function gameByDay(day) {
+    var id = APP.data.my_team_id;
+    return (APP.data.games || []).filter(function (g) {
+      return matchDay(g) === day && (g.home_id === id || g.away_id === id);
+    })[0] || null;
+  }
+
+  function periodName(period, game) {
+    if (period <= 3) return period + "-й период";
+    var shootout = game && game.periods && game.periods.so;
+    return (period >= 5 || shootout) ? "буллиты" : "овертайм";
+  }
+
+  function goalRow(goal, game) {
+    var scorer = goal.scorer || {};
+    var assists = (goal.assists || []).map(function (a) { return esc(a.name); }).join(" · ");
+    return '<li class="goal' + (goal.mine ? " mine" : "") + '">' +
+      '<span class="g-when"><b>' + esc(goal.time || "") + '</b><i>' + esc(periodName(goal.period, game)) + '</i></span>' +
+      '<span class="g-score">' + esc(goal.score || "") + '</span>' +
+      '<span class="g-who"><b>' + esc(scorer.name || "") +
+        (scorer.number != null ? ' <i>№' + esc(scorer.number) + '</i>' : "") + '</b>' +
+        (scorer.season ? '<i class="g-tally">' + esc(scorer.season) + '-я шайба в сезоне</i>' : "") +
+        (assists ? '<span class="g-ass">передачи: ' + assists + '</span>' : "") +
+      '</span>' +
+      (goal.power_play ? '<span class="g-tag">большинство</span>' : "") +
+    '</li>';
+  }
+
+  var SHEET_STATS = [
+    { key: "shots",   label: "Броски в створ" },
+    { key: "blocked", label: "Блокированные броски" },
+    { key: "hits",    label: "Силовые приёмы" },
+    { key: "penalty", label: "Штраф, минут" },
+    { key: "attack",  label: "Время в атаке" }
+  ];
+
+  // Время вида «21:33» для полосы переводим в секунды, остальное — как есть.
+  function statValue(value) {
+    var text = String(value == null ? "" : value);
+    if (text.indexOf(":") > -1) {
+      var parts = text.split(":");
+      return (Number(parts[0]) || 0) * 60 + (Number(parts[1]) || 0);
+    }
+    return Number(text) || 0;
+  }
+
+  function statRow(label, pair) {
+    var mine = statValue(pair[0]), theirs = statValue(pair[1]);
+    var total = mine + theirs;
+    var share = total ? Math.round((mine / total) * 100) : 50;
+    return '<div class="sheet-stat">' +
+      '<b>' + esc(pair[0] == null ? "—" : pair[0]) + '</b>' +
+      '<span class="s-mid"><i>' + esc(label) + '</i>' +
+        '<span class="s-bar"><u style="width:' + share + '%"></u></span></span>' +
+      '<b>' + esc(pair[1] == null ? "—" : pair[1]) + '</b>' +
+    '</div>';
+  }
+
+  // Отчёт — обычные абзацы. Пресс-конференция — разговор: «Фамилия:» это
+  // говорящий, вопрос журналиста и ответ клуб часто склеивает в один абзац,
+  // поэтому разрезаем их по «? —».
+  function sheetArticle(article, empty, talk) {
+    if (!article) return '<p class="empty">' + esc(empty) + '</p>';
+    var body = [];
+    (article.text || []).forEach(function (line) {
+      if (/^[^:]{2,48}:$/.test(line)) {
+        body.push('<h4 class="speaker">' + esc(line.replace(/:$/, "")) + '</h4>');
+        return;
+      }
+      if (!talk) {
+        body.push("<p>" + esc(line) + "</p>");
+        return;
+      }
+      if (/^Вопрос/i.test(line) && line.length < 20) {
+        body.push('<p class="qhead">' + esc(line) + '</p>');
+        return;
+      }
+      line.replace(/\?\s*[-\u2013\u2014]\s+/g, "?\n").split("\n").forEach(function (piece) {
+        var text = piece.replace(/^[-\u2013\u2014]\s*/, "").trim();
+        if (text) body.push('<p class="' + (/\?$/.test(text) ? "ask" : "say") + '">' + esc(text) + '</p>');
+      });
+    });
+    return '<h3>' + esc(article.title) + '</h3>' +
+      (article.lead ? '<p class="lead">' + esc(article.lead) + '</p>' : "") + body.join("");
+  }
+
+  function sheetHtml(game, info) {
+    var id = APP.data.my_team_id;
+    var result = outcome(game, id);
+    var meta = [
+      fmtDayFull(game.start_at) + ", " + fmtWeekday(game.start_at) + ", " + fmtTime(game.start_at),
+      info.arena || game.location,
+      info.audience ? info.audience + " " + wordForm(Number(info.audience), "зритель", "зрителя", "зрителей") : ""
+    ].filter(Boolean).join(" · ");
+
+    // В протоколе тренер записан как «Квартальнов Дмитрий Вячеславович».
+    var coaches = [info.coach_mine, info.coach_rival].filter(Boolean).map(function (name) {
+      var parts = name.split(" ");
+      return parts.length > 1 ? parts[1] + " " + parts[0] : name;
+    }).join(" — ");
+
+    var goals = (info.goals || []).map(function (g) { return goalRow(g, game); }).join("");
+    var stats = SHEET_STATS.filter(function (row) { return (info.stats || {})[row.key]; })
+      .map(function (row) { return statRow(row.label, info.stats[row.key]); }).join("");
+
+    return '<header class="sheet-head">' +
+        '<p class="sheet-meta">' + esc(meta) + '</p>' +
+        '<div class="sheet-score">' +
+          '<span class="s-team">' + crest(game.home_id, "big").replace('class="crest ', 'class="s-crest ') +
+            '<b>' + esc(game.home) + '</b></span>' +
+          '<span class="s-num"><b>' + esc(game.score || "") + '</b><i>' + esc(periodsText(game)) + '</i></span>' +
+          '<span class="s-team">' + crest(game.away_id, "big").replace('class="crest ', 'class="s-crest ') +
+            '<b>' + esc(game.away) + '</b></span>' +
+        '</div>' +
+        '<p class="sheet-tag">' +
+          (result ? '<span class="pill ' + (result.code === "w" ? "zone" : result.code === "otl" ? "dim" : "hot") + '">' +
+            (result.win ? "победа" : "поражение") + (result.extra ? " · " + result.extra : "") + '</span>' : "") +
+          (coaches ? '<span class="dim">тренеры: ' + esc(coaches) + '</span>' : "") +
+        '</p>' +
+      '</header>' +
+      '<h2 class="sheet-sec">Голы</h2>' +
+      (goals ? '<ol class="goals">' + goals + '</ol>' : '<p class="empty">В этом матче не забивали.</p>') +
+      (stats ? '<h2 class="sheet-sec">Матч в числах</h2><div class="sheet-stats">' + stats + '</div>' : "") +
+      '<h2 class="sheet-sec">Отчёт клуба</h2>' +
+      '<article class="sheet-text">' + sheetArticle(info.report, "Клуб не публиковал отчёт об этом матче.") + '</article>' +
+      '<h2 class="sheet-sec">После матча</h2>' +
+      '<article class="sheet-text talk">' +
+        sheetArticle(info.presser, "Пресс-конференцию после этого матча клуб не публиковал — так бывает после выездных игр.", true) +
+      '</article>';
+  }
+
+  function openSheet(game) {
+    var info = matchInfo(game);
+    if (!info) return;
+    $("sheetBody").innerHTML = sheetHtml(game, info);
+    var sheet = $("matchSheet");
+    sheet.hidden = false;
+    document.body.classList.add("sheet-open");
+    sheet.querySelector(".sheet-card").scrollTop = 0;
+    if (lenis) lenis.stop();
+    if (canAnimate()) {
+      window.gsap.fromTo(sheet.querySelector(".sheet-card"),
+        { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" });
+    }
+  }
+
+  function closeSheet() {
+    var sheet = $("matchSheet");
+    if (!sheet || sheet.hidden) return;
+    sheet.hidden = true;
+    document.body.classList.remove("sheet-open");
+    $("sheetBody").innerHTML = "";
+    if (lenis) lenis.start();
+  }
+
+  function wireSheet() {
+    var sheet = $("matchSheet");
+    if (!sheet) return;
+    sheet.addEventListener("click", function (event) {
+      if (event.target.closest("[data-sheet-close]")) closeSheet();
+    });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") closeSheet();
+    });
+  }
+
+  // Щелчок по строке матча в любой таблице, где есть data-day.
+  function wireMatchRows(table) {
+    if (!table) return;
+    table.onclick = function (event) {
+      var row = event.target.closest("tr[data-day]");
+      if (!row) return;
+      var game = gameByDay(row.getAttribute("data-day"));
+      if (game) openSheet(game);
+    };
   }
 
   /* ================================ помним ================================ */
@@ -1489,7 +1684,10 @@
     var body = list.map(function (g) {
       var finished = g.state === "finished";
       var mine = isMine(g.home_id) || isMine(g.away_id);
-      return "<tr" + (mine ? " class='mine'" : "") + ">" +
+      var info = matchInfo(g);
+      var classes = ((mine ? "mine " : "") + (info ? "openable" : "")).trim();
+      return "<tr" + (classes ? " class='" + classes + "'" : "") +
+        (info ? " data-day='" + esc(matchDay(g)) + "' title='Открыть разбор матча'" : "") + ">" +
         "<td class='l dim'>" + esc(fmtDayFull(g.start_at)) + ", " + esc(fmtWeekday(g.start_at)) + "</td>" +
         "<td class='dim'>" + esc(fmtTime(g.start_at)) + "</td>" +
         "<td class='l'>" + crest(g.home_id) + esc(g.home) + "</td>" +
@@ -1497,10 +1695,12 @@
           : "<span class='pill dim'>" + (isAwaitingResult(g) ? "ждём итог" : "скоро") + "</span>") + "</td>" +
         "<td class='l'>" + crest(g.away_id) + esc(g.away) + "</td>" +
         "<td class='l dim'>" + esc(periodsText(g)) + "</td>" +
-        "<td class='l dim'>" + esc(g.location || "") + "</td>" +
+        "<td class='l dim'>" + esc(g.location || "") +
+          (info ? " <span class='open-hint'>разбор</span>" : "") + "</td>" +
       "</tr>";
     }).join("");
 
+    wireMatchRows($("gamesTable"));
     $("gamesTable").innerHTML = head + "<tbody>" +
       (body || "<tr><td class='l dim' colspan='7'>Ничего не нашлось под эти фильтры.</td></tr>") + "</tbody>";
   }
@@ -1820,6 +2020,7 @@
     renderHeader();
     wireFilters();
     wireInjuryForm();
+    wireSheet();
     updateClubTab();
     setupWings();
     show(currentView());

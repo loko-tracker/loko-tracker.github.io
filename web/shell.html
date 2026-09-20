@@ -85,6 +85,16 @@
   <span class="wing-edge edge-r" id="edgeR"></span>
 </div>
 
+<!-- Лист матча: открывается щелчком по сыгранной игре «Локомотива».
+     Голы, командные числа, отчёт клуба и пресс-конференция. -->
+<div class="sheet" id="matchSheet" hidden>
+  <div class="sheet-back" data-sheet-close></div>
+  <div class="sheet-card" role="dialog" aria-modal="true" aria-label="Подробности матча">
+    <button type="button" class="sheet-x" data-sheet-close aria-label="Закрыть">×</button>
+    <div class="sheet-body" id="sheetBody"></div>
+  </div>
+</div>
+
 <main class="wrap">
 
   <p class="loading" id="loading"><span class="spin"></span> <span id="loadingText">Загружаю сезон…</span></p>

@@ -17,6 +17,7 @@ import traceback
 
 import auth
 import build
+import club_games
 import club_media
 import club_roster
 import collect
@@ -67,6 +68,7 @@ def main() -> int:
             club_media.sync(season)
             collect.save(season)
             memorial.sync()
+            club_games.build()
         except Exception:
             traceback.print_exc()
             print()
