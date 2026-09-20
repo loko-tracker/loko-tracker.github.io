@@ -15,6 +15,7 @@ from pathlib import Path
 import club_roster
 import collect
 import injuries as injuries_module
+import memorial
 import odds as odds_module
 
 DATA = Path(__file__).parent / "data"
@@ -172,6 +173,7 @@ def build(season: dict | None = None, *, sims: int = 10_000, progress=print) -> 
             for team, roster in season.get("club_rosters", {}).items()
         },
         "club_facts": {str(team): facts for team, facts in club_roster.FACTS.items()},
+        "memorial": memorial.payload(),
         "injuries_updated_at": injuries_data.get("updated_at"),
     }
 

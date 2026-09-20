@@ -7,6 +7,7 @@ data/web_key.json
 # поэтому в истории хранить незачем.
 data/season.json
 data/site_data.json
+data/memorial.json
 web/vendor/
 web/logos/
 web/photos/

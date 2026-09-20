@@ -21,6 +21,7 @@ import club_media
 import club_roster
 import collect
 import injuries as injuries_module
+import memorial
 import serve
 import site_pages
 import vendor
@@ -65,6 +66,7 @@ def main() -> int:
             club_roster.apply(season)
             club_media.sync(season)
             collect.save(season)
+            memorial.sync()
         except Exception:
             traceback.print_exc()
             print()

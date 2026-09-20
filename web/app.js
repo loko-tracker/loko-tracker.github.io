@@ -878,6 +878,144 @@
     else if (WIDE.addListener) WIDE.addListener(syncWings);
   }
 
+  /* ================================ помним ================================ */
+
+  // Вкладка памяти команды 2011 года. Пока она открыта, весь сайт меняет
+  // облик (класс mourning на body): ни бирюзы, ни красного — тьма, слоновая
+  // кость и тёплый свет свечи. Портреты проявляются из темноты по одному.
+  function memYears(n) {
+    return n + " " + wordForm(n, "год", "года", "лет");
+  }
+
+  function memPlayer(p, crashDay) {
+    var meta = [p.role, p.captain ? "капитан" : "", p.country].filter(Boolean).join(" · ");
+    var later = p.died && p.died !== crashDay ? "скончался " + fmtDayFull(p.died + "T12:00:00") : "";
+    return '<figure class="mem-card" data-lit>' +
+      '<div class="mem-photo">' +
+        (p.photo ? '<img src="' + esc(photoUrl(p.photo)) + '" alt="' + esc(p.name) + '" loading="lazy" decoding="async">' : "") +
+        (p.number != null ? '<span class="mem-num">' + esc(p.number) + '</span>' : "") +
+      '</div>' +
+      '<figcaption>' +
+        '<b class="mem-name">' + esc(p.name) + '</b>' +
+        '<span class="mem-years">' + esc(p.born) + ' — 2011</span>' +
+        '<span class="mem-meta">' + esc(meta) + '</span>' +
+        (later ? '<span class="mem-note">' + esc(later) + '</span>' : "") +
+      '</figcaption>' +
+    '</figure>';
+  }
+
+  // Без фото: инициалы в медальоне и огонёк свечи.
+  function memPerson(x) {
+    var initials = String(x.name).split(" ").map(function (w) { return w.charAt(0); }).join("");
+    var about = [x.age ? memYears(x.age) : "", x.country || ""].filter(Boolean).join(" · ");
+    return '<div class="mem-person" data-lit>' +
+      '<span class="mem-medal" aria-hidden="true">' + esc(initials) + '</span>' +
+      '<b class="mem-name">' + esc(x.name) + '</b>' +
+      '<span class="mem-meta">' + esc(x.role) + '</span>' +
+      (about ? '<span class="mem-meta">' + esc(about) + '</span>' : "") +
+    '</div>';
+  }
+
+  function memSection(title, body, note) {
+    return '<section class="mem-group">' +
+      '<h2 class="mem-sec"><span>' + esc(title) + '</span></h2>' +
+      (note ? '<p class="mem-sub">' + esc(note) + '</p>' : "") + body +
+    '</section>';
+  }
+
+  function renderMemory() {
+    var m = APP.data.memorial || {};
+    var crashDay = m.crash_day || "2011-09-07";
+    var players = m.players || [];
+    var now = new Date();
+    var years = now.getFullYear() - 2011 -
+      ((now.getMonth() < 8 || (now.getMonth() === 8 && now.getDate() < 7)) ? 1 : 0);
+    var team = players.length + (m.coaches || []).length + (m.staff || []).length;
+
+    var groups = [
+      { key: "goaltender", title: "Вратари" },
+      { key: "defenseman", title: "Защитники" },
+      { key: "forward",    title: "Нападающие" }
+    ].map(function (g) {
+      var list = players.filter(function (p) { return p.role_key === g.key; })
+        .sort(function (a, b) { return (a.number || 0) - (b.number || 0); });
+      if (!list.length) return "";
+      return '<h3 class="mem-role">' + esc(g.title) + '</h3>' +
+        '<div class="mem-grid">' + list.map(function (p) { return memPlayer(p, crashDay); }).join("") + '</div>';
+    }).join("");
+
+    var people = function (list) {
+      return '<div class="mem-people">' + (list || []).map(memPerson).join("") + '</div>';
+    };
+
+    var memory = (m.memory || []).map(function (x) {
+      return '<li data-lit><span class="mem-when">' + esc(x.when) + '</span><p>' + esc(x.what) + '</p></li>';
+    }).join("");
+
+    $("view-memory").innerHTML =
+      '<header class="mem-hero">' +
+        '<div class="candle" aria-hidden="true"><i class="glow"></i><i class="flame"></i><b class="wax"></b></div>' +
+        '<p class="mem-date">7 сентября 2011</p>' +
+        '<h1 class="mem-title">Помним</h1>' +
+        '<p class="mem-lead">Хоккеисты, тренеры и сотрудники «Локомотива», погибшие в авиакатастрофе под Ярославлем. ' +
+          'Команда летела в Минск на первый матч сезона.</p>' +
+        '<div class="mem-count">' +
+          '<div><b>' + team + '</b><span>хоккеистов, тренеров<br>и сотрудников клуба</span></div>' +
+          '<div><b>' + (m.crew || []).length + '</b><span>членов<br>экипажа</span></div>' +
+          '<div><b>' + years + '</b><span>' + esc(wordForm(years, "год", "года", "лет")) + ' со дня<br>катастрофы</span></div>' +
+        '</div>' +
+      '</header>' +
+
+      '<div class="mem-story" data-lit>' +
+        '<p>7 сентября 2011 года в 15:59 самолёт Як-42 с командой на борту взлетал из ярославского аэропорта Туношна. ' +
+          'Он не смог набрать высоту и упал у реки Туношонки, недалеко от взлётной полосы.</p>' +
+        '<p>На борту было 45 человек, погибли 44. Нападающий Александр Галимов выжил при падении, ' +
+          'но через пять дней скончался в больнице. Выжил только инженер Александр Сизов.</p>' +
+        '<p>Расследование назвало причиной ошибку экипажа: во время разбега кто-то из пилотов нажимал на тормозные педали. ' +
+          '«Локомотив» снялся с чемпионата того сезона.</p>' +
+      '</div>' +
+
+      memSection("Хоккеисты", groups) +
+      memSection("Тренеры", people(m.coaches)) +
+      memSection("Сотрудники клуба", people(m.staff)) +
+      memSection("Экипаж", people(m.crew), "Вместе с командой погибли семь человек из экипажа самолёта.") +
+      memSection("Память", '<ol class="mem-timeline">' + memory + '</ol>') +
+
+      '<footer class="mem-end" data-lit>' +
+        '<div class="candle small" aria-hidden="true"><i class="glow"></i><i class="flame"></i><b class="wax"></b></div>' +
+        '<p>Вечная память</p>' +
+      '</footer>';
+
+    lightUp($("view-memory"));
+  }
+
+  // Проявление из темноты по мере прокрутки. Если кадры не идут (фоновая
+  // вкладка) или движение отключено — всё видно сразу.
+  function lightUp(root) {
+    var items = [].slice.call(root.querySelectorAll("[data-lit]"));
+    if (!canAnimate() || !("IntersectionObserver" in window)) {
+      items.forEach(function (node) { node.classList.add("lit"); });
+      return;
+    }
+    root.classList.add("lit-armed");
+    var seen = false;
+    var observer = new IntersectionObserver(function (entries) {
+      seen = true;
+      var batch = entries.filter(function (e) { return e.isIntersecting; });
+      batch.forEach(function (entry, i) {
+        entry.target.style.transitionDelay = Math.min(i * 90, 900) + "ms";
+        entry.target.classList.add("lit");
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin: "0px 0px -8% 0px" });
+    items.forEach(function (node) { observer.observe(node); });
+    setTimeout(function () {
+      if (seen) return;
+      observer.disconnect();
+      items.forEach(function (node) { node.classList.add("lit"); });
+    }, 1500);
+  }
+
   // Клик по карточке на крыле — к этому игроку в составе клуба.
   function focusPlayer(name) {
     APP.focusPlayer = name;
@@ -1611,7 +1749,7 @@
 
   /* ============================== навигация ============================== */
 
-  var VIEWS = ["overview","club","games","table","odds","players","injuries"];
+  var VIEWS = ["overview","club","memory","games","table","odds","players","injuries"];
   var rendered = {};
 
   function currentView() {
@@ -1623,6 +1761,7 @@
     if (rendered[view]) return;
     if (view === "overview") renderOverview();
     if (view === "club") renderClub();
+    if (view === "memory") renderMemory();
     if (view === "games") renderGames();
     if (view === "table") renderTable();
     if (view === "odds") renderOdds();
@@ -1636,6 +1775,8 @@
     $("tabs").querySelectorAll("a").forEach(function (link) {
       link.classList.toggle("on", link.getAttribute("data-view") === view);
     });
+    // Вкладка памяти меняет облик всего сайта, пока она открыта.
+    document.body.classList.toggle("mourning", view === "memory");
     moveTabPill(view);
     paint(view);
     syncWings();

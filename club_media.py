@@ -53,10 +53,10 @@ def _shrink(data: bytes, prefix: str, box: tuple[int, int]) -> bytes:
         return data
     with Image.open(io.BytesIO(data)) as image:
         image = ImageOps.exif_transpose(image).convert("RGB")
-        if prefix == "head":
-            image = ImageOps.fit(image, box, Image.LANCZOS)
-        else:
+        if prefix == "action":                  # снимок с матча — целиком
             image.thumbnail(box, Image.LANCZOS)
+        else:                                   # портрет — ровно в рамку
+            image = ImageOps.fit(image, box, Image.LANCZOS)
         out = io.BytesIO()
         image.save(out, "JPEG", quality=80, optimize=True, progressive=True)
         return out.getvalue()
@@ -71,6 +71,37 @@ def _fetch(job: tuple[str, str, str, tuple[int, int]]) -> bool:
     return True
 
 
+def _safe_fetch(job) -> bool:
+    try:
+        return _fetch(job)
+    except Exception:
+        return False
+
+
+def fetch_many(items) -> tuple[dict[str, str | None], int]:
+    """[(ссылка, приставка, размер)] -> ({ссылка: имя файла или None}, сколько скачано).
+
+    Уже скачанное повторно не качается; неудача даёт None, а не ошибку.
+    """
+    PHOTOS.mkdir(parents=True, exist_ok=True)
+    names, jobs = {}, {}
+    for url, prefix, box in items:
+        name = local_name(url, prefix)
+        names[url] = name
+        if not (PHOTOS / name).exists():
+            jobs[name] = (url, name, prefix, box)
+
+    failed = set()
+    if jobs:
+        with ThreadPoolExecutor(max_workers=6) as pool:
+            for name, ok in zip(jobs, pool.map(_safe_fetch, jobs.values())):
+                if not ok:
+                    failed.add(name)
+    found = {url: (name if name not in failed and (PHOTOS / name).exists() else None)
+             for url, name in names.items()}
+    return found, len(jobs) - len(failed)
+
+
 def sync(season_data: dict, progress=print) -> dict:
     """Докачивает недостающие фото и проставляет в составах имена файлов.
 
@@ -79,45 +110,28 @@ def sync(season_data: dict, progress=print) -> dict:
     rosters = season_data.get("club_rosters") or {}
     if not rosters:
         return season_data
-    PHOTOS.mkdir(parents=True, exist_ok=True)
 
-    jobs, wanted = {}, []
+    wanted, items = [], []
     for roster in rosters.values():
         for member in roster:
             for url_field, (name_field, prefix, box) in KINDS.items():
-                url = member.get(url_field)
                 member.pop(name_field, None)
-                if not url:
-                    continue
-                name = local_name(url, prefix)
-                wanted.append((member, name_field, name))
-                if not (PHOTOS / name).exists():
-                    jobs[name] = (url, name, prefix, box)
+                url = member.get(url_field)
+                if url:
+                    wanted.append((member, name_field, url))
+                    items.append((url, prefix, box))
 
-    failed = set()
-    if jobs:
-        with ThreadPoolExecutor(max_workers=6) as pool:
-            results = pool.map(_safe_fetch, jobs.values())
-            for name, ok in zip(jobs, results):
-                if not ok:
-                    failed.add(name)
+    names, fresh = fetch_many(items)
+    for member, name_field, url in wanted:
+        if names.get(url):
+            member[name_field] = names[url]
 
-    for member, name_field, name in wanted:
-        if name not in failed and (PHOTOS / name).exists():
-            member[name_field] = name
-
-    have = sum(1 for _, _, name in wanted if name not in failed)
-    note = f", не скачалось: {len(failed)}" if failed else ""
+    have = sum(1 for name in names.values() if name)
+    missing = len(names) - have
+    note = f", не скачалось: {missing}" if missing else ""
     shrink = "" if Image else " (без Pillow — оригиналы, крупнее)"
-    progress(f"  фото игроков: {have} из {len(wanted)}, новых {len(jobs) - len(failed)}{note}{shrink}")
+    progress(f"  фото игроков: {have} из {len(names)}, новых {fresh}{note}{shrink}")
     return season_data
-
-
-def _safe_fetch(job) -> bool:
-    try:
-        return _fetch(job)
-    except Exception:
-        return False
 
 
 if __name__ == "__main__":

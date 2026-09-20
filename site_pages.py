@@ -36,7 +36,8 @@ TITLE = "Трекер сезона КХЛ"
 FONTS = (
     '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
     '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700'
-    '&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">'
+    '&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600'
+    '&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap">'
 )
 
 # Те же версии, что лежат локально в web/vendor (см. vendor.py).
@@ -86,13 +87,14 @@ def _photo_names(payload: dict | None = None) -> list[str]:
             payload = json.loads(SITE_DATA.read_text(encoding="utf-8"))
         except (OSError, ValueError):
             return []
+    people = [m for roster in (payload.get("club_rosters") or {}).values() for m in roster]
+    people += (payload.get("memorial") or {}).get("players", [])
     names = set()
-    for roster in (payload.get("club_rosters") or {}).values():
-        for member in roster:
-            for field in ("photo", "action"):
-                name = member.get(field)
-                if name and (PHOTOS / name).is_file():
-                    names.add(name)
+    for member in people:
+        for field in ("photo", "action"):
+            name = member.get(field)
+            if name and (PHOTOS / name).is_file():
+                names.add(name)
     return sorted(names)
 
 

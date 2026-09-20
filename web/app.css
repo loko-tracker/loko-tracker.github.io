@@ -1200,3 +1200,318 @@ table.grid tr.flash td { animation: row-flash 2.2s ease-out; }
   .pcard:hover::before, .acard:hover::before { animation: none; }
   .pcard, .acard, .pcard img, .acard img { transition: none; }
 }
+
+/* ================================ помним ================================ */
+
+/* Пока открыта вкладка памяти, весь сайт меняет облик: вместо бирюзы
+   и красного — тьма, слоновая кость и тёплый свет свечи. Цвета заданы
+   токенами, поэтому шапка, вкладки и полоса сезона перекрашиваются сами. */
+body { transition: background-color 1.2s ease, color 1.2s ease; }
+body.mourning {
+  --plane:   #09090a;
+  --surface: #151413;
+  --raised:  #1c1b19;
+  --ink:     #efe9dd;
+  --ink-2:   #bdb5a7;
+  --muted:   #8f887c;
+  --rule:        #2a2723;
+  --rule-strong: #3b3731;
+  --ice:       #d9c49a;
+  --ice-soft:  rgba(217, 196, 154, .12);
+  --goal:      #d9c49a;
+  --goal-soft: rgba(217, 196, 154, .12);
+  --glass: rgba(21, 20, 19, .72);
+  --serif: "Cormorant Garamond", "Times New Roman", Georgia, serif;
+  --candle: 255, 196, 120;
+}
+
+.beam { transition: opacity 1.4s ease; }
+body.mourning .beam { opacity: 0; }
+
+/* Тёплое пятно сверху, как от свечи, и затемнение по краям. */
+.arena::before, .arena::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.6s ease;
+}
+.arena::before {
+  left: 50%; top: -30vh;
+  width: 110vw; height: 100vh;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at 50% 40%, rgba(255, 196, 120, .10), transparent 62%);
+}
+.arena::after {
+  inset: 0;
+  box-shadow: inset 0 0 22vw rgba(0, 0, 0, .85);
+}
+body.mourning .arena::before, body.mourning .arena::after { opacity: 1; }
+
+body.mourning .masthead { background: linear-gradient(to bottom, rgba(9, 9, 10, .96), rgba(9, 9, 10, .8)); }
+body.mourning .puck { filter: drop-shadow(0 0 6px rgba(var(--candle), .45)); }
+body.mourning .tab-pill { box-shadow: 0 0 18px -4px rgba(var(--candle), .55); }
+body.mourning .rail-fill { box-shadow: 0 0 10px rgba(var(--candle), .5); }
+
+/* ---- заглавие ---- */
+.memorial { padding-bottom: 40px; font-variant-numeric: lining-nums; }
+.mem-hero {
+  text-align: center;
+  padding: 64px 0 34px;
+}
+.mem-date {
+  font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-size: clamp(18px, 2.4vw, 24px); letter-spacing: .06em;
+  color: var(--ice); margin: 0;
+}
+.mem-title {
+  font-family: var(--serif); font-weight: 300;
+  font-size: clamp(64px, 11vw, 132px); line-height: .95;
+  letter-spacing: .05em;
+  margin: 6px 0 18px;
+  color: var(--ink);
+  text-shadow: 0 0 40px rgba(var(--candle), .18);
+}
+.mem-lead {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(19px, 2.3vw, 24px); line-height: 1.45;
+  color: var(--ink-2);
+  max-width: 40ch; margin: 0 auto;
+  text-wrap: balance;
+}
+
+.mem-count {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 18px 56px;
+  margin: 44px auto 0;
+}
+.mem-count div { display: grid; justify-items: center; gap: 4px; }
+.mem-count b {
+  font-family: var(--serif); font-weight: 300;
+  font-size: clamp(48px, 6vw, 68px); line-height: 1;
+  color: var(--ice);
+}
+.mem-count span {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--muted); line-height: 1.5;
+}
+
+/* ---- свеча ---- */
+.candle { position: relative; width: 22px; height: 118px; margin: 0 auto 30px; }
+.candle .wax {
+  position: absolute; left: 0; bottom: 0;
+  width: 22px; height: 72px;
+  border-radius: 5px 5px 3px 3px;
+  background: linear-gradient(90deg, #b8ad98, #f2ead9 42%, #d9cfbc 60%, #a89c86);
+  box-shadow: inset 0 -12px 18px rgba(0, 0, 0, .35), 0 0 30px rgba(var(--candle), .12);
+}
+.candle .wax::before {                     /* фитиль */
+  content: ""; position: absolute; left: 50%; top: -9px;
+  width: 2px; height: 10px; margin-left: -1px;
+  border-radius: 1px; background: #2c251d;
+}
+.candle .flame {
+  position: absolute; left: 50%; bottom: 79px;
+  width: 14px; height: 32px; margin-left: -7px;
+  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+  background: radial-gradient(ellipse at 50% 82%, #fffaf0 0%, #ffe3a6 28%, #ffb35c 58%, rgba(255, 140, 60, 0) 76%);
+  transform-origin: 50% 100%;
+  animation: flicker 3.4s ease-in-out infinite;
+}
+.candle .glow {
+  position: absolute; left: 50%; bottom: 58px;
+  width: 220px; height: 220px; margin-left: -110px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--candle), .30), rgba(var(--candle), .08) 38%, transparent 68%);
+  animation: candle-glow 3.4s ease-in-out infinite;
+  pointer-events: none;
+}
+.candle.small { transform: scale(.72); margin-bottom: 8px; }
+@keyframes flicker {
+  0%, 100% { transform: scale(1, 1) rotate(-1deg); }
+  18%      { transform: scale(.95, 1.06) rotate(1.6deg); }
+  37%      { transform: scale(1.04, .95) rotate(-.6deg); }
+  58%      { transform: scale(.97, 1.04) rotate(1deg); }
+  79%      { transform: scale(1.02, .97) rotate(-1.6deg); }
+}
+@keyframes candle-glow {
+  0%, 100% { opacity: .82; transform: scale(1); }
+  50%      { opacity: 1;   transform: scale(1.07); }
+}
+
+/* ---- рассказ ---- */
+.mem-story {
+  max-width: 62ch; margin: 26px auto 10px;
+  padding: 26px 0 8px;
+  border-top: 1px solid var(--rule);
+  font-size: 15.5px; line-height: 1.75; color: var(--ink-2);
+  text-align: center;
+}
+.mem-story p { margin: 0 0 14px; }
+
+/* ---- разделы ---- */
+.mem-group { margin-top: 70px; }
+.mem-sec {
+  display: flex; align-items: center; gap: 22px;
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(30px, 4vw, 42px); line-height: 1.1; letter-spacing: .03em;
+  color: var(--ink); margin: 0 0 8px;
+}
+.mem-sec::before, .mem-sec::after {
+  content: ""; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--rule-strong));
+}
+.mem-sec::after { background: linear-gradient(90deg, var(--rule-strong), transparent); }
+.mem-sub, .mem-role {
+  text-align: center;
+  font-family: var(--mono); font-size: 10.5px; font-weight: 400;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--muted);
+  margin: 26px 0 22px;
+}
+.mem-sub { letter-spacing: .04em; text-transform: none; font-family: var(--sans); font-size: 14px; }
+
+/* ---- портреты: фотографии в арочных рамках, как на мемориальной стене ---- */
+/* Ряды по центру: неполный ряд (два вратаря) не жмётся к левому краю. */
+.mem-grid {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 40px 26px;
+}
+.mem-card { margin: 0; width: 176px; text-align: center; }
+.mem-photo {
+  position: relative;
+  padding: 7px;
+  border: 1px solid rgba(217, 196, 154, .32);
+  border-radius: 999px 999px 14px 14px;
+  background: linear-gradient(180deg, #1d1b18, #121110);
+  box-shadow: 0 24px 40px -26px #000;
+  transition: border-color .8s ease, box-shadow .8s ease;
+}
+.mem-photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 320 / 340;
+  object-fit: cover;
+  border-radius: 999px 999px 9px 9px;
+  filter: grayscale(1) contrast(.94) brightness(.9);
+  transition: filter 1.2s ease;
+}
+/* Мягкая виньетка по краям снимка. */
+.mem-photo::after {
+  content: "";
+  position: absolute; inset: 7px;
+  border-radius: 999px 999px 9px 9px;
+  box-shadow: inset 0 0 26px rgba(0, 0, 0, .55);
+  pointer-events: none;
+}
+.mem-num {
+  position: absolute; right: -6px; bottom: -14px; z-index: 1;
+  min-width: 42px; padding: 0 6px;
+  font-family: var(--serif); font-weight: 400; font-style: italic;
+  font-size: 30px; line-height: 1.15;
+  color: var(--ice);
+  background: var(--plane);
+  border-radius: 20px;
+}
+.mem-card:hover .mem-photo {
+  border-color: rgba(var(--candle), .7);
+  box-shadow: 0 0 40px -8px rgba(var(--candle), .35), 0 24px 40px -26px #000;
+}
+.mem-card:hover .mem-photo img { filter: grayscale(.55) sepia(.25) contrast(.96) brightness(.98); }
+
+.mem-card figcaption, .mem-person { display: grid; justify-items: center; align-content: start; gap: 2px; }
+.mem-card figcaption { margin-top: 20px; }
+.mem-name {
+  font-family: var(--serif); font-weight: 500;
+  font-size: 21px; line-height: 1.15; color: var(--ink);
+  text-wrap: balance;
+}
+.mem-years {
+  font-family: var(--serif); font-style: italic;
+  font-size: 17px; color: var(--ice);
+}
+.mem-meta {
+  font-family: var(--mono); font-size: 10px; letter-spacing: .08em;
+  color: var(--muted); line-height: 1.6;
+}
+.mem-note { font-size: 12.5px; color: var(--ink-2); font-style: italic; }
+
+/* ---- тренеры, сотрудники, экипаж ---- */
+.mem-people {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 30px 22px;
+}
+.mem-person { width: 220px; text-align: center; padding: 6px 4px; }
+.mem-medal {
+  display: grid; place-items: center;
+  width: 64px; height: 64px; margin-bottom: 12px;
+  border-radius: 50%;
+  border: 1px solid rgba(217, 196, 154, .35);
+  background: radial-gradient(circle at 50% 35%, #25221e, #121110);
+  font-family: var(--serif); font-size: 24px; font-weight: 400; letter-spacing: .04em;
+  color: var(--ice);
+  box-shadow: 0 0 30px -12px rgba(var(--candle), .4);
+}
+.mem-person .mem-name { font-size: 19px; }
+
+/* ---- память ---- */
+.mem-timeline {
+  list-style: none; margin: 30px auto 0; padding: 0;
+  max-width: 760px;
+  position: relative;
+}
+.mem-timeline::before {
+  content: ""; position: absolute; left: 150px; top: 8px; bottom: 8px; width: 1px;
+  background: linear-gradient(transparent, var(--rule-strong) 8%, var(--rule-strong) 92%, transparent);
+}
+.mem-timeline li {
+  position: relative;
+  display: grid; grid-template-columns: 150px 1fr; gap: 0 30px;
+  padding: 12px 0;
+}
+.mem-timeline li::before {                  /* огонёк на линии */
+  content: ""; position: absolute; left: 146px; top: 20px;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: #ffd79a;
+  box-shadow: 0 0 10px 2px rgba(var(--candle), .6);
+}
+.mem-when {
+  font-family: var(--serif); font-style: italic; font-size: 19px; line-height: 1.3;
+  color: var(--ice); text-align: right;
+}
+.mem-timeline p { margin: 0; font-size: 15px; line-height: 1.65; color: var(--ink-2); }
+
+/* ---- финал ---- */
+.mem-end { text-align: center; margin: 90px 0 20px; }
+.mem-end p {
+  font-family: var(--serif); font-weight: 300; font-style: italic;
+  font-size: clamp(34px, 5vw, 52px); letter-spacing: .04em;
+  color: var(--ink); margin: 0;
+  text-shadow: 0 0 36px rgba(var(--candle), .2);
+}
+
+/* ---- проявление из темноты ---- */
+.lit-armed [data-lit] {
+  opacity: 0;
+  filter: brightness(.2) blur(2px);
+  transform: translateY(14px);
+  transition: opacity 1.6s ease, filter 1.8s ease, transform 1.6s cubic-bezier(.2,.8,.2,1);
+}
+.lit-armed [data-lit].lit { opacity: 1; filter: none; transform: none; }
+
+@media (max-width: 620px) {
+  .mem-hero { padding-top: 40px; }
+  .mem-grid { gap: 32px 16px; }
+  .mem-card { width: calc(50% - 8px); }
+  .mem-person { width: calc(50% - 11px); }
+  .mem-name { font-size: 18px; }
+  .mem-num { font-size: 24px; min-width: 34px; bottom: -12px; }
+  .mem-count { gap: 18px 30px; }
+  .mem-timeline::before { left: 4px; }
+  .mem-timeline li { grid-template-columns: 1fr; padding-left: 26px; }
+  .mem-timeline li::before { left: 0; top: 18px; }
+  .mem-when { text-align: left; margin-bottom: 2px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .candle .flame, .candle .glow { animation: none; }
+  .lit-armed [data-lit] { opacity: 1; filter: none; transform: none; transition: none; }
+}
