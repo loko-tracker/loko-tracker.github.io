@@ -19,7 +19,9 @@
 
 from __future__ import annotations
 
+import html
 import json
+import re
 import urllib.parse
 import urllib.request
 
@@ -43,6 +45,64 @@ def _attrs(node) -> dict:
     """Strapi кладёт связи как {"data": {"attributes": {...}}}."""
     data = node.get("data") if isinstance(node, dict) else None
     return (data or {}).get("attributes") or {}
+
+
+MAX_PARAGRAPHS = 60
+MAX_CHARS = 2500
+
+
+def _clip(text: str, limit: int) -> str:
+    """Длинный абзац режем по концу предложения, а не посреди слова."""
+    if len(text) <= limit:
+        return text
+    cut = text.rfind(". ", 0, limit)
+    return (text[:cut + 1] if cut > limit // 2 else text[:limit].rsplit(" ", 1)[0]) + " …"
+
+
+def paragraphs(raw: str | None) -> list[str]:
+    """HTML с сайта клуба -> список абзацев обычным текстом."""
+    if not raw:
+        return []
+    text = re.sub(r"(?i)<br\s*/?>", "\n", raw)
+    text = re.sub(r"(?i)</(p|div|h\d|li)>", "\n\n", text)
+    text = re.sub(r"<[^>]+>", "", text)
+    text = html.unescape(text).replace("\xa0", " ")
+    out = []
+    for piece in text.split("\n\n"):
+        piece = re.sub(r"[ \t]+", " ", piece).strip()
+        if piece:
+            out.append(_clip(piece, MAX_CHARS))
+    return out[:MAX_PARAGRAPHS]
+
+
+# Биография на сайте клуба разбита на сезоны: «Сезон 2025/2026 гг:», дальше
+# старше. Берём два последних сезона и достижения — остальное на сайте клуба.
+BIO_SEASONS = 2
+BIO_SECTION_CHARS = 1800
+
+
+def bio_sections(raw: str | None) -> list[dict]:
+    if not raw:
+        return []
+    parts = re.split(r"(?is)<h[1-3][^>]*>(.*?)</h[1-3]>", raw)
+    sections = []
+    for index in range(1, len(parts) - 1, 2):
+        title = html.unescape(re.sub(r"<[^>]+>", "", parts[index])).replace("\xa0", " ")
+        title = title.strip().rstrip(":").strip()
+        text, size = [], 0
+        for line in paragraphs(parts[index + 1]):
+            if size + len(line) > BIO_SECTION_CHARS and text:
+                break
+            text.append(line)
+            size += len(line)
+        if title and text:
+            sections.append({"title": title, "text": text})
+    seasons = [x for x in sections if x["title"].lower().startswith("сезон")][:BIO_SEASONS]
+    extra = [x for x in sections if x["title"].lower().startswith("достижен")][:1]
+    return seasons + extra
+
+
+GRIPS = {"л": "левый", "п": "правый", "l": "левый", "r": "правый"}
 
 
 def _media_url(node, prefer: tuple[str, ...] = ()) -> str | None:
@@ -114,6 +174,7 @@ def fetch_lokomotiv(season: str) -> list[dict]:
             "populate[player][populate][1]": "photo",
             "populate[player][populate][2]": "bg_photo",
             "populate[player][populate][3]": "main_bg_photo",
+            "populate[player][populate][4]": "grip",
             "populate[assignment]": "*",
             "filters[season][name][$eq]": _loko_season_code(season),
             "filters[active][$eq]": "true",
@@ -144,9 +205,28 @@ def fetch_lokomotiv(season: str) -> list[dict]:
                 "photo_url": _media_url(player.get("photo")),
                 "action_url": _media_url(player.get("bg_photo"), ("medium", "small"))
                               or _media_url(player.get("main_bg_photo"), ("medium", "small")),
+                "bio": _bio(player),
             }
         )
     return roster
+
+
+def _bio(player: dict) -> dict:
+    """Анкета игрока с сайта клуба: только заполненные поля."""
+    grip = (_attrs(player.get("grip")).get("grip") or "").strip().lower()
+    facts = {
+        "birth": player.get("birth"),
+        "birth_place": (player.get("birth_place") or "").strip(),
+        "country": (player.get("country") or "").strip(),
+        "height": player.get("height"),
+        "weight": player.get("weight"),
+        "grip": GRIPS.get(grip, ""),
+        "school": (player.get("hockey_school") or "").strip(),
+        "debut": player.get("debut"),
+        "contract_ends": None if player.get("hide_contract_info") else player.get("contract_ends"),
+        "story": bio_sections(player.get("details")),
+    }
+    return {key: value for key, value in facts.items() if value}
 
 
 # KHL team id -> (название, функция загрузки состава)
@@ -245,6 +325,7 @@ def apply(season_data: dict, season: str = "2026/2027", progress=print) -> dict:
                 **{k: m[k] for k in ("name", "number", "role_key", "role", "injured", "farm_club")},
                 "photo_url": member.get("photo_url"),
                 "action_url": member.get("action_url"),
+                "bio": member.get("bio") or {},
             }
             for m, member in zip(merged, official)
         ]

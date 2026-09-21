@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 import datetime as dt
-import html
 import json
 import re
 import urllib.parse
@@ -29,26 +28,11 @@ SEASON = "2027MEN"
 MSK = dt.timedelta(hours=3)             # в API клуба время в UTC
 PRESSER_WINDOW = dt.timedelta(hours=9)  # пресс-конференция — вскоре после игры
 PRESSER_MARK = "пресс-конференц"
-MAX_PARAGRAPHS = 60
-MAX_CHARS = 1500
 
 
 # --------------------------------------------------------------- текст
 
-def paragraphs(raw: str | None) -> list[str]:
-    """HTML статьи -> список абзацев обычным текстом."""
-    if not raw:
-        return []
-    text = re.sub(r"(?i)<br\s*/?>", "\n", raw)
-    text = re.sub(r"(?i)</(p|div|h\d|li)>", "\n\n", text)
-    text = re.sub(r"<[^>]+>", "", text)
-    text = html.unescape(text).replace("\xa0", " ")
-    out = []
-    for piece in text.split("\n\n"):
-        piece = re.sub(r"[ \t]+", " ", piece).strip()
-        if piece:
-            out.append(piece[:MAX_CHARS])
-    return out[:MAX_PARAGRAPHS]
+paragraphs = club_roster.paragraphs
 
 
 def _article(node) -> dict | None:
