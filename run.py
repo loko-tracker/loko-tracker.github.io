@@ -20,6 +20,7 @@ import build
 import club_games
 import club_media
 import club_news
+import claude_picks
 import club_roster
 import collect
 import injuries as injuries_module
@@ -71,6 +72,7 @@ def main() -> int:
             memorial.sync()
             club_games.build()
             club_news.sync()
+            claude_picks.update(season)
         except Exception:
             traceback.print_exc()
             print()

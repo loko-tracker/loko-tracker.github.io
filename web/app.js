@@ -1325,6 +1325,12 @@
     catch (error) { return false; }
   }
 
+  // Прогноз Claude — по модели шансов (claude_picks.py). Пока матч не
+  // начался, он пересчитывается каждое утро, после начала — заморожен.
+  function claudePick(game) {
+    return (APP.data.claude_picks || {})[String(game.id)] || null;
+  }
+
   function betOpen(game) {
     var start = parseDate(game.start_at);
     return game.state !== "finished" && !!start && start.getTime() > Date.now();
@@ -1354,7 +1360,9 @@
     var bet = loadBets()[String(game.id)];
     var open = betOpen(game);
     if (!open && !bet) {
-      return '<h2 class="sheet-sec">Твой прогноз</h2><p class="empty">Матч уже начался — прогнозы закрыты.</p>';
+      var frozen = claudePick(game);
+      return '<h2 class="sheet-sec">Твой прогноз</h2><p class="empty">Матч уже начался — прогнозы закрыты.' +
+        (frozen ? ' Claude ставил ' + frozen.h + ':' + frozen.a + '.' : "") + '</p>';
     }
     var h = bet ? bet.h : 2, a = bet ? bet.a : 2;
     if (!bet && game.home_id === APP.myTeam) h = 3;
@@ -1368,6 +1376,8 @@
           (open ? betStepper("a", a) : '<b class="bet-fixed">' + a + '</b>') +
           '<span class="bet-team">' + crest(game.away_id) + esc(game.away) + '</span>' +
         '</div>' +
+        (claudePick(game) ? '<p class="bet-claude">Прогноз Claude: <b>' + claudePick(game).h + ':' + claudePick(game).a + '</b>' +
+          '<span>по модели шансов · ' + (open ? "может измениться до начала матча" : "зафиксирован") + '</span></p>' : "") +
         (open
           ? '<div class="bet-actions"><button type="button" class="watch-go bet-save">' +
               (bet ? "Обновить прогноз" : "Сохранить прогноз") + '</button>' +
@@ -1418,47 +1428,63 @@
     var all = loadBets(), teamId = APP.myTeam;
     var games = (APP.data.games || []).filter(function (g) { return g.home_id === teamId || g.away_id === teamId; });
     var done = games.filter(function (g) { return all[String(g.id)] && g.state === "finished"; });
-    var points = 0, exact = 0, right = 0;
+    // Честное сравнение — на одних и тех же матчах: там, где прогноз есть у обоих.
+    var points = 0, exact = 0, right = 0, rival = 0, rivalExact = 0, rivalRight = 0, duels = 0;
     done.forEach(function (g) {
       var pts = betPoints(all[String(g.id)], g);
       points += pts; if (pts === 3) exact++; if (pts >= 1) right++;
+      var mine = claudePick(g);
+      if (mine) {
+        var theirs = betPoints(mine, g);
+        duels++; rival += theirs; if (theirs === 3) rivalExact++; if (theirs >= 1) rivalRight++;
+      }
     });
     var ahead = games.filter(betOpen).slice(0, 3);
     var waiting = games.filter(function (g) { return all[String(g.id)] && g.state !== "finished"; }).length;
 
     var upcoming = ahead.map(function (g) {
-      var bet = all[String(g.id)];
+      var bet = all[String(g.id)], pick = claudePick(g);
       return '<li class="openable" data-preview="' + esc(g.id) + '">' +
         '<span class="dim">' + esc(fmtDay(g.start_at)) + '</span>' +
-        '<span>' + esc(g.home) + ' — ' + esc(g.away) + '</span>' +
+        '<span>' + esc(g.home) + ' — ' + esc(g.away) +
+          (pick ? '<i class="bet-rival">Claude: ' + pick.h + ':' + pick.a + '</i>' : "") + '</span>' +
         (bet ? '<b class="bet-mine">' + bet.h + ':' + bet.a + '</b><span class="open-hint">изменить</span>'
              : '<span class="open-hint">сделать прогноз</span>') + '</li>';
     }).join("");
 
     var history = done.slice().reverse().map(function (g) {
       var bet = all[String(g.id)], pts = betPoints(bet, g);
+      var pick = claudePick(g), theirs = pick ? betPoints(pick, g) : null;
+      var chip = function (value) {
+        return '<span class="pill ' + (value === 3 ? "zone" : value ? "cool" : "dim") + '">+' + value + '</span>';
+      };
       return '<tr>' +
         '<td class="l dim">' + esc(fmtDay(g.start_at)) + '</td>' +
         '<td class="l">' + esc(g.home) + ' — ' + esc(g.away) + '</td>' +
-        '<td>' + bet.h + ':' + bet.a + '</td>' +
         '<td class="strong">' + esc(g.score) + '</td>' +
-        '<td><span class="pill ' + (pts === 3 ? "zone" : pts ? "cool" : "dim") + '">+' + pts + '</span></td>' +
+        '<td>' + bet.h + ':' + bet.a + ' ' + chip(pts) + '</td>' +
+        '<td>' + (pick ? pick.h + ':' + pick.a + ' ' + chip(theirs) : '<span class="dim">—</span>') + '</td>' +
       '</tr>';
     }).join("");
 
     host.innerHTML =
-      '<div class="stat-row bet-tiles">' +
-        betTile("Очки", points, done.length ? "за " + done.length + " " + wordForm(done.length, "прогноз", "прогноза", "прогнозов") : "пока нет сыгранных") +
-        betTile("Точный счёт", exact, "по 3 очка") +
-        betTile("Угадан исход", done.length ? right + " из " + done.length : "—", "") +
-        betTile("Ждут матча", waiting, wordForm(waiting, "прогноз", "прогноза", "прогнозов")) +
+      '<div class="bet-duel">' +
+        '<div class="bd-side"><span class="k">Ты</span><b>' + points + '</b>' +
+          '<i>точных ' + exact + ' · исход ' + right + ' из ' + done.length + '</i></div>' +
+        '<div class="bd-mid">' + (done.length
+          ? (points > rival ? "ты впереди" : points < rival ? "Claude впереди" : "поровну")
+          : "счёт откроется<br>после первого матча") + '</div>' +
+        '<div class="bd-side rival"><span class="k">Claude</span><b>' + rival + '</b>' +
+          '<i>точных ' + rivalExact + ' · исход ' + rivalRight + ' из ' + duels + '</i></div>' +
       '</div>' +
+      '<p class="legend bet-note">Считаются матчи, где прогноз есть у обоих. Ждут матча: ' + waiting + ' ' +
+        wordForm(waiting, "твой прогноз", "твоих прогноза", "твоих прогнозов") + '.</p>' +
       '<div class="cols-2">' +
         '<div class="panel"><h3 class="panel-head">Ближайшие матчи</h3>' +
           (upcoming ? '<ul class="bet-next">' + upcoming + '</ul>' : '<p class="empty">Впереди матчей нет.</p>') + '</div>' +
         '<div class="panel"><h3 class="panel-head">Мои прогнозы</h3>' +
           (history ? '<div class="table-scroll"><table class="grid"><thead><tr><th class="l">Дата</th><th class="l">Матч</th>' +
-            '<th>Прогноз</th><th>Итог</th><th>Очки</th></tr></thead><tbody>' + history + '</tbody></table></div>'
+            '<th>Итог</th><th>Ты</th><th>Claude</th></tr></thead><tbody>' + history + '</tbody></table></div>'
                    : '<p class="empty">Здесь появятся сыгранные матчи с твоими прогнозами и очками за них.</p>') + '</div>' +
       '</div>' +
       '<p class="legend">Прогнозы хранятся в этом браузере — на телефоне и на компьютере они свои.</p>';
@@ -1473,9 +1499,11 @@
   function heroBet(next) {
     if (!next) return "";
     var bet = loadBets()[String(next.id)];
+    var pick = claudePick(next);
     return '<span class="hero-bet">' + (bet
       ? 'Твой прогноз: <b>' + bet.h + ':' + bet.a + '</b>'
-      : (betOpen(next) ? 'Прогноз ещё не сделан' : '')) + '</span>';
+      : (betOpen(next) ? 'Твой прогноз ещё не сделан' : '')) +
+      (pick ? ' · Claude: <b>' + pick.h + ':' + pick.a + '</b>' : "") + '</span>';
   }
 
   function refreshBets() {

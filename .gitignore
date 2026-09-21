@@ -10,6 +10,7 @@ data/site_data.json
 data/memorial.json
 data/club_games.json
 data/club_news.json
+data/claude_picks.json
 web/vendor/
 web/logos/
 web/photos/

@@ -12,6 +12,7 @@ import json
 import sys
 from pathlib import Path
 
+import claude_picks
 import club_games
 import club_news
 import club_roster
@@ -190,6 +191,7 @@ def build(season: dict | None = None, *, sims: int = 10_000, progress=print) -> 
         "memorial": memorial.payload(),
         "club_games": club_games.load(),
         "club_news": club_news.load(),
+        "claude_picks": claude_picks.load(),
         "injuries_updated_at": injuries_data.get("updated_at"),
     }
 
