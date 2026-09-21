@@ -189,6 +189,14 @@ def simulate(season: dict, sims: int = 10_000, seed: int | None = 20262027,
     # минимум и максимум из десяти тысяч прогонов — это единичные выбросы,
     # они выглядят внушительно и ничего не сообщают.
     points_runs: dict[int, list[int]] = {t: [] for t in team_ratings}
+    # Сколько очков в каждом прогоне набрали восьмое и первое место
+    # конференции — из этого считается «что нужно» для плей-офф и первого места.
+    line_runs: dict[str, dict[str, list[int]]] = {
+        key: {"playoff": [], "first": []} for key in by_conference
+    }
+    # Исходы каждого оставшегося матча: победа хозяев в основное время,
+    # в овертайме/по буллитам, то же для гостей. Для превью матча.
+    outcome_counts = [[0, 0, 0, 0] for _ in fixtures]
 
     rng = random.Random(seed)
     rand = rng.random
@@ -220,11 +228,12 @@ def simulate(season: dict, sims: int = 10_000, seed: int | None = 20262027,
         wins = {t: base[t][1] for t in team_ratings}
         diff = {t: base[t][2] for t in team_ratings}
 
-        for pair in fixtures:
+        for index, pair in enumerate(fixtures):
             home, away = pair
             table_home, table_away = pair_tables[pair]
             gh = bisect_left(table_home, rand())
             ga = bisect_left(table_away, rand())
+            counts = outcome_counts[index]
 
             if gh == ga:
                 # Овертайм и буллиты: победителя определяем броском монеты
@@ -235,17 +244,21 @@ def simulate(season: dict, sims: int = 10_000, seed: int | None = 20262027,
                     pts[away] += PTS_OT_LOSS
                     wins[home] += 1
                     gh += 1
+                    counts[1] += 1
                 else:
                     pts[away] += PTS_WIN
                     pts[home] += PTS_OT_LOSS
                     wins[away] += 1
                     ga += 1
+                    counts[2] += 1
             elif gh > ga:
                 pts[home] += PTS_WIN
                 wins[home] += 1
+                counts[0] += 1
             else:
                 pts[away] += PTS_WIN
                 wins[away] += 1
+                counts[3] += 1
 
             diff[home] += gh - ga
             diff[away] += ga - gh
@@ -269,6 +282,8 @@ def simulate(season: dict, sims: int = 10_000, seed: int | None = 20262027,
             for team_id in table[:PLAYOFF_SPOTS]:
                 playoff_hits[team_id] += 1
             first_hits[table[0]] += 1
+            line_runs[key]["first"].append(pts[table[0]])
+            line_runs[key]["playoff"].append(pts[table[min(PLAYOFF_SPOTS, len(table)) - 1]])
             leader_key = (pts[table[0]], wins[table[0]], diff[table[0]])
             if best_key is None or leader_key > best_key:
                 best_key, best_overall = leader_key, table[0]
@@ -311,6 +326,26 @@ def simulate(season: dict, sims: int = 10_000, seed: int | None = 20262027,
 
     results.sort(key=lambda r: (-r["playoff_pct"], -r["proj_pts"]))
 
+    # Черта плей-офф и первого места: сколько очков у восьмого и первого
+    # клуба конференции в обычном прогоне (медиана) и в «тяжёлом» (9 из 10
+    # прогонов не выше этого числа — набрав на очко больше, почти наверняка
+    # окажешься выше черты).
+    lines = {}
+    for key, runs in line_runs.items():
+        lines[key] = {}
+        for name, values in runs.items():
+            ordered = sorted(values)
+            lines[key][name] = {
+                "median": percentile(ordered, 0.50),
+                "high": percentile(ordered, 0.90),
+            }
+
+    # Шансы в каждом оставшемся матче, в процентах, с точки зрения хозяев.
+    matchups = {}
+    for game, counts in zip(remaining, outcome_counts):
+        total = sum(counts) or 1
+        matchups[str(game["id"])] = [round(100.0 * c / total, 1) for c in counts]
+
     return {
         "sims": sims,
         "seed": seed,
@@ -320,6 +355,8 @@ def simulate(season: dict, sims: int = 10_000, seed: int | None = 20262027,
         "games_remaining": len(remaining),
         "games_played": sum(1 for g in games if g.get("state") == "finished"),
         "teams": results,
+        "lines": lines,
+        "matchups": matchups,
     }
 
 

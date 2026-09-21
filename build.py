@@ -13,6 +13,7 @@ import sys
 from pathlib import Path
 
 import club_games
+import club_news
 import club_roster
 import collect
 import injuries as injuries_module
@@ -151,6 +152,8 @@ def build(season: dict | None = None, *, sims: int = 10_000, progress=print) -> 
             "home_advantage": round(odds["home_advantage"], 4),
             "prior_games": odds["prior_games"],
             "games_remaining": odds["games_remaining"],
+            "lines": odds["lines"],
+            "matchups": odds["matchups"],
             "teams": [
                 {
                     **row,
@@ -186,6 +189,7 @@ def build(season: dict | None = None, *, sims: int = 10_000, progress=print) -> 
         "club_facts": {str(team): facts for team, facts in club_roster.FACTS.items()},
         "memorial": memorial.payload(),
         "club_games": club_games.load(),
+        "club_news": club_news.load(),
         "injuries_updated_at": injuries_data.get("updated_at"),
     }
 

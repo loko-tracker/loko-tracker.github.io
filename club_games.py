@@ -118,6 +118,41 @@ def _attack(node) -> dict:
             for row in _as_list((node or {}).get("Toa")) if row.get("@_team")}
 
 
+def _int(value) -> int:
+    try:
+        return int(value or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
+def _goalies(summary: dict, mine_id) -> list[dict]:
+    """Вратари из протокола: кто стоял, сколько бросков, сколько пропустил.
+
+    Лига отдаёт по вратарям только число матчей, а клуб в протоколе —
+    броски, сейвы и «сухари». Запасной, не выходивший на лёд, не нужен.
+    """
+    out = []
+    for team in _as_list(summary.get("PlayerStatsList")):
+        for row in _as_list(team.get("PlayerStats")):
+            if (row.get("@_pos") or "").strip().lower() not in ("в", "g"):
+                continue
+            shots, goals = _int(row.get("@_sog")), _int(row.get("@_ga"))
+            if not shots and not goals:
+                continue
+            out.append(
+                {
+                    "name": f"{row.get('@_lastname', '')} {row.get('@_firstname', '')}".strip(),
+                    "number": _int(row.get("@_jn")) or None,
+                    "mine": str(row.get("@_clubidt") or team.get("@_teamId")) == str(mine_id),
+                    "shots": shots,
+                    "saves": _int(row.get("@_sv")),
+                    "goals": goals,
+                    "shutout": _int(row.get("@_so")) > 0,
+                }
+            )
+    return out
+
+
 def _protocol_data(summary: dict, home_is_mine: bool) -> dict:
     """Протокол -> голы и командные числа, всегда парой «мои : соперник»."""
     mine, theirs = ("A", "B") if home_is_mine else ("B", "A")
@@ -153,6 +188,7 @@ def _protocol_data(summary: dict, home_is_mine: bool) -> dict:
     }
     return {
         "goals": goals,
+        "goalies": _goalies(summary, mine_id),
         "stats": {k: v for k, v in stats.items() if v},
         "audience": summary.get("@_audience"),
         "coach_mine": summary.get("@_trainA" if home_is_mine else "@_trainB"),

@@ -105,6 +105,7 @@
 
     <!-- Мой клуб: то, ради чего открывают сайт, — первым. -->
     <div class="club-hero" id="clubHero" hidden></div>
+    <div class="hero-news" id="heroNews" hidden></div>
 
     <div class="hero">
       <div class="hero-main">
@@ -164,6 +165,9 @@
 
     <div class="stat-row" id="clubTiles"></div>
 
+    <!-- Что нужно для плей-офф и первого места — по той же модели, что и шансы. -->
+    <div class="needs" id="clubNeeds"></div>
+
     <div class="cols-2">
       <div>
         <h2 class="sec">Календарь</h2>
@@ -175,6 +179,26 @@
         <div class="panel" id="clubInjuries"></div>
         <h2 class="sec">Лучшие в клубе</h2>
         <div class="panel" id="clubLeaders"></div>
+      </div>
+    </div>
+
+    <!-- Игра в прогнозы: счёт до матча, очки после. Хранится в браузере. -->
+    <h2 class="sec">Игра в прогнозы</h2>
+    <div class="bets" id="clubBets"></div>
+
+    <h2 class="sec" id="clubNewsHead" hidden>Новости клуба</h2>
+    <div class="news-grid" id="clubNews" hidden></div>
+
+    <h2 class="sec" id="clubChartsHead" hidden>Сезон в графиках</h2>
+    <div class="cols-2" id="clubCharts" hidden>
+      <div class="panel chart-panel">
+        <h3 class="panel-head">Гонка за очки</h3>
+        <div class="chart" id="chartRace"></div>
+      </div>
+      <div class="panel chart-panel">
+        <h3 class="panel-head">Голы по периодам</h3>
+        <div class="chart" id="chartPeriods"></div>
+        <p class="legend" id="periodsTable"></p>
       </div>
     </div>
 

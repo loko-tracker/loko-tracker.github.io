@@ -500,13 +500,20 @@
         '<div class="form-strip" aria-label="Последние матчи">' + form + '</div>' +
       '</div>' +
       '<div class="club-next">' + nextHtml +
+        heroBet(next) +
         '<div class="club-next-links">' +
-          '<a class="club-link" href="#/club">Календарь и состав →</a>' +
+          (next ? '<button type="button" class="watch-go pv-open" data-preview="' + esc(next.id) + '">Превью матча</button>' : "") +
           (next ? watchLink(watchLinks().team, "Смотреть матч ↗") : "") +
+          '<a class="club-link" href="#/club">Календарь и состав →</a>' +
         '</div>' +
       '</div>';
 
     if (next) runCountdown("club", next.start_at, ["ccD","ccH","ccM","ccS"]);
+    host.onclick = function (event) {
+      var button = event.target.closest("[data-preview]");
+      if (button) openPreview(gameById(button.getAttribute("data-preview")));
+    };
+    renderHeroNews();
   }
 
   var ROLE_GROUPS = [
@@ -551,7 +558,8 @@
       var oppId = home ? g.away_id : g.home_id, opp = home ? g.away : g.home;
       var r = g.state === "finished" ? outcome(g, club.team.id) : null;
       var info = matchInfo(g);
-      var classes = ((g === club.next ? "mine " : "") + (info ? "openable" : "")).trim();
+      var ahead = g.state !== "finished";
+      var classes = ((g === club.next ? "mine " : "") + (info || ahead ? "openable" : "")).trim();
       var result = r
         ? "<span class='pill " + (r.code === "w" ? "zone" : r.code === "otl" ? "dim" : "hot") + "'>" +
             (r.win ? "победа" : "поражение") + (r.extra ? " · " + r.extra : "") + "</span>"
@@ -559,12 +567,14 @@
           ? "<span class='pill dim'>ждём итог</span>"
           : "<span class='pill dim'>" + esc(fmtTime(g.start_at)) + "</span>";
       return "<tr" + (classes ? " class='" + classes + "'" : "") +
-        (info ? " data-day='" + esc(matchDay(g)) + "' title='Открыть разбор матча'" : "") + ">" +
+        (info ? " data-day='" + esc(matchDay(g)) + "' title='Открыть разбор матча'" : "") +
+        (ahead ? " data-preview='" + esc(g.id) + "' title='Открыть превью матча'" : "") + ">" +
         "<td class='l dim'>" + esc(fmtDay(g.start_at)) + ", " + esc(fmtWeekday(g.start_at)) + "</td>" +
         "<td class='l dim'>" + (home ? "дома" : "в гостях") + "</td>" +
         "<td class='l'>" + crest(oppId) + esc(opp) + "</td>" +
         "<td class='strong'>" + (r ? r.mine + ":" + r.theirs : "—") + "</td>" +
-        "<td class='l'>" + result + (info ? " <span class='open-hint'>разбор</span>" : "") + "</td>" +
+        "<td class='l'>" + result + (info ? " <span class='open-hint'>разбор</span>" : "") +
+          (ahead ? " <span class='open-hint'>превью</span>" : "") + "</td>" +
       "</tr>";
     }).join("");
     wireMatchRows($("clubGames"));
@@ -572,6 +582,10 @@
       (body || "<tr><td class='l dim' colspan='5'>Матчей нет.</td></tr>") + "</tbody>";
 
     renderClubWatch(club);
+    renderClubNeeds(club);
+    renderBets();
+    renderClubNews();
+    renderClubCharts(club);
 
     // Лазарет клуба: данные клуба, твои отметки и новости вместе.
     $("clubInjuries").innerHTML = club.injuries.length
@@ -606,10 +620,12 @@
         return group.key === "goaltender" ? (b.gp - a.gp) : ((b.pts - a.pts) || (b.gp - a.gp));
       });
       var goalie = group.key === "goaltender";
-      // У вратарей лига отдаёт только число игр: время на льду у них нулевое,
-      // а сейвов в данных нет — показывать нечего, кроме матчей.
+      // У вратарей лига отдаёт только число игр. Броски и сейвы — из
+      // протоколов клуба, они есть только у «Локомотива».
+      var keeper = goalie && Number(club.team.id) === Number(APP.data.my_team_id) ? goalieTotals() : null;
       var headRow = "<thead><tr><th class='l'>№</th><th class='l'>Игрок</th><th>И</th>" +
-        (goalie ? "" : "<th>Г</th><th>П</th><th>О</th><th>+/−</th>") + "</tr></thead>";
+        (goalie ? (keeper ? "<th>Бр</th><th>Отр</th><th>Проп</th><th>%ОБ</th><th title='Матчи на ноль'>«0»</th>" : "")
+                : "<th>Г</th><th>П</th><th>О</th><th>+/−</th>") + "</tr></thead>";
       var rows = list.map(function (p) {
         var media = photos[nameKey(p.name)] || {};
         var flags = (p.injured || hurt[nameKey(p.name)] ? " <span class='pill hot'>травма</span>" : "") +
@@ -617,8 +633,9 @@
         var face = media.photo
           ? "<img class='ava' src='" + esc(photoUrl(media.photo)) + "' alt='' loading='lazy' decoding='async'>" : "";
         return "<tr class='openable' data-player='" + esc(p.name) + "' title='Открыть карточку игрока'><td class='l'><span class='num-badge'>" + esc(p.number != null ? p.number : "") + "</span></td>" +
-          "<td class='l'>" + face + esc(p.name) + flags + "</td><td>" + (p.gp || 0) + "</td>" +
-          (goalie ? ""
+          "<td class='l'>" + face + esc(p.name) + flags + "</td><td>" +
+            (keeper && keeper[protoKey(p.name)] ? keeper[protoKey(p.name)].games : (p.gp || 0)) + "</td>" +
+          (goalie ? (keeper ? goalieCells(keeper[protoKey(p.name)]) : "")
                   : "<td>" + (p.g || 0) + "</td><td>" + (p.a || 0) + "</td><td class='strong'>" + (p.pts || 0) +
                     "</td><td>" + signed(p.plus_minus) + "</td>") +
           "</tr>";
@@ -924,6 +941,552 @@
       : "";
   }
 
+  /* ============================ превью матча ============================ */
+
+  // Перед игрой: шансы по модели, место и форма обеих команд, личные
+  // встречи в сезоне, лидеры и лазареты. Открывается щелчком по предстоящему
+  // матчу или кнопкой «Превью матча» у ближайшей игры.
+  function gameById(id) {
+    return (APP.data.games || []).filter(function (g) { return String(g.id) === String(id); })[0] || null;
+  }
+
+  // Шансы — из тех же 10 000 прогонов, что и шансы на плей-офф:
+  // как часто этот матч заканчивался каждым исходом. Глазами teamId.
+  function matchupFor(game, teamId) {
+    var m = ((APP.data.odds || {}).matchups || {})[String(game.id)];
+    if (!m) return null;
+    return game.home_id === teamId
+      ? { win: m[0], otWin: m[1], otLoss: m[2], loss: m[3] }
+      : { win: m[3], otWin: m[2], otLoss: m[1], loss: m[0] };
+  }
+
+  function topScorers(teamId, limit) {
+    return (APP.data.players || []).filter(function (p) { return p.team_id === teamId && p.gp; })
+      .sort(function (a, b) { return (b.pts - a.pts) || (b.g - a.g); }).slice(0, limit || 3);
+  }
+
+  function placeText(row) {
+    if (!row || !row.position) return "—";
+    return row.position + "-е на " + (row.conference_key === "east" ? "Востоке" : "Западе");
+  }
+
+  function previewSide(model) {
+    var leaders = topScorers(model.team.id, 3);
+    return '<div class="pv-side">' +
+      '<h3 class="pv-team">' + crest(model.team.id) + esc(model.team.name) + '</h3>' +
+      '<p class="pv-k">Форма</p>' +
+      '<div class="form-strip">' + (model.played.slice(-5).map(formChip).join("") || '<span class="dim">матчей ещё не было</span>') + '</div>' +
+      '<p class="pv-k">Лидеры</p>' +
+      (leaders.length ? '<ol class="pv-list">' + leaders.map(function (p) {
+        return '<li data-player="' + esc(p.name) + '" data-team="' + esc(p.team_id) + '"><b>' + esc(p.name) + '</b>' +
+          '<span>' + p.g + '+' + p.a + ' = ' + p.pts + '</span></li>';
+      }).join("") + '</ol>' : '<p class="empty">Статистики пока нет.</p>') +
+      '<p class="pv-k">Лазарет</p>' +
+      (model.injuries.length ? '<ul class="pv-list">' + model.injuries.map(function (i) {
+        return '<li><b>' + esc(i.player) + '</b><span>' + esc(i.until || i.term || "срок неизвестен") + '</span></li>';
+      }).join("") + '</ul>' : '<p class="empty">Сведений о травмах нет.</p>') +
+    '</div>';
+  }
+
+  function previewHtml(game) {
+    var mineId = APP.myTeam;
+    var oppId = game.home_id === mineId ? game.away_id : game.home_id;
+    var me = clubModel(mineId), them = clubModel(oppId);
+    if (!me || !them) return "";
+    var home = game.home_id === mineId;
+    var chances = matchupFor(game, mineId);
+    // «Завтра» — по календарю, а не по числу часов до начала.
+    var start = parseDate(game.start_at), today = new Date();
+    var days = start ? Math.max(0, Math.round(
+      (new Date(start.getFullYear(), start.getMonth(), start.getDate()) -
+       new Date(today.getFullYear(), today.getMonth(), today.getDate())) / 86400000)) : null;
+    var when = days === null ? "" : days === 0 ? "сегодня" : days === 1 ? "завтра" :
+      "через " + days + " " + wordForm(days, "день", "дня", "дней");
+
+    var chanceHtml = "";
+    if (chances) {
+      var parts = [
+        { k: "Победа", v: chances.win, cls: "w" },
+        { k: "Победа в ОТ или по буллитам", v: chances.otWin, cls: "otw" },
+        { k: "Поражение в ОТ или по буллитам", v: chances.otLoss, cls: "otl" },
+        { k: "Поражение", v: chances.loss, cls: "l" }
+      ];
+      chanceHtml = '<h2 class="sheet-sec">Шансы по модели</h2>' +
+        '<div class="pv-bar" aria-hidden="true">' + parts.map(function (x) {
+          return '<span class="' + x.cls + '" style="flex-grow:' + x.v + '"></span>';
+        }).join("") + '</div>' +
+        '<ul class="pv-legend">' + parts.map(function (x) {
+          return '<li class="' + x.cls + '"><i></i>' + esc(x.k) + ' <b>' + pct(x.v) + '%</b></li>';
+        }).join("") + '</ul>' +
+        '<p class="pv-hint">Из 10 000 прогонов оставшегося сезона: учитываются сила атаки и обороны обеих команд и преимущество своего льда. Это оценка, не ставка.</p>';
+    }
+
+    var cmp = [
+      ["Место", placeText(me.row), placeText(them.row)],
+      ["Очки", me.row ? me.row.pts + " за " + me.row.gp : "—", them.row ? them.row.pts + " за " + them.row.gp : "—"],
+      ["Шайбы", me.row ? me.row.gf + "–" + me.row.ga : "—", them.row ? them.row.gf + "–" + them.row.ga : "—"],
+      ["Серия", streakText(me.streak), streakText(them.streak)],
+      ["Плей-офф", me.odds ? pct(me.odds.playoff_pct) + "%" : "—", them.odds ? pct(them.odds.playoff_pct) + "%" : "—"]
+    ].map(function (r) {
+      return '<div class="pv-row"><b>' + esc(r[1]) + '</b><span>' + esc(r[0]) + '</span><b>' + esc(r[2]) + '</b></div>';
+    }).join("");
+
+    var meetings = (APP.data.games || []).filter(function (g) {
+      return g.state === "finished" &&
+        ((g.home_id === mineId && g.away_id === oppId) || (g.home_id === oppId && g.away_id === mineId));
+    }).map(function (g) {
+      var info = matchInfo(g);
+      return '<li' + (info ? ' class="openable" data-day="' + esc(matchDay(g)) + '"' : "") + '>' +
+        '<span class="dim">' + esc(fmtDay(g.start_at)) + '</span> ' + esc(g.home) + ' <b>' + esc(g.score) + '</b> ' + esc(g.away) +
+        (info ? ' <span class="open-hint">разбор</span>' : "") + '</li>';
+    }).join("");
+
+    return '<header class="sheet-head">' +
+        '<p class="sheet-meta">' + esc([fmtDayFull(game.start_at) + ", " + fmtWeekday(game.start_at) + ", " + fmtTime(game.start_at),
+          home ? "дома" : "в гостях", game.location || ""].filter(Boolean).join(" · ")) + '</p>' +
+        '<div class="sheet-score">' +
+          '<span class="s-team">' + crest(game.home_id, "big").replace('class="crest ', 'class="s-crest ') + '<b>' + esc(game.home) + '</b></span>' +
+          '<span class="s-num"><b class="pv-vs">превью</b><i>' + esc(when) + '</i></span>' +
+          '<span class="s-team">' + crest(game.away_id, "big").replace('class="crest ', 'class="s-crest ') + '<b>' + esc(game.away) + '</b></span>' +
+        '</div>' +
+        '<p class="sheet-links">' + watchLink(watchLinks().team, "Смотреть матч ↗") + khlGameLink(game, "Матч на сайте КХЛ ↗") + '</p>' +
+      '</header>' +
+      chanceHtml +
+      betBlock(game) +
+      '<h2 class="sheet-sec">Команды сейчас</h2>' +
+      '<div class="pv-head"><b>' + esc(me.team.name) + '</b><span></span><b>' + esc(them.team.name) + '</b></div>' +
+      '<div class="pv-cmp">' + cmp + '</div>' +
+      '<h2 class="sheet-sec">Личные встречи в сезоне</h2>' +
+      (meetings ? '<ul class="pv-meet">' + meetings + '</ul>' : '<p class="empty">В этом сезоне ещё не встречались.</p>') +
+      '<div class="pv-sides">' + previewSide(me) + previewSide(them) + '</div>';
+  }
+
+  function openPreview(game) {
+    if (!game) return;
+    var html = previewHtml(game);
+    if (html) showSheet(html);
+  }
+
+  /* ============================ новости клуба ============================ */
+
+  // Свежие материалы с сайта клуба. Они есть только для «Локомотива»,
+  // поэтому показываем их, пока выбран он.
+  function newsList() {
+    return Number(APP.myTeam) === Number(APP.data.my_team_id) ? (APP.data.club_news || []) : [];
+  }
+
+  function newsDay(iso) {
+    var d = parseDate(iso);
+    return d ? d.getDate() + " " + MONTHS_SHORT[d.getMonth()] : "";
+  }
+
+  function newsCard(item, index) {
+    return '<article class="news-card" data-news="' + index + '" tabindex="0">' +
+      (item.image ? '<img src="' + esc(photoUrl(item.image)) + '" alt="" loading="lazy" decoding="async">'
+                  : '<span class="news-noimg">' + crest(APP.data.my_team_id, "big") + '</span>') +
+      '<div class="news-body"><time>' + esc(newsDay(item.date)) + '</time>' +
+        '<h3>' + esc(item.title) + '</h3>' + (item.lead ? '<p>' + esc(item.lead) + '</p>' : "") + '</div>' +
+    '</article>';
+  }
+
+  function openNews(index) {
+    var item = newsList()[index];
+    if (!item) return;
+    var talk = /пресс-конференц/i.test(item.title);
+    showSheet(
+      (item.image ? '<img class="news-cover" src="' + esc(photoUrl(item.image)) + '" alt="">' : "") +
+      '<p class="sheet-meta">' + esc(fmtDate(item.date)) + ' · сайт ХК «Локомотив»</p>' +
+      '<article class="sheet-text">' + sheetArticle(item, "", talk) + '</article>'
+    );
+  }
+
+  function wireNews(host) {
+    host.onclick = function (event) {
+      var more = event.target.closest(".news-more");
+      if (more) { APP.newsAll = !APP.newsAll; renderClubNews(); return; }
+      var card = event.target.closest("[data-news]");
+      if (card) openNews(Number(card.getAttribute("data-news")));
+    };
+    host.onkeydown = function (event) {
+      var card = event.target.closest("[data-news]");
+      if (card && (event.key === "Enter" || event.key === " ")) {
+        event.preventDefault();
+        openNews(Number(card.getAttribute("data-news")));
+      }
+    };
+  }
+
+  function renderClubNews() {
+    var host = $("clubNews"), list = newsList();
+    host.hidden = $("clubNewsHead").hidden = !list.length;
+    if (!list.length) { host.innerHTML = ""; return; }
+    var shown = APP.newsAll ? list : list.slice(0, 6);
+    host.innerHTML = shown.map(newsCard).join("") +
+      (list.length > 6 ? '<button type="button" class="ghost news-more">' +
+        (APP.newsAll ? "Свернуть" : "Ещё новости · " + (list.length - 6)) + '</button>' : "");
+    wireNews(host);
+  }
+
+  function renderHeroNews() {
+    var host = $("heroNews"), list = newsList().slice(0, 3);
+    if (!host) return;
+    host.hidden = !list.length;
+    host.innerHTML = list.length
+      ? '<span class="hn-k">Новости клуба</span>' + list.map(function (item, i) {
+          return '<a href="#/club" class="hn-item" data-news="' + i + '"><time>' + esc(newsDay(item.date)) + '</time>' +
+            esc(item.title) + '</a>';
+        }).join("")
+      : "";
+    host.onclick = function (event) {
+      var link = event.target.closest("[data-news]");
+      if (!link) return;
+      event.preventDefault();
+      openNews(Number(link.getAttribute("data-news")));
+    };
+  }
+
+  /* ============================== вратари ============================== */
+
+  // Лига отдаёт по вратарям только число матчей. Броски, сейвы и «сухари»
+  // берём из протоколов клуба — поэтому они есть только у «Локомотива».
+  function goalieTotals() {
+    var totals = {};
+    var games = APP.data.club_games || {};
+    Object.keys(games).forEach(function (day) {
+      (games[day].goalies || []).forEach(function (g) {
+        if (!g.mine) return;
+        var key = protoKey(g.name);
+        var t = totals[key] || (totals[key] = { games: 0, shots: 0, saves: 0, goals: 0, shutouts: 0 });
+        t.games++;
+        t.shots += g.shots || 0;
+        t.saves += g.saves || 0;
+        t.goals += g.goals || 0;
+        if (g.shutout) t.shutouts++;
+      });
+    });
+    return totals;
+  }
+
+  function goalieCells(t) {
+    if (!t) return "<td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>";
+    return "<td>" + t.shots + "</td><td>" + t.saves + "</td><td>" + t.goals + "</td>" +
+      "<td class='strong'>" + svPct(t) + "</td><td>" + t.shutouts + "</td>";
+  }
+
+  function svPct(t) {
+    return t && t.shots ? dec((100 * t.saves) / t.shots, 1) + "%" : "—";
+  }
+
+  /* ============================ что нужно клубу ============================ */
+
+  // Черта плей-офф и первого места — сколько очков набирали восьмой и первый
+  // клуб конференции в 10 000 прогонов. «Обычно» — медиана, «наверняка» —
+  // на очко больше, чем в 9 прогонах из 10.
+  function ptsGen(n) { return n % 10 === 1 && n % 100 !== 11 ? "очка" : "очков"; }
+
+  function needCard(title, chance, line, row, left) {
+    var typical = line.median, safe = line.high + 1;
+    var need = Math.max(0, safe - row.pts);
+    var wins = Math.ceil(need / 2);
+    var share = left ? Math.min(100, Math.round((100 * need) / (2 * left))) : 0;
+    var fill = Math.min(100, Math.round((100 * row.pts) / safe));
+    var mark = Math.min(100, Math.round((100 * typical) / safe));
+    var main = need
+      ? 'Ещё <b>' + need + '</b> ' + wordForm(need, "очко", "очка", "очков") + ' за ' + left + ' ' +
+        wordForm(left, "матч", "матча", "матчей") + ' — примерно ' + wins + ' ' + wordForm(wins, "победа", "победы", "побед") +
+        ' (' + share + '% возможных очков).'
+      : 'Черта пройдена: столько очков хватает даже при самом тесном раскладе.';
+    return '<div class="need">' +
+      '<div class="need-top"><span class="k">' + esc(title) + '</span><b>' + pct(chance) + '%</b></div>' +
+      '<div class="need-bar" title="Сейчас ' + row.pts + ' из ' + safe + '"><u style="width:' + fill + '%"></u>' +
+        '<i style="left:' + mark + '%" title="Обычно хватает ' + typical + '"></i></div>' +
+      '<p class="need-main">' + main + '</p>' +
+      '<p class="need-sub">Обычно хватает ' + typical + ' ' + ptsGen(typical) + ', почти наверняка — ' + safe + '. Сейчас ' + row.pts + '.</p>' +
+    '</div>';
+  }
+
+  function renderClubNeeds(club) {
+    var host = $("clubNeeds");
+    if (!host) return;
+    var row = club.row, odds = club.odds;
+    var lines = row ? ((APP.data.odds || {}).lines || {})[row.conference_key] : null;
+    if (!row || !odds || !lines) { host.innerHTML = ""; return; }
+    var left = club.games.filter(function (g) { return g.state !== "finished"; }).length;
+    var where = row.conference_key === "east" ? "Востоке" : "Западе";
+    host.innerHTML =
+      needCard("Попасть в плей-офф", odds.playoff_pct, lines.playoff, row, left) +
+      needCard("Первое место на " + where, odds.conf_first_pct, lines.first, row, left);
+  }
+
+  /* ============================ сезон в графиках ============================ */
+
+  // Пять категориальных цветов в фиксированном порядке; проверены
+  // валидатором палитр для тёмного фона сайта (различимы и при нарушениях
+  // цветового зрения). «Мой» клуб — всегда первый цвет.
+  var SERIES = ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181"];
+
+  function renderClubCharts(club) {
+    var head = $("clubChartsHead"), box = $("clubCharts");
+    if (!HAS_ECHARTS || !club.row || !club.played.length) { head.hidden = box.hidden = true; return; }
+    head.hidden = box.hidden = false;
+
+    // Соперники — четыре клуба, ближайших в таблице конференции. Цвет
+    // закреплён за клубом по его номеру, а не по месту: сменится место —
+    // цвет останется.
+    var rivals = (APP.data.standings[club.row.conference_key] || [])
+      .filter(function (r) { return r.team_id !== club.team.id; }).slice(0, 4)
+      .map(function (r) { return r.team_id; }).sort(function (a, b) { return a - b; });
+    var ids = [club.team.id].concat(rivals);
+    var ink = cssVar("--ink-2");
+
+    var series = ids.map(function (id, i) {
+      var model = clubModel(id), total = 0, data = [[0, 0]];
+      model.played.forEach(function (x, n) { total += x.result.points; data.push([n + 1, total]); });
+      var mine = i === 0;
+      return {
+        name: model.team.name, type: "line", data: data, color: SERIES[i],
+        showSymbol: mine, symbol: "circle", symbolSize: 8,
+        lineStyle: { width: mine ? 3 : 2 }, z: mine ? 5 : 2,
+        emphasis: { focus: "series" },
+        endLabel: mine ? { show: true, formatter: "{a}", color: ink, fontSize: 11 } : undefined
+      };
+    });
+
+    makeChart("chartRace", {
+      tooltip: Object.assign(tooltipBase(), {
+        trigger: "axis",
+        axisPointer: { type: "line", lineStyle: { color: cssVar("--rule-strong") } },
+        formatter: function (items) {
+          return "<b>после " + items[0].axisValue + "-го матча</b><br>" + items
+            .slice().sort(function (a, b) { return b.value[1] - a.value[1]; })
+            .map(function (it) { return it.marker + esc(it.seriesName) + ": " + it.value[1]; }).join("<br>");
+        }
+      }),
+      legend: { top: 0, left: 0, textStyle: { color: ink, fontSize: 11 }, itemWidth: 14, itemHeight: 8 },
+      grid: { left: 8, right: 84, top: 44, bottom: 8, containLabel: true },
+      xAxis: Object.assign({ type: "value", minInterval: 1, name: "матчи", nameTextStyle: { color: cssVar("--muted"), fontSize: 10 } }, axisStyle()),
+      yAxis: Object.assign({ type: "value", minInterval: 1, name: "очки", nameTextStyle: { color: cssVar("--muted"), fontSize: 10 } }, axisStyle()),
+      series: series
+    });
+
+    // Голы по периодам из счёта периодов; буллиты не считаем — это не игра.
+    var scored = [0, 0, 0, 0], missed = [0, 0, 0, 0];
+    club.played.forEach(function (x) {
+      var g = x.game, home = g.home_id === club.team.id, per = g.periods || {};
+      ["p1", "p2", "p3", "ot"].forEach(function (key, i) {
+        var parts = String(per[key] || "").split(":");
+        if (parts.length !== 2) return;
+        var a = Number(parts[0]) || 0, b = Number(parts[1]) || 0;
+        scored[i] += home ? a : b;
+        missed[i] += home ? b : a;
+      });
+    });
+    var labels = ["1-й период", "2-й период", "3-й период", "Овертайм"];
+    makeChart("chartPeriods", {
+      tooltip: Object.assign(tooltipBase(), {
+        trigger: "item",
+        formatter: function (it) { return esc(it.name) + "<br>" + it.marker + esc(it.seriesName) + ": <b>" + it.value + "</b>"; }
+      }),
+      legend: { top: 0, left: 0, textStyle: { color: ink, fontSize: 11 }, itemWidth: 14, itemHeight: 8 },
+      grid: { left: 8, right: 8, top: 40, bottom: 8, containLabel: true },
+      xAxis: Object.assign({ type: "category", data: ["1-й", "2-й", "3-й", "ОТ"] }, axisStyle(), { splitLine: { show: false } }),
+      yAxis: Object.assign({ type: "value", minInterval: 1 }, axisStyle()),
+      series: [
+        { name: "Забито", type: "bar", data: scored, color: SERIES[0], barGap: "12%", barMaxWidth: 34,
+          itemStyle: { borderRadius: [4, 4, 0, 0] } },
+        { name: "Пропущено", type: "bar", data: missed, color: SERIES[1], barMaxWidth: 34,
+          itemStyle: { borderRadius: [4, 4, 0, 0] } }
+      ]
+    });
+    $("periodsTable").textContent = labels.map(function (label, i) {
+      return label + ": " + scored[i] + "–" + missed[i];
+    }).join(" · ");
+  }
+
+  /* ============================ игра в прогнозы ============================ */
+
+  // Перед матчем вписываешь счёт, после игры сайт начисляет очки: точный
+  // счёт — 3, угаданы исход и разница шайб — 2, только исход — 1.
+  // Прогнозы хранятся в этом браузере (как и «запомнить меня»): так сайт
+  // остаётся открытым по ссылке. Ключ — номер матча, поэтому смена клуба
+  // ничего не теряет.
+  var BET_KEY = "khl-tracker-predictions-v1";
+  var bets = null;
+
+  function loadBets() {
+    if (bets) return bets;
+    try { bets = JSON.parse(window.localStorage.getItem(BET_KEY) || "{}") || {}; }
+    catch (error) { bets = {}; }
+    return bets;
+  }
+
+  function saveBets() {
+    try { window.localStorage.setItem(BET_KEY, JSON.stringify(bets)); return true; }
+    catch (error) { return false; }
+  }
+
+  function betOpen(game) {
+    var start = parseDate(game.start_at);
+    return game.state !== "finished" && !!start && start.getTime() > Date.now();
+  }
+
+  // Счёт в данных итоговый — с решающей шайбой овертайма или буллитов,
+  // поэтому ничьих не бывает ни в матчах, ни в прогнозах.
+  function betPoints(bet, game) {
+    var parts = String(game.score || "").split(":");
+    if (!bet || game.state !== "finished" || parts.length !== 2) return null;
+    var h = Number(parts[0]), a = Number(parts[1]);
+    if (bet.h === h && bet.a === a) return 3;
+    var same = Math.sign(bet.h - bet.a) === Math.sign(h - a);
+    if (same && bet.h - bet.a === h - a) return 2;
+    return same ? 1 : 0;
+  }
+
+  function betStepper(side, value) {
+    return '<div class="bet-num" data-side="' + side + '">' +
+      '<button type="button" data-step="-1" aria-label="Меньше">−</button>' +
+      '<b>' + value + '</b>' +
+      '<button type="button" data-step="1" aria-label="Больше">+</button></div>';
+  }
+
+  // Блок прогноза в превью матча.
+  function betBlock(game) {
+    var bet = loadBets()[String(game.id)];
+    var open = betOpen(game);
+    if (!open && !bet) {
+      return '<h2 class="sheet-sec">Твой прогноз</h2><p class="empty">Матч уже начался — прогнозы закрыты.</p>';
+    }
+    var h = bet ? bet.h : 2, a = bet ? bet.a : 2;
+    if (!bet && game.home_id === APP.myTeam) h = 3;
+    if (!bet && game.away_id === APP.myTeam) a = 3;
+    return '<h2 class="sheet-sec">Твой прогноз</h2>' +
+      '<div class="bet" data-bet="' + esc(game.id) + '">' +
+        '<div class="bet-row">' +
+          '<span class="bet-team">' + crest(game.home_id) + esc(game.home) + '</span>' +
+          (open ? betStepper("h", h) : '<b class="bet-fixed">' + h + '</b>') +
+          '<span class="bet-colon">:</span>' +
+          (open ? betStepper("a", a) : '<b class="bet-fixed">' + a + '</b>') +
+          '<span class="bet-team">' + crest(game.away_id) + esc(game.away) + '</span>' +
+        '</div>' +
+        (open
+          ? '<div class="bet-actions"><button type="button" class="watch-go bet-save">' +
+              (bet ? "Обновить прогноз" : "Сохранить прогноз") + '</button>' +
+              '<span class="bet-state" role="status">' + (bet ? "сохранён " + esc(fmtDay(bet.at)) : "") + '</span></div>' +
+            '<p class="pv-hint">Счёт — итоговый, с овертаймом и буллитами, поэтому ничьих не бывает. ' +
+              'Точный счёт — 3 очка, исход и разница шайб — 2, только исход — 1. Менять можно до начала матча.</p>'
+          : '<p class="pv-hint">Матч уже начался — прогноз зафиксирован.</p>') +
+      '</div>';
+  }
+
+  // Клики внутри блока прогноза: плюс/минус и «сохранить».
+  function handleBetClick(event) {
+    var box = event.target.closest("[data-bet]");
+    if (!box) return false;
+    var step = event.target.closest("[data-step]");
+    if (step) {
+      var num = step.closest(".bet-num").querySelector("b");
+      num.textContent = Math.max(0, Math.min(15, Number(num.textContent) + Number(step.getAttribute("data-step"))));
+      box.querySelector(".bet-state").textContent = "";
+      return true;
+    }
+    if (event.target.closest(".bet-save")) {
+      var game = gameById(box.getAttribute("data-bet"));
+      var state = box.querySelector(".bet-state");
+      if (!game || !betOpen(game)) { state.textContent = "матч уже начался"; return true; }
+      var h = Number(box.querySelector('[data-side="h"] b').textContent);
+      var a = Number(box.querySelector('[data-side="a"] b').textContent);
+      if (h === a) { state.textContent = "ничьих не бывает — кто-то забьёт в овертайме"; state.className = "bet-state bad"; return true; }
+      loadBets()[String(game.id)] = { h: h, a: a, at: new Date().toISOString().slice(0, 19) };
+      var saved = saveBets();
+      state.textContent = saved ? "сохранён ✓" : "не сохранился: браузер не даёт хранить данные";
+      state.className = "bet-state" + (saved ? " ok" : " bad");
+      box.querySelector(".bet-save").textContent = "Обновить прогноз";
+      refreshBets();
+      return true;
+    }
+    return true;
+  }
+
+  function betTile(label, value, sub) {
+    return '<div class="stat"><div class="k">' + esc(label) + '</div><div class="v">' + esc(value) + '</div>' +
+      '<div class="sub">' + esc(sub || "") + '</div></div>';
+  }
+
+  function renderBets() {
+    var host = $("clubBets");
+    if (!host || !APP.myTeam) return;
+    var all = loadBets(), teamId = APP.myTeam;
+    var games = (APP.data.games || []).filter(function (g) { return g.home_id === teamId || g.away_id === teamId; });
+    var done = games.filter(function (g) { return all[String(g.id)] && g.state === "finished"; });
+    var points = 0, exact = 0, right = 0;
+    done.forEach(function (g) {
+      var pts = betPoints(all[String(g.id)], g);
+      points += pts; if (pts === 3) exact++; if (pts >= 1) right++;
+    });
+    var ahead = games.filter(betOpen).slice(0, 3);
+    var waiting = games.filter(function (g) { return all[String(g.id)] && g.state !== "finished"; }).length;
+
+    var upcoming = ahead.map(function (g) {
+      var bet = all[String(g.id)];
+      return '<li class="openable" data-preview="' + esc(g.id) + '">' +
+        '<span class="dim">' + esc(fmtDay(g.start_at)) + '</span>' +
+        '<span>' + esc(g.home) + ' — ' + esc(g.away) + '</span>' +
+        (bet ? '<b class="bet-mine">' + bet.h + ':' + bet.a + '</b><span class="open-hint">изменить</span>'
+             : '<span class="open-hint">сделать прогноз</span>') + '</li>';
+    }).join("");
+
+    var history = done.slice().reverse().map(function (g) {
+      var bet = all[String(g.id)], pts = betPoints(bet, g);
+      return '<tr>' +
+        '<td class="l dim">' + esc(fmtDay(g.start_at)) + '</td>' +
+        '<td class="l">' + esc(g.home) + ' — ' + esc(g.away) + '</td>' +
+        '<td>' + bet.h + ':' + bet.a + '</td>' +
+        '<td class="strong">' + esc(g.score) + '</td>' +
+        '<td><span class="pill ' + (pts === 3 ? "zone" : pts ? "cool" : "dim") + '">+' + pts + '</span></td>' +
+      '</tr>';
+    }).join("");
+
+    host.innerHTML =
+      '<div class="stat-row bet-tiles">' +
+        betTile("Очки", points, done.length ? "за " + done.length + " " + wordForm(done.length, "прогноз", "прогноза", "прогнозов") : "пока нет сыгранных") +
+        betTile("Точный счёт", exact, "по 3 очка") +
+        betTile("Угадан исход", done.length ? right + " из " + done.length : "—", "") +
+        betTile("Ждут матча", waiting, wordForm(waiting, "прогноз", "прогноза", "прогнозов")) +
+      '</div>' +
+      '<div class="cols-2">' +
+        '<div class="panel"><h3 class="panel-head">Ближайшие матчи</h3>' +
+          (upcoming ? '<ul class="bet-next">' + upcoming + '</ul>' : '<p class="empty">Впереди матчей нет.</p>') + '</div>' +
+        '<div class="panel"><h3 class="panel-head">Мои прогнозы</h3>' +
+          (history ? '<div class="table-scroll"><table class="grid"><thead><tr><th class="l">Дата</th><th class="l">Матч</th>' +
+            '<th>Прогноз</th><th>Итог</th><th>Очки</th></tr></thead><tbody>' + history + '</tbody></table></div>'
+                   : '<p class="empty">Здесь появятся сыгранные матчи с твоими прогнозами и очками за них.</p>') + '</div>' +
+      '</div>' +
+      '<p class="legend">Прогнозы хранятся в этом браузере — на телефоне и на компьютере они свои.</p>';
+
+    host.onclick = function (event) {
+      var row = event.target.closest("[data-preview]");
+      if (row) openPreview(gameById(row.getAttribute("data-preview")));
+    };
+  }
+
+  // Прогноз ближайшего матча в карточке клуба на «Обзоре».
+  function heroBet(next) {
+    if (!next) return "";
+    var bet = loadBets()[String(next.id)];
+    return '<span class="hero-bet">' + (bet
+      ? 'Твой прогноз: <b>' + bet.h + ':' + bet.a + '</b>'
+      : (betOpen(next) ? 'Прогноз ещё не сделан' : '')) + '</span>';
+  }
+
+  function refreshBets() {
+    renderBets();
+    var slot = document.querySelector("#clubHero .hero-bet");
+    if (slot && APP.myTeam) {
+      var club = clubModel(APP.myTeam);
+      if (club && club.next) slot.outerHTML = heroBet(club.next);
+    }
+  }
+
   /* ============================= лист матча ============================= */
 
   // Протокола матчей в API лиги нет, зато его выкладывает сам клуб: кто забил
@@ -1001,13 +1564,15 @@
   // поэтому разрезаем их по «? —».
   function sheetArticle(article, empty, talk) {
     if (!article) return '<p class="empty">' + esc(empty) + '</p>';
-    var body = [];
+    var body = [], spoken = false;
     (article.text || []).forEach(function (line) {
       if (/^[^:]{2,48}:$/.test(line)) {
+        spoken = true;
         body.push('<h4 class="speaker">' + esc(line.replace(/:$/, "")) + '</h4>');
         return;
       }
-      if (!talk) {
+      // Вступление до первого говорящего — обычный текст, не реплика.
+      if (!talk || (!spoken && !/^[-–—]/.test(line))) {
         body.push("<p>" + esc(line) + "</p>");
         return;
       }
@@ -1040,6 +1605,11 @@
     }).join(" — ");
 
     var goals = (info.goals || []).map(function (g) { return goalRow(g, game); }).join("");
+    var keepers = (info.goalies || []).slice().sort(function (a, b) { return (b.mine ? 1 : 0) - (a.mine ? 1 : 0); })
+      .map(function (g) {
+        return '<li class="' + (g.mine ? "mine" : "") + '"><b>' + esc(g.name) + '</b><span>' +
+          g.saves + ' из ' + g.shots + ' · ' + svPct(g) + (g.shutout ? ' · «сухарь»' : "") + '</span></li>';
+      }).join("");
     var stats = SHEET_STATS.filter(function (row) { return (info.stats || {})[row.key]; })
       .map(function (row) { return statRow(row.label, info.stats[row.key]); }).join("");
 
@@ -1064,6 +1634,7 @@
       '</header>' +
       '<h2 class="sheet-sec">Голы</h2>' +
       (goals ? '<ol class="goals">' + goals + '</ol>' : '<p class="empty">В этом матче не забивали.</p>') +
+      (keepers ? '<h2 class="sheet-sec">Вратари</h2><ul class="sheet-goalies">' + keepers + '</ul>' : "") +
       (stats ? '<h2 class="sheet-sec">Матч в числах</h2><div class="sheet-stats">' + stats + '</div>' : "") +
       '<h2 class="sheet-sec">Отчёт клуба</h2>' +
       '<article class="sheet-text">' + sheetArticle(info.report, "Клуб не публиковал отчёт об этом матче.") + '</article>' +
@@ -1107,7 +1678,15 @@
     if (!sheet) return;
     sheet.addEventListener("click", function (event) {
       if (event.target.closest("[data-sheet-close]")) { closeSheet(); return; }
-      // Из карточки игрока — в разбор матча, где он забил или отдал пас.
+      if (handleBetClick(event)) return;
+      // Из превью — в карточку игрока.
+      var person = event.target.closest("[data-player]");
+      if (person && sheet.contains(person)) {
+        var team = person.getAttribute("data-team");
+        openPlayer(person.getAttribute("data-player"), team ? Number(team) : undefined);
+        return;
+      }
+      // Из карточки игрока или превью — в разбор матча.
       var moment = event.target.closest("[data-day]");
       if (moment && sheet.contains(moment)) {
         var game = gameByDay(moment.getAttribute("data-day"));
@@ -1123,6 +1702,8 @@
   function wireMatchRows(table) {
     if (!table) return;
     table.onclick = function (event) {
+      var ahead = event.target.closest("tr[data-preview]");
+      if (ahead) { openPreview(gameById(ahead.getAttribute("data-preview"))); return; }
       var row = event.target.closest("tr[data-day]");
       if (!row) return;
       var game = gameByDay(row.getAttribute("data-day"));
@@ -1221,6 +1802,14 @@
 
   function playerStats(p) {
     var goalie = p.role_key === "goaltender";
+    var keeper = goalie && Number(p.team_id) === Number(APP.data.my_team_id) ? goalieTotals()[protoKey(p.name)] : null;
+    if (keeper) {
+      return [["Матчи", keeper.games], ["Броски", keeper.shots], ["Отражено", keeper.saves],
+              ["% отражённых", svPct(keeper)], ["Пропущено", keeper.goals], ["На ноль", keeper.shutouts]]
+        .map(function (t, i) {
+          return '<div class="pl-stat' + (i === 3 ? " hot" : "") + '"><span>' + esc(t[0]) + '</span><b>' + esc(t[1]) + '</b></div>';
+        }).join("");
+    }
     var tiles = [["Матчи", p.gp || 0]];
     if (!goalie) {
       tiles.push(["Голы", p.g || 0], ["Передачи", p.a || 0], ["Очки", p.pts || 0],
@@ -1262,7 +1851,8 @@
       (injury && injury.note ? '<p class="pl-note">' + esc(injury.note) + '</p>' : "") +
       '<h2 class="sheet-sec">Сезон 2026/27</h2>' +
       '<div class="pl-stats">' + playerStats(p) + '</div>' +
-      (goalie ? '<p class="pl-hint">Для вратарей лига отдаёт только число матчей — сейвов и пропущенных в данных нет.</p>' : "") +
+      (goalie && !(Number(p.team_id) === Number(APP.data.my_team_id) && goalieTotals()[protoKey(p.name)])
+        ? '<p class="pl-hint">Для вратарей лига отдаёт только число матчей — броски и сейвы есть лишь в протоколах «Локомотива».</p>' : "") +
       (Number(p.team_id) === Number(APP.data.my_team_id)
         ? '<h2 class="sheet-sec">Голы и передачи' + (moments.length ? ' <i class="pl-count">' + goals + ' + ' + (moments.length - goals) + '</i>' : "") + '</h2>' +
           (moments.length ? '<ol class="pl-moments">' + moments.map(momentRow).join("") + '</ol>'
@@ -1878,9 +2468,11 @@
       var finished = g.state === "finished";
       var mine = isMine(g.home_id) || isMine(g.away_id);
       var info = matchInfo(g);
-      var classes = ((mine ? "mine " : "") + (info ? "openable" : "")).trim();
+      var ahead = mine && !finished;
+      var classes = ((mine ? "mine " : "") + (info || ahead ? "openable" : "")).trim();
       return "<tr" + (classes ? " class='" + classes + "'" : "") +
-        (info ? " data-day='" + esc(matchDay(g)) + "' title='Открыть разбор матча'" : "") + ">" +
+        (info ? " data-day='" + esc(matchDay(g)) + "' title='Открыть разбор матча'" : "") +
+        (ahead ? " data-preview='" + esc(g.id) + "' title='Открыть превью матча'" : "") + ">" +
         "<td class='l dim'>" + esc(fmtDayFull(g.start_at)) + ", " + esc(fmtWeekday(g.start_at)) + "</td>" +
         "<td class='dim'>" + esc(fmtTime(g.start_at)) + "</td>" +
         "<td class='l'>" + crest(g.home_id) + esc(g.home) + "</td>" +
@@ -1889,7 +2481,8 @@
         "<td class='l'>" + crest(g.away_id) + esc(g.away) + "</td>" +
         "<td class='l dim'>" + esc(periodsText(g)) + "</td>" +
         "<td class='l dim'>" + esc(g.location || "") +
-          (info ? " <span class='open-hint'>разбор</span>" : "") + "</td>" +
+          (info ? " <span class='open-hint'>разбор</span>" : "") +
+          (ahead ? " <span class='open-hint'>превью</span>" : "") + "</td>" +
       "</tr>";
     }).join("");
 
