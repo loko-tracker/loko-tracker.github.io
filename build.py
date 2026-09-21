@@ -13,11 +13,13 @@ import sys
 from pathlib import Path
 
 import claude_picks
+import club_history
 import club_games
 import club_news
 import club_roster
 import collect
 import injuries as injuries_module
+import league_faces
 import memorial
 import odds as odds_module
 
@@ -192,6 +194,8 @@ def build(season: dict | None = None, *, sims: int = 10_000, progress=print) -> 
         "club_games": club_games.load(),
         "club_news": club_news.load(),
         "claude_picks": claude_picks.load(),
+        "club_history": club_history.load(),
+        "faces": league_faces.load(),
         "injuries_updated_at": injuries_data.get("updated_at"),
     }
 

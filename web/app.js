@@ -514,6 +514,7 @@
       if (button) openPreview(gameById(button.getAttribute("data-preview")));
     };
     renderHeroNews();
+    renderToday();
   }
 
   var ROLE_GROUPS = [
@@ -586,6 +587,7 @@
     renderBets();
     renderClubNews();
     renderClubCharts(club);
+    renderClubRecords(club);
 
     // Лазарет клуба: данные клуба, твои отметки и новости вместе.
     $("clubInjuries").innerHTML = club.injuries.length
@@ -630,8 +632,7 @@
         var media = photos[nameKey(p.name)] || {};
         var flags = (p.injured || hurt[nameKey(p.name)] ? " <span class='pill hot'>травма</span>" : "") +
                     (p.farm_club ? " <span class='pill dim'>фарм</span>" : "");
-        var face = media.photo
-          ? "<img class='ava' src='" + esc(photoUrl(media.photo)) + "' alt='' loading='lazy' decoding='async'>" : "";
+        var face = faceHtml(p, "ava", true);
         return "<tr class='openable' data-player='" + esc(p.name) + "' title='Открыть карточку игрока'><td class='l'><span class='num-badge'>" + esc(p.number != null ? p.number : "") + "</span></td>" +
           "<td class='l'>" + face + esc(p.name) + flags + "</td><td>" +
             (keeper && keeper[protoKey(p.name)] ? keeper[protoKey(p.name)].games : (p.gp || 0)) + "</td>" +
@@ -939,6 +940,366 @@
       ? "Где смотреть: " + parts.join(" · ") +
         '<span class="dim"> — трансляции идут на Кинопоиске, нужна подписка.</span>'
       : "";
+  }
+
+  /* ============================ портреты лиги ============================ */
+
+  // У «Локомотива» — фото с сайта клуба, у остальных — клетка из общей
+  // картинки команды (league_faces.py): одна картинка на клуб вместо
+  // трёх десятков файлов.
+  function faceStyle(p) {
+    var faces = APP.data.faces || {};
+    var spot = (faces.players || {})[String(p.id)];
+    var sprite = spot && (faces.sprites || {})[String(spot[0])];
+    if (!sprite) return "";
+    var col = spot[1] % sprite.cols, row = Math.floor(spot[1] / sprite.cols);
+    var x = sprite.cols > 1 ? (100 * col) / (sprite.cols - 1) : 0;
+    var y = sprite.rows > 1 ? (100 * row) / (sprite.rows - 1) : 0;
+    return "background-image:url(&quot;" + esc(photoUrl(sprite.file)) + "?v=" + esc(sprite.v) + "&quot;);" +
+      "background-size:" + sprite.cols * 100 + "% " + sprite.rows * 100 + "%;" +
+      "background-position:" + x.toFixed(3) + "% " + y.toFixed(3) + "%;";
+  }
+
+  function faceHtml(p, cls, lazy) {
+    var media = clubPhotos(p.team_id)[nameKey(p.name)] || {};
+    if (media.photo) {
+      return '<img class="' + cls + '" src="' + esc(photoUrl(media.photo)) + '" alt=""' +
+        (lazy ? ' loading="lazy" decoding="async"' : "") + '>';
+    }
+    var style = faceStyle(p);
+    return style ? '<span class="' + cls + ' face-sprite" style="' + style + '" aria-hidden="true"></span>' : "";
+  }
+
+  /* =========================== именинники =========================== */
+
+  function birthOf(p) {
+    var media = clubPhotos(p.team_id)[nameKey(p.name)] || {};
+    return (media.bio || {}).birth || p.birthday || null;
+  }
+
+  function sameDay(iso, date) {
+    var parts = String(iso || "").split("-");
+    return parts.length === 3 && Number(parts[1]) === date.getMonth() + 1 && Number(parts[2]) === date.getDate();
+  }
+
+  function turnsOn(iso, date) {
+    return date.getFullYear() - Number(String(iso).slice(0, 4));
+  }
+
+  // Ближайшие дни рождения игроков клуба: сколько дней осталось.
+  function upcomingBirthdays(teamId, days) {
+    var today = new Date(), out = [];
+    today.setHours(12, 0, 0, 0);
+    (APP.data.players || []).forEach(function (p) {
+      if (p.team_id !== teamId) return;
+      var iso = birthOf(p);
+      if (!iso) return;
+      var next = new Date(today.getFullYear(), Number(iso.slice(5, 7)) - 1, Number(iso.slice(8, 10)), 12);
+      if (next < today) next.setFullYear(today.getFullYear() + 1);
+      var left = Math.round((next - today) / 86400000);
+      if (left <= days) out.push({ p: p, left: left, date: next, age: turnsOn(iso, next) });
+    });
+    return out.sort(function (a, b) { return a.left - b.left; });
+  }
+
+  function personLink(p, text) {
+    return '<a href="#" class="p-link" data-player="' + esc(p.name) + '" data-team="' + esc(p.team_id) + '">' +
+      esc(text || p.name) + '</a>';
+  }
+
+  // «Сегодня» на «Обзоре»: именинники клуба и лиги, легенды, архив.
+  function renderToday() {
+    var host = $("heroToday");
+    if (!host) return;
+    var today = new Date(), mine = APP.myTeam, parts = [];
+    var born = (APP.data.players || []).filter(function (p) { return sameDay(birthOf(p), today); });
+    var ours = born.filter(function (p) { return p.team_id === mine; });
+    var others = born.filter(function (p) { return p.team_id !== mine; });
+    if (ours.length) {
+      parts.push('<span class="ht-k">День рождения</span>' + ours.map(function (p) {
+        return personLink(p) + ' <span class="dim">' + turnsOn(birthOf(p), today) + '</span>';
+      }).join(", "));
+    }
+    if (others.length) {
+      parts.push('<span class="ht-k">' + (ours.length ? "И ещё в КХЛ" : "Именинники КХЛ") + '</span>' +
+        others.slice(0, 4).map(function (p) { return personLink(p) + ' <span class="dim">' + esc(p.team) + '</span>'; }).join(", ") +
+        (others.length > 4 ? ' <span class="dim">и ещё ' + (others.length - 4) + '</span>' : ""));
+    }
+    var history = APP.data.club_history || {};
+    if (Number(mine) === Number(APP.data.my_team_id)) {
+      var legends = (history.legends || []).filter(function (l) { return sameDay(l.birth, today); });
+      if (legends.length) {
+        parts.push('<span class="ht-k">Легенда клуба</span>' + legends.map(function (l) {
+          return esc(l.name) + ' <span class="dim">' + turnsOn(l.birth, today) + '</span>';
+        }).join(", "));
+      }
+      var past = onThisDay(today);
+      if (past.length) {
+        parts.push('<span class="ht-k">В этот день</span><a href="#/history" class="ht-more">' +
+          esc(archiveLine(past[0])) + '</a>');
+      }
+    }
+    host.hidden = !parts.length;
+    host.innerHTML = parts.map(function (x) { return '<p>' + x + '</p>'; }).join("");
+    host.onclick = function (event) {
+      var link = event.target.closest("[data-player]");
+      if (!link) return;
+      event.preventDefault();
+      openPlayer(link.getAttribute("data-player"), Number(link.getAttribute("data-team")));
+    };
+  }
+
+  /* ============================ рекорды сезона ============================ */
+
+  function secondsOf(time) {
+    var parts = String(time || "").split(":");
+    return parts.length === 2 ? Number(parts[0]) * 60 + Number(parts[1]) : Infinity;
+  }
+
+  // «дома: Трактор» — без склонения названий, которое легко испортить.
+  function versus(game, teamId) {
+    var home = game.home_id === teamId;
+    return (home ? "дома: " : "в гостях: ") + (home ? game.away : game.home);
+  }
+
+  function recordRow(label, value, detail, day) {
+    return '<li' + (day ? ' class="openable" data-day="' + esc(day) + '"' : "") + '>' +
+      '<span class="rc-k">' + esc(label) + '</span><b>' + esc(value) + '</b>' +
+      '<span class="rc-d">' + esc(detail || "") + '</span></li>';
+  }
+
+  function clubRecords(club) {
+    var rows = [], played = club.played, id = club.team.id;
+    if (!played.length) return rows;
+    // Серии побед: самая длинная за сезон.
+    var best = { count: 0 }, run = { count: 0 };
+    played.forEach(function (x) {
+      if (x.result.win) {
+        run = run.count ? { count: run.count + 1, from: run.from, to: x.game } : { count: 1, from: x.game, to: x.game };
+        if (run.count > best.count) best = run;
+      } else run = { count: 0 };
+    });
+    if (best.count) {
+      rows.push(recordRow("Серия побед", best.count + " " + wordForm(best.count, "матч", "матча", "матчей"),
+        fmtDay(best.from.start_at) + " — " + fmtDay(best.to.start_at)));
+    }
+    var byMargin = played.slice().sort(function (a, b) {
+      return (b.result.mine - b.result.theirs) - (a.result.mine - a.result.theirs);
+    });
+    var win = byMargin[0], loss = byMargin[byMargin.length - 1];
+    if (win && win.result.win) {
+      rows.push(recordRow("Крупнейшая победа", win.result.mine + ":" + win.result.theirs,
+        versus(win.game, id) + " · " + fmtDay(win.game.start_at), matchInfo(win.game) ? matchDay(win.game) : ""));
+    }
+    if (loss && !loss.result.win) {
+      rows.push(recordRow("Крупнейшее поражение", loss.result.mine + ":" + loss.result.theirs,
+        versus(loss.game, id) + " · " + fmtDay(loss.game.start_at), matchInfo(loss.game) ? matchDay(loss.game) : ""));
+    }
+    var most = played.slice().sort(function (a, b) { return b.result.mine - a.result.mine; })[0];
+    rows.push(recordRow("Больше всего шайб", most.result.mine,
+      versus(most.game, id) + " · " + fmtDay(most.game.start_at), matchInfo(most.game) ? matchDay(most.game) : ""));
+
+    // Из протоколов клуба — только для «Локомотива».
+    if (Number(id) !== Number(APP.data.my_team_id)) return rows;
+    var games = APP.data.club_games || {}, fastest = null, crowd = null, shots = null, star = null;
+    Object.keys(games).forEach(function (day) {
+      var info = games[day], game = gameByDay(day);
+      if (!game) return;
+      var tally = {};
+      (info.goals || []).forEach(function (g) {
+        if (!g.mine) return;
+        if (!fastest || secondsOf(g.time) < secondsOf(fastest.goal.time)) fastest = { goal: g, game: game, day: day };
+        var key = (g.scorer || {}).name;
+        if (key) { tally[key] = tally[key] || { g: 0, a: 0 }; tally[key].g++; }
+        (g.assists || []).forEach(function (a) { tally[a.name] = tally[a.name] || { g: 0, a: 0 }; tally[a.name].a++; });
+      });
+      Object.keys(tally).forEach(function (name) {
+        var t = tally[name], pts = t.g + t.a;
+        if (!star || pts > star.pts || (pts === star.pts && t.g > star.g)) star = { name: name, pts: pts, g: t.g, a: t.a, game: game, day: day };
+      });
+      if (game.home_id === id && info.audience && (!crowd || Number(info.audience) > Number(crowd.value))) {
+        crowd = { value: info.audience, game: game, day: day };
+      }
+      var s = (info.stats || {}).shots;
+      if (s && (!shots || s[0] > shots.value)) shots = { value: s[0], game: game, day: day };
+    });
+    if (fastest) {
+      rows.push(recordRow("Самый быстрый гол", fastest.goal.time,
+        (fastest.goal.scorer || {}).name + " · " + versus(fastest.game, id), fastest.day));
+    }
+    if (star) {
+      rows.push(recordRow("Лучший матч игрока", star.g + "+" + star.a,
+        star.name + " · " + versus(star.game, id), star.day));
+    }
+    if (shots) rows.push(recordRow("Больше всего бросков", shots.value, versus(shots.game, id) + " · " + fmtDay(shots.game.start_at), shots.day));
+    if (crowd) rows.push(recordRow("Рекорд посещаемости", String(crowd.value).replace(/\B(?=(\d{3})+(?!\d))/g, " "),
+      versus(crowd.game, id) + " · " + fmtDay(crowd.game.start_at), crowd.day));
+    return rows;
+  }
+
+  function leagueRecords() {
+    var rows = [], finished = (APP.data.games || []).filter(function (g) { return g.state === "finished" && g.score; });
+    if (!finished.length) return rows;
+    var parse = function (g) { var s = String(g.score).split(":"); return [Number(s[0]), Number(s[1])]; };
+    var margin = finished.slice().sort(function (a, b) {
+      var x = parse(a), y = parse(b); return Math.abs(y[0] - y[1]) - Math.abs(x[0] - x[1]);
+    })[0];
+    rows.push(recordRow("Крупнейшая победа", margin.score, margin.home + " — " + margin.away + " · " + fmtDay(margin.start_at)));
+    var goals = finished.slice().sort(function (a, b) {
+      var x = parse(a), y = parse(b); return (y[0] + y[1]) - (x[0] + x[1]);
+    })[0];
+    var total = parse(goals);
+    rows.push(recordRow("Самый результативный матч", total[0] + total[1] + " шайб", goals.home + " " + goals.score + " " + goals.away));
+    // Самая длинная серия побед в лиге.
+    var bestRun = null;
+    (APP.data.teams || []).forEach(function (t) {
+      var run = 0;
+      (APP.data.games || []).forEach(function (g) {
+        if (g.state !== "finished" || (g.home_id !== t.id && g.away_id !== t.id)) return;
+        var r = outcome(g, t.id);
+        if (!r) return;
+        run = r.win ? run + 1 : 0;
+        if (!bestRun || run > bestRun.count) bestRun = { count: run, team: t.name };
+      });
+    });
+    if (bestRun && bestRun.count) rows.push(recordRow("Серия побед", bestRun.count + " " + wordForm(bestRun.count, "матч", "матча", "матчей"), bestRun.team));
+    var leaders = APP.data.leaders || {};
+    if ((leaders.pts || [])[0]) rows.push(recordRow("Лучший бомбардир", leaders.pts[0].value + " очк.", leaders.pts[0].name + " · " + leaders.pts[0].team));
+    if ((leaders.g || [])[0]) rows.push(recordRow("Лучший снайпер", leaders.g[0].value + " " + wordForm(leaders.g[0].value, "гол", "гола", "голов"), leaders.g[0].name + " · " + leaders.g[0].team));
+    return rows;
+  }
+
+  function renderClubRecords(club) {
+    var host = $("clubRecords");
+    if (!host) return;
+    var mine = clubRecords(club), league = leagueRecords();
+    var birthdays = upcomingBirthdays(club.team.id, 30).slice(0, 6);
+    var bdays = birthdays.map(function (b) {
+      return '<li><span class="rc-k">' + (b.left === 0 ? "сегодня" : b.left === 1 ? "завтра" : esc(fmtDay(b.date.toISOString()))) + '</span>' +
+        personLink(b.p) + '<span class="rc-d">' + b.age + " " + wordForm(b.age, "год", "года", "лет") + '</span></li>';
+    }).join("");
+    host.innerHTML =
+      '<div class="panel"><h3 class="panel-head">«' + esc(club.team.name) + '»</h3><ul class="rc-list">' +
+        (mine.join("") || '<li class="empty">Сезон ещё не начался.</li>') + '</ul></div>' +
+      '<div class="panel"><h3 class="panel-head">Вся лига</h3><ul class="rc-list">' +
+        (league.join("") || '<li class="empty">Сезон ещё не начался.</li>') + '</ul></div>' +
+      '<div class="panel"><h3 class="panel-head">Дни рождения в клубе</h3><ul class="rc-list bday">' +
+        (bdays || '<li class="empty">В ближайший месяц дней рождения нет.</li>') + '</ul></div>';
+    host.onclick = function (event) {
+      var person = event.target.closest("[data-player]");
+      if (person) { event.preventDefault(); openPlayer(person.getAttribute("data-player"), Number(person.getAttribute("data-team"))); return; }
+      var row = event.target.closest("[data-day]");
+      if (row) { var game = gameByDay(row.getAttribute("data-day")); if (game) openSheet(game); }
+    };
+  }
+
+  /* ============================== история ============================== */
+
+  // По архиву сайта клуба (с сезона 2017/18): матчи этого дня в прошлые годы.
+  function onThisDay(date) {
+    var archive = ((APP.data.club_history || {}).archive) || [];
+    var md = String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0");
+    var year = String(date.getFullYear());
+    return archive.filter(function (g) { return g.date.slice(5) === md && g.date.slice(0, 4) !== year && g.stage !== "pre"; })
+      .sort(function (a, b) { return b.date < a.date ? -1 : 1; });
+  }
+
+  function archiveLine(g) {
+    return g.date.slice(0, 4) + ": " + g.home + " " + g.score + (g.extra ? " (ОТ/Б)" : "") + " " + g.away +
+      (g.stage === "playoff" ? " · плей-офф" : "");
+  }
+
+  function archiveWin(g) {
+    var s = g.score.split(":"), home = /Локомотив/.test(g.home);
+    return home ? Number(s[0]) > Number(s[1]) : Number(s[1]) > Number(s[0]);
+  }
+
+  var KIND_LABEL = { gold: "золото", silver: "серебро", bronze: "бронза", cup: "кубок", start: "событие", memory: "память" };
+
+  function renderHistory() {
+    var h = APP.data.club_history || {};
+    var host = $("view-history");
+    var trophies = h.achievements || [];
+    var golds = trophies.filter(function (t) { return t.kind === "gold"; });
+    var gagarin = trophies.filter(function (t) { return /кубка гагарина/i.test(t.title); }).length;
+    var medals = trophies.filter(function (t) { return t.kind === "silver" || t.kind === "bronze"; }).length;
+
+    var timeline = (h.milestones || []).concat(trophies).map(function (t, i) {
+      return { year: t.year, key: Number(String(t.year).slice(0, 4)) + (String(t.year).length > 4 ? 0.5 : 0) + i / 1000, t: t };
+    }).sort(function (a, b) { return a.key - b.key; }).map(function (x) {
+      var t = x.t;
+      return '<li class="tl-' + esc(t.kind) + '"' + (t.kind === "memory" ? ' data-go="memory"' : "") + '>' +
+        '<span class="tl-year">' + esc(t.year) + '</span>' +
+        '<div class="tl-body"><b>' + esc(t.title) + '</b>' + (t.text ? '<p>' + esc(t.text) + '</p>' : "") +
+          (t.kind === "memory" ? '<a href="#/memory" class="club-link">Помним →</a>' : "") + '</div>' +
+        '<span class="tl-kind">' + esc(KIND_LABEL[t.kind] || "") + '</span></li>';
+    }).join("");
+
+    var today = new Date(), past = onThisDay(today);
+    var legendsToday = (h.legends || []).filter(function (l) { return sameDay(l.birth, today); });
+    var dayHtml = past.slice(0, 6).map(function (g) {
+      var win = archiveWin(g);
+      return '<li><span class="pill ' + (win ? "zone" : "hot") + '">' + (win ? "победа" : "поражение") + '</span>' + esc(archiveLine(g)) + '</li>';
+    }).join("") + legendsToday.map(function (l) {
+      return '<li><span class="pill cool">родился</span>' + esc(l.name) + ', ' + esc(l.role) + ' · ' + esc(l.birth.slice(0, 4)) + '</li>';
+    }).join("");
+
+    var awards = (h.awards || []).map(function (group) {
+      return '<div class="panel aw-group"><h3 class="panel-head">' + esc(group.title) + '</h3><ul class="aw-list">' +
+        group.items.map(function (item) {
+          return item.sub ? '<li class="aw-sub">' + esc(item.sub) + '</li>' : '<li>' + esc(item.text) + '</li>';
+        }).join("") + '</ul></div>';
+    }).join("");
+
+    var legends = (h.legends || []).map(function (l) {
+      var bday = sameDay(l.birth, today);
+      return '<li class="' + (bday ? "bday" : "") + '"><b>' + esc(l.name) + '</b><span>' + esc(l.role) + ' · ' +
+        esc(fmtDate(l.birth)) + (bday ? ' · сегодня день рождения' : "") + '</span></li>';
+    }).join("");
+
+    // Архив с 2017/18: итог и крайности.
+    var archive = (h.archive || []).filter(function (g) { return g.stage !== "pre"; });
+    var wins = archive.filter(archiveWin).length;
+    var margin = function (g) { var s = g.score.split(":"); var d = Number(s[0]) - Number(s[1]); return /Локомотив/.test(g.home) ? d : -d; };
+    var sorted = archive.slice().sort(function (a, b) { return margin(b) - margin(a); });
+
+    host.innerHTML =
+      '<header class="hs-hero">' +
+        '<p class="eyebrow">Ярославль · с 1949 года</p>' +
+        '<h1 class="hs-title">История «Локомотива»</h1>' +
+        '<div class="hs-count">' +
+          '<div><b>' + golds.length + '</b><span>титулов чемпиона<br>России</span></div>' +
+          '<div class="gold"><b>' + gagarin + '</b><span>' + wordForm(gagarin, "Кубок", "Кубка", "Кубков") + '<br>Гагарина</span></div>' +
+          '<div><b>' + medals + '</b><span>серебряных и<br>бронзовых медалей</span></div>' +
+        '</div>' +
+        (h.story && h.story.length ? '<button type="button" class="watch-go pv-open hs-story">Читать историю от клуба</button>' : "") +
+      '</header>' +
+
+      '<h2 class="sec">В этот день</h2>' +
+      (dayHtml ? '<ul class="hs-day">' + dayHtml + '</ul>' : '<p class="note">В архиве клуба (с сезона 2017/18) в этот день матчей не было.</p>') +
+
+      '<h2 class="sec">Главные события и трофеи</h2>' +
+      '<ol class="timeline">' + timeline + '</ol>' +
+
+      (awards ? '<h2 class="sec">Награды</h2><div class="aw-grid">' + awards + '</div>' : "") +
+
+      (legends ? '<h2 class="sec">Легенды клуба</h2><ul class="legends">' + legends + '</ul>' : "") +
+
+      (archive.length ? '<h2 class="sec">С 2017 года</h2>' +
+        '<div class="stat-row">' +
+          '<div class="stat"><div class="k">Матчей</div><div class="v">' + archive.length + '</div><div class="sub">регулярка и плей-офф</div></div>' +
+          '<div class="stat"><div class="k">Побед</div><div class="v">' + wins + '</div><div class="sub">' + Math.round(100 * wins / archive.length) + '% матчей</div></div>' +
+          '<div class="stat"><div class="k">Крупнейшая победа</div><div class="v">' + esc(sorted[0].score) + '</div><div class="sub">' + esc(sorted[0].home + " — " + sorted[0].away + ", " + sorted[0].date.slice(0, 4)) + '</div></div>' +
+          '<div class="stat"><div class="k">Крупнейшее поражение</div><div class="v">' + esc(sorted[sorted.length - 1].score) + '</div><div class="sub">' + esc(sorted[sorted.length - 1].home + " — " + sorted[sorted.length - 1].away + ", " + sorted[sorted.length - 1].date.slice(0, 4)) + '</div></div>' +
+        '</div>' : "") +
+      '<p class="legend">По данным официального сайта ХК «Локомотив»: трофеи, награды, легенды и архив матчей с сезона 2017/18.</p>';
+
+    host.onclick = function (event) {
+      if (event.target.closest(".hs-story")) {
+        showSheet('<p class="sheet-meta">сайт ХК «Локомотив»</p><article class="sheet-text">' +
+          sheetArticle({ title: "История клуба", lead: "", text: h.story }, "", false) + '</article>');
+      }
+    };
   }
 
   /* ============================ превью матча ============================ */
@@ -1860,9 +2221,8 @@
       return '<h4 class="speaker">' + esc(sec.title) + '</h4>' +
         sec.text.map(function (line) { return "<p>" + esc(line) + "</p>"; }).join("");
     }).join("");
-    var face = media.photo
-      ? '<img class="pl-face" src="' + esc(photoUrl(media.photo)) + '" alt="">'
-      : crest(p.team_id, "big").replace('class="crest ', 'class="pl-face crest-face ');
+    var face = faceHtml(p, "pl-face") ||
+      crest(p.team_id, "big").replace('class="crest ', 'class="pl-face crest-face ');
     var backdrop = media.action ? ' style="--pl-bg:url(&quot;' + esc(photoUrl(media.action)) + '&quot;)"' : "";
     var goalie = p.role_key === "goaltender";
 
@@ -1875,7 +2235,9 @@
           (hurt ? '<span class="pill hot">травма' + (injury && (injury.until || injury.term) ? " · " + esc(injury.until || injury.term) : "") + '</span>' : "") +
         '</div>' +
       '</header>' +
-      '<dl class="pl-facts">' + playerFacts(bio, p) + '</dl>' +
+      '<dl class="pl-facts">' + playerFacts(Object.assign({
+        birth: p.birthday, country: p.country, height: p.height, weight: p.weight, grip: p.stick
+      }, bio), p) + '</dl>' +
       (injury && injury.note ? '<p class="pl-note">' + esc(injury.note) + '</p>' : "") +
       '<h2 class="sheet-sec">Сезон 2026/27</h2>' +
       '<div class="pl-stats">' + playerStats(p) + '</div>' +
@@ -2764,7 +3126,7 @@
 
   /* ============================== навигация ============================== */
 
-  var VIEWS = ["overview","club","memory","games","table","odds","players","injuries"];
+  var VIEWS = ["overview","club","history","memory","games","table","odds","players","injuries"];
   var rendered = {};
 
   function currentView() {
@@ -2777,6 +3139,7 @@
     if (view === "overview") renderOverview();
     if (view === "club") renderClub();
     if (view === "memory") renderMemory();
+    if (view === "history") renderHistory();
     if (view === "games") renderGames();
     if (view === "table") renderTable();
     if (view === "odds") renderOdds();

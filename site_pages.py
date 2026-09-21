@@ -90,6 +90,7 @@ def _photo_names(payload: dict | None = None) -> list[str]:
     people = [m for roster in (payload.get("club_rosters") or {}).values() for m in roster]
     people += (payload.get("memorial") or {}).get("players", [])
     people += [{"photo": n.get("image")} for n in payload.get("club_news") or []]
+    people += [{"photo": s.get("file")} for s in ((payload.get("faces") or {}).get("sprites") or {}).values()]
     names = set()
     for member in people:
         for field in ("photo", "action"):

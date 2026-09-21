@@ -39,6 +39,11 @@ def plan() -> dict:
         for name, source in assets.items()
         if published.get(name) != _digest(source)
     }
+    # Картинки новостей и старые спрайты уходят со страницы — убираем их
+    # и с сайта (null в карте файлов), иначе файлы копились бы до предела.
+    for name in published:
+        if name not in assets and name.startswith("photos/"):
+            changed[name] = None
     return {
         "url": site["public_url"],
         "page": str(site_pages.WEB_PAGE),

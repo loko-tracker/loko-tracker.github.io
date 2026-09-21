@@ -21,9 +21,11 @@ import club_games
 import club_media
 import club_news
 import claude_picks
+import club_history
 import club_roster
 import collect
 import injuries as injuries_module
+import league_faces
 import memorial
 import serve
 import site_pages
@@ -73,6 +75,8 @@ def main() -> int:
             club_games.build()
             club_news.sync()
             claude_picks.update(season)
+            club_history.sync()
+            league_faces.save(league_faces.sync(season["players"]))
         except Exception:
             traceback.print_exc()
             print()

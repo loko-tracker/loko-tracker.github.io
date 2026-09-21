@@ -11,6 +11,8 @@ data/memorial.json
 data/club_games.json
 data/club_news.json
 data/claude_picks.json
+data/club_history.json
+data/league_faces.json
 web/vendor/
 web/logos/
 web/photos/

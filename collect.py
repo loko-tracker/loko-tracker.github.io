@@ -73,6 +73,14 @@ def _current_team(player: dict) -> dict:
     return {}
 
 
+def _birthday(value) -> str | None:
+    """Дата рождения приходит секундами Unix (полночь по UTC)."""
+    try:
+        return dt.datetime.fromtimestamp(int(value), dt.timezone.utc).date().isoformat()
+    except (TypeError, ValueError, OverflowError, OSError):
+        return None
+
+
 def _stat(player: dict, stat_id: str, default=0):
     for entry in player.get("stats") or ():
         if entry.get("id") == stat_id:
@@ -221,6 +229,10 @@ def collect(progress=print) -> dict:
                 "age": p.get("age"),
                 "country": p.get("country"),
                 "image": p.get("image"),
+                "birthday": _birthday(p.get("birthday")),
+                "height": p.get("height") or None,
+                "weight": p.get("weight") or None,
+                "stick": {"l": "левый", "r": "правый"}.get(str(p.get("stick") or "").lower()),
                 "gp": _int(_stat(p, "gp")),
                 "g": _int(_stat(p, "g")),
                 "a": _int(_stat(p, "a")),

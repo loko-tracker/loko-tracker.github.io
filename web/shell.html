@@ -53,6 +53,7 @@
       <span class="tab-pill" id="tabPill" aria-hidden="true"></span>
       <a href="#/"         data-view="overview">Обзор</a>
       <a href="#/club"     data-view="club" id="clubTab">Мой клуб</a>
+      <a href="#/history"  data-view="history">История</a>
       <a href="#/memory"   data-view="memory">Помним</a>
       <a href="#/games"    data-view="games">Матчи</a>
       <a href="#/table"    data-view="table">Таблица</a>
@@ -106,6 +107,7 @@
     <!-- Мой клуб: то, ради чего открывают сайт, — первым. -->
     <div class="club-hero" id="clubHero" hidden></div>
     <div class="hero-news" id="heroNews" hidden></div>
+    <div class="hero-today" id="heroToday" hidden></div>
 
     <div class="hero">
       <div class="hero-main">
@@ -202,6 +204,9 @@
       </div>
     </div>
 
+    <h2 class="sec" id="clubRecordsHead">Рекорды сезона</h2>
+    <div class="records" id="clubRecords"></div>
+
     <h2 class="sec">Состав</h2>
     <p class="note" id="clubRosterNote"></p>
     <div class="club-roster" id="clubRoster"></div>
@@ -212,6 +217,11 @@
       <span class="club-pick-note">Выбор запоминается на этом устройстве.</span>
     </div>
   </section>
+
+  <!-- ============================== ИСТОРИЯ ============================== -->
+  <!-- История клуба с официального сайта: трофеи, события, награды,
+       легенды и «в этот день» по архиву матчей. Наполняет renderHistory. -->
+  <section class="view history" id="view-history" hidden></section>
 
   <!-- ============================== ПОМНИМ ============================== -->
   <!-- Память команды «Локомотива», погибшей 7 сентября 2011 года.
