@@ -30,7 +30,6 @@ import memorial
 import serve
 import site_pages
 import vendor
-import webkey
 
 
 def step(title: str) -> None:
@@ -107,13 +106,10 @@ def main() -> int:
     step("Страницы сайта")
     site_pages.write_local()
     print("  локальная версия: web/index.html")
-    if webkey.is_configured():
-        page = site_pages.write_web(payload)
-        check = site_pages.self_check()
-        print(f"  публичная версия: {page.relative_to(page.parents[1])}, {check['size_kb']} КБ, "
-              f"данные зашифрованы и проверены ({check['games']} матчей)")
-    else:
-        print("  публичная версия не собрана: пароль для сайта ещё не задан (setup-login.bat)")
+    page = site_pages.write_web(payload)
+    check = site_pages.self_check()
+    print(f"  публичная версия: {page.relative_to(page.parents[1])} и data.json, "
+          f"{check['size_kb']} КБ, проверено ({check['games']} матчей)")
 
     summary = payload["summary"]
     print()

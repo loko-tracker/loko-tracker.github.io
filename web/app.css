@@ -177,7 +177,6 @@ body {
   background: center / contain no-repeat;
   filter: drop-shadow(0 2px 7px rgba(0, 0, 0, .55));
 }
-.gate-mark .mark-crest { width: 30px; height: 30px; }
 
 .tabs { position: relative; display: flex; flex-wrap: wrap; gap: 2px; }
 .tabs a {
@@ -730,96 +729,6 @@ footer code {
   .cd-unit b { font-size: 26px; }
   .chart { height: 300px; }
   #chartProjection { height: 560px; }
-}
-
-/* ============================ вход (публичная версия) ============================ */
-
-.gate {
-  position: fixed;
-  inset: 0;
-  z-index: 80;
-  display: grid;
-  place-items: center;
-  padding: 24px 16px;
-  padding-top: calc(24px + env(safe-area-inset-top, 0px));
-  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-  overflow-y: auto;
-}
-.gate-card {
-  position: relative;
-  width: 100%;
-  max-width: 370px;
-  padding: 28px 24px 22px;
-  border: 1px solid var(--rule);
-  border-radius: 16px;
-  background: rgba(18, 27, 38, .8);
-  backdrop-filter: blur(14px);
-  box-shadow: 0 1px 0 rgba(255,255,255,.05) inset, 0 24px 60px -26px rgba(0,0,0,.95);
-}
-.gate-mark {
-  display: flex; align-items: center; gap: 9px;
-  font-family: var(--disp); font-weight: 600; font-size: 22px;
-  text-transform: uppercase; letter-spacing: .02em;
-  margin: 0 0 3px;
-}
-.gate-mark span { color: var(--goal); }
-.gate-sub {
-  font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em;
-  text-transform: uppercase; color: var(--muted);
-  margin: 0 0 22px;
-}
-.gate-card > label {
-  display: block;
-  font-family: var(--mono); font-size: 10px; letter-spacing: .08em;
-  text-transform: uppercase; color: var(--muted);
-  margin: 0 0 5px;
-}
-.gate-card input[type="text"], .gate-card input[type="password"] {
-  width: 100%;
-  font-size: 16px;               /* 16px, чтобы iOS не увеличивала страницу при фокусе */
-  padding: 10px 12px;
-  margin: 0 0 14px;
-  min-width: 0;
-}
-.gate-remember {
-  display: flex !important;
-  align-items: center;
-  gap: 9px;
-  text-transform: none !important;
-  letter-spacing: 0 !important;
-  font-family: var(--sans) !important;
-  font-size: 13.5px !important;
-  color: var(--ink-2) !important;
-  margin: 2px 0 16px !important;
-  cursor: pointer;
-}
-.gate-remember input { width: 17px; height: 17px; accent-color: var(--ice); margin: 0; }
-.gate-card button[type="submit"] { width: 100%; padding: 11px 15px; font-size: 15px; }
-.gate-error {
-  background: rgba(255, 66, 86, .13);
-  border: 1px solid rgba(255, 66, 86, .4);
-  color: var(--goal);
-  border-radius: 8px;
-  padding: 8px 11px;
-  font-size: 13.5px;
-  margin: 0 0 16px;
-}
-.gate-hint {
-  font-size: 12px;
-  color: var(--muted);
-  margin: 18px 0 0;
-  padding-top: 14px;
-  border-top: 1px solid var(--rule);
-}
-.gate.shake .gate-card { animation: shake .42s cubic-bezier(.36,.07,.19,.97); }
-@keyframes shake {
-  10%, 90% { transform: translateX(-1px); }
-  20%, 80% { transform: translateX(3px); }
-  30%, 50%, 70% { transform: translateX(-6px); }
-  40%, 60% { transform: translateX(6px); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .gate.shake .gate-card { animation: none; }
 }
 
 .readonly-note {

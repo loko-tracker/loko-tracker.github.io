@@ -13,34 +13,6 @@
   <div class="grain"></div>
 </div>
 
-<!--web-->
-<div class="gate" id="gate" data-lenis-prevent>
-  <form class="gate-card" id="gateForm" autocomplete="on">
-    <p class="gate-mark">
-      <span class="mark-crest" aria-hidden="true"></span>
-      КХЛ <span>2026/27</span>
-    </p>
-    <p class="gate-sub">Личный трекер сезона</p>
-
-    <p class="gate-error" id="gateError" role="alert" hidden></p>
-
-    <label for="gateLogin">Логин</label>
-    <input type="text" id="gateLogin" name="username" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" required>
-
-    <label for="gatePassword">Пароль</label>
-    <input type="password" id="gatePassword" name="password" autocomplete="current-password" required>
-
-    <label class="gate-remember" for="gateRemember">
-      <input type="checkbox" id="gateRemember" checked>
-      <span>Запомнить на этом устройстве</span>
-    </label>
-
-    <button type="submit" id="gateSubmit">Войти</button>
-    <p class="gate-hint">Данные на этой странице зашифрованы. Без верного логина и пароля их не прочитать — даже заглянув в код.</p>
-  </form>
-</div>
-<!--/web-->
-
 <div class="app" id="app">
 <header class="masthead">
   <div class="masthead-in">
@@ -67,9 +39,6 @@
       <!--local-->
       <form method="post" action="/logout" id="logoutForm"><button type="submit" class="ghost small">Выйти</button></form>
       <!--/local-->
-      <!--web-->
-      <button type="button" class="ghost small" id="webLogout">Выйти</button>
-      <!--/web-->
     </div>
   </div>
   <div class="rail"><div class="rail-fill" id="railFill"></div></div>
@@ -88,9 +57,9 @@
 
 <!-- Лист матча: открывается щелчком по сыгранной игре «Локомотива».
      Голы, командные числа, отчёт клуба и пресс-конференция. -->
-<!-- data-lenis-prevent: внутри листа, календаря и входа колесо мыши
-     отдаём браузеру. Плавный скролл иначе перехватывает колесо на
-     всей странице, и длинный текст (например пресс-конференция)
+<!-- data-lenis-prevent: внутри листа и календаря колесо мыши отдаём
+     браузеру. Плавный скролл иначе перехватывает колесо на всей
+     странице, и длинный текст (например пресс-конференция)
      прокручивался бы только полосой и клавишами. -->
 <div class="sheet" id="matchSheet" hidden>
   <div class="sheet-back" data-sheet-close></div>

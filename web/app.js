@@ -4,10 +4,9 @@
    Локальная версия (refresh.bat): данные берутся с сервера — /data.json,
    отметки о травмах сохраняются через /api/injuries.
 
-   Публичная версия (ссылка): данные зашифрованы и лежат прямо в странице
-   (<script id="vault">). Логин и пароль превращаются в ключ PBKDF2-SHA256,
-   им расшифровывается AES-GCM, затем распаковывается gzip. Никуда по сети
-   ни пароль, ни ключ не уходят.
+   Опубликованная версия (ссылка): данные лежат рядом со страницей
+   отдельным файлом data.json, его адрес страница называет сама
+   (window.DATA_URL). Вход не спрашивается: сайт открыт.
 
    Стек: GSAP + ScrollTrigger (движение), ECharts (графики), Lenis (скролл).
    Без Alpine намеренно: он вычисляет выражения через eval, а политика
@@ -20,7 +19,7 @@
   var APP = { data: null, charts: {} };
   var $ = function (id) { return document.getElementById(id); };
 
-  var MODE = $("vault") ? "web" : "local";
+  var MODE = window.DATA_URL ? "web" : "local";
   var HAS_GSAP = typeof window.gsap !== "undefined";
   var HAS_ECHARTS = typeof window.echarts !== "undefined";
   var REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -3459,8 +3458,11 @@
 
   /* ---------------------- локальная версия: с сервера ---------------------- */
 
-  function bootLocal() {
-    fetch("/data.json", { headers: { "Accept": "application/json" } })
+  // Данные всегда приходят отдельным файлом: у локального сервера это
+  // /data.json (и он может попросить войти), у опубликованного сайта —
+  // data.json рядом со страницей.
+  function boot() {
+    fetch(window.DATA_URL || "/data.json", { headers: { "Accept": "application/json" } })
       .then(function (response) {
         if (response.status === 401) { window.location.href = "/login"; return null; }
         if (!response.ok) throw new Error("http " + response.status);
@@ -3472,157 +3474,10 @@
         start(data);
       })
       .catch(function (error) {
-        fail("Данные не загрузились: " + error.message + ". Запусти refresh.bat, чтобы собрать их заново.");
+        fail("Данные не загрузились: " + error.message + "." +
+          (MODE === "web" ? " Обнови страницу." : " Запусти refresh.bat, чтобы собрать их заново."));
       });
   }
 
-  /* -------------------- публичная версия: расшифровка -------------------- */
-
-  var KEY_STORAGE = "khl-tracker-key-v1";
-
-  function b64ToBytes(text) {
-    var binary = atob(text), bytes = new Uint8Array(binary.length);
-    for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-    return bytes;
-  }
-  function bytesToB64(buffer) {
-    var bytes = new Uint8Array(buffer), binary = "";
-    for (var i = 0; i < bytes.length; i += 0x8000) {
-      binary += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
-    }
-    return btoa(binary);
-  }
-
-  function readVault() {
-    return JSON.parse($("vault").textContent);
-  }
-
-  // Тот же вывод ключа, что в webkey.py: логин в нижнем регистре,
-  // перевод строки, пароль как есть; PBKDF2-SHA256 → 256-битный ключ.
-  function deriveKey(login, password, vault) {
-    var material = new TextEncoder().encode(String(login).trim().toLowerCase() + "\n" + password);
-    return crypto.subtle.importKey("raw", material, "PBKDF2", false, ["deriveKey"])
-      .then(function (base) {
-        return crypto.subtle.deriveKey(
-          { name: "PBKDF2", hash: "SHA-256", salt: b64ToBytes(vault.salt), iterations: vault.iterations },
-          base, { name: "AES-GCM", length: 256 }, true, ["decrypt"]);
-      });
-  }
-
-  function importStoredKey(raw) {
-    return crypto.subtle.importKey("raw", b64ToBytes(raw), { name: "AES-GCM" }, true, ["decrypt"]);
-  }
-
-  // Неверный ключ здесь не даёт мусор: AES-GCM проверяет целостность
-  // и честно отказывает. Это и есть проверка пароля.
-  function openVault(key, vault) {
-    return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64ToBytes(vault.iv) }, key, b64ToBytes(vault.data))
-      .then(function (packed) {
-        var stream = new Blob([packed]).stream().pipeThrough(new DecompressionStream("gzip"));
-        return new Response(stream).text();
-      })
-      .then(function (text) { return JSON.parse(text); });
-  }
-
-  function storage(action, value) {
-    // Хранилище браузера бывает недоступно (приватный режим, запреты) —
-    // тогда просто не запоминаем, вход всё равно работает.
-    try {
-      if (action === "get") return window.localStorage.getItem(KEY_STORAGE);
-      if (action === "set") window.localStorage.setItem(KEY_STORAGE, value);
-      if (action === "del") window.localStorage.removeItem(KEY_STORAGE);
-    } catch (error) { /* нет хранилища — нет запоминания */ }
-    return null;
-  }
-
-  function showGate(message) {
-    $("gate").hidden = false;
-    $("app").hidden = true;
-    var error = $("gateError");
-    error.hidden = !message;
-    error.textContent = message || "";
-    setTimeout(function () { $("gateLogin").focus(); }, 50);
-  }
-
-  function unlock(data) {
-    $("gate").hidden = true;
-    $("loading").hidden = true;
-    start(data);
-  }
-
-  function bootWeb() {
-    if (!window.crypto || !crypto.subtle || typeof DecompressionStream === "undefined") {
-      showGate("Этот браузер слишком старый для расшифровки. Обнови его или открой в Chrome, Safari или Firefox.");
-      $("gateSubmit").disabled = true;
-      return;
-    }
-
-    var vault;
-    try { vault = readVault(); }
-    catch (error) { fail("Страница повреждена: не читаются зашифрованные данные."); return; }
-
-    $("webLogout").addEventListener("click", function () {
-      storage("del");
-      window.location.reload();
-    });
-
-    var form = $("gateForm"), button = $("gateSubmit");
-    form.addEventListener("submit", function (event) {
-      event.preventDefault();
-      var login = $("gateLogin").value, password = $("gatePassword").value;
-      if (!login.trim() || !password) return;
-
-      button.disabled = true;
-      button.textContent = "Проверяю…";
-      $("gateError").hidden = true;
-
-      var key;
-      deriveKey(login, password, vault)
-        .then(function (derived) { key = derived; return openVault(derived, vault); })
-        .then(function (data) {
-          $("gatePassword").value = "";
-          if ($("gateRemember").checked) {
-            return crypto.subtle.exportKey("raw", key).then(function (raw) {
-              storage("set", bytesToB64(raw));
-              return data;
-            });
-          }
-          storage("del");
-          return data;
-        })
-        .then(unlock)
-        .catch(function () {
-          // Небольшая пауза после неудачи: перебирать руками неудобно.
-          setTimeout(function () {
-            button.disabled = false;
-            button.textContent = "Войти";
-            showGate("Неверный логин или пароль.");
-            $("gatePassword").value = "";
-            var gate = $("gate");
-            gate.classList.remove("shake");
-            void gate.offsetWidth;
-            gate.classList.add("shake");
-          }, 700);
-        });
-    });
-
-    // Запомненный ключ: пробуем открыть сразу. Если пароль с тех пор
-    // сменили, ключ не подойдёт — забываем его и просим войти заново.
-    var remembered = storage("get");
-    if (!remembered) { showGate(); return; }
-
-    $("gate").hidden = true;
-    $("loadingText").textContent = "Расшифровываю…";
-    $("app").hidden = false;
-    importStoredKey(remembered)
-      .then(function (key) { return openVault(key, vault); })
-      .then(unlock)
-      .catch(function () {
-        storage("del");
-        showGate("Пароль был изменён — войди заново.");
-      });
-  }
-
-  if (MODE === "web") bootWeb();
-  else bootLocal();
+  boot();
 }());

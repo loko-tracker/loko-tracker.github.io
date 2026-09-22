@@ -1,9 +1,9 @@
 """Собирает страницы из общей разметки web/shell.html.
 
   * web/index.html + web/logos.css — локальная версия (её отдаёт serve.py);
-  * publish/khl-tracker.html      — публичная: данные зашифрованы паролем
-                                    (см. webkey.py), код, стили, логотипы
-                                    и фото игроков — отдельными файлами рядом;
+  * publish/khl-tracker.html      — публичная: сайт открыт, данные лежат
+                                    рядом файлом data.json, как и код,
+                                    стили, логотипы и фото игроков;
   * publish/index.html           — та же публичная страница, обёрнутая
                                     в полный документ: её открывают у себя,
                                     её же отдаёт GitHub Pages (публикуется
@@ -20,8 +20,6 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
-
-import webkey
 
 ROOT = Path(__file__).parent
 WEB = ROOT / "web"
@@ -223,10 +221,9 @@ def write_local() -> Path:
 
 # ---------------------------------------------------------------- публичная
 
-# Неизменные части публичной версии лежат рядом со страницей отдельными
-# файлами. Каждое утро меняется только зашифрованный блок внутри страницы,
-# а перед заменой страницу приходится прочитать целиком — поэтому она
-# должна быть маленькой: код, стили и логотипы в неё не встраиваются.
+# Всё, что не меняется каждый день, лежит рядом со страницей отдельными
+# файлами: так сама страница остаётся крошечной, а данные обновляются
+# заменой одного data.json.
 STATIC_FILES = ["app.css", "app.js", "logos.css"]
 
 
@@ -234,6 +231,8 @@ def web_asset_map() -> dict[str, str]:
     """Опубликованный путь -> файл на диске, для первой публикации и
     для публикации после изменений в коде или оформлении."""
     files = {name: str(PUBLISH / name) for name in STATIC_FILES}
+    files["data.json"] = str(PUBLISH / "data.json")
+    files["site.webmanifest"] = str(PUBLISH / "site.webmanifest")
     for team_id in _logo_ids():
         files[f"logos/{team_id}.png"] = str(PUBLISH / "logos" / f"{team_id}.png")
     for name in _photo_names():
@@ -242,16 +241,6 @@ def web_asset_map() -> dict[str, str]:
 
 
 def build_web_page(payload: dict) -> str:
-    vault = webkey.seal(payload)
-    vault_json = json.dumps(
-        {k: vault[k] for k in ("v", "kdf", "iterations", "salt", "iv", "data")},
-        separators=(",", ":"),
-    )
-
-    body = _variant(_shell(), "web")
-    # Пока не введён пароль, приложение скрыто — без вспышки пустой страницы.
-    body = body.replace('<div class="app" id="app">', '<div class="app" id="app" hidden>', 1)
-
     return "\n".join([
         f"<title>{TITLE}</title>",
         '<meta name="color-scheme" content="dark">',
@@ -259,8 +248,10 @@ def build_web_page(payload: dict) -> str:
         FONTS,
         '<link rel="stylesheet" href="app.css">',
         '<link rel="stylesheet" href="logos.css">',
-        body,
-        f'<script type="application/json" id="vault">{vault_json}</script>',
+        _variant(_shell(), "web"),
+        # Адрес данных страница называет сама: у локальной версии их отдаёт
+        # сервер, у опубликованной они лежат файлом рядом.
+        '<script>window.DATA_URL = "data.json";</script>',
         *[f'<script src="{src}"></script>' for src in CDN_SCRIPTS],
         '<script src="app.js"></script>',
         "",
@@ -294,6 +285,8 @@ def _write_web_assets(payload: dict) -> None:
 def write_web(payload: dict) -> Path:
     PUBLISH.mkdir(exist_ok=True)
     _write_web_assets(payload)
+    (PUBLISH / "data.json").write_text(
+        json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     page = build_web_page(payload)
     WEB_PAGE.write_text(page, encoding="utf-8")
 
@@ -313,14 +306,16 @@ def write_web(payload: dict) -> Path:
 
 
 def self_check() -> dict:
-    """Проверяет, что собранная страница расшифровывается сохранённым ключом."""
+    """Проверяет, что страница собрана и данные рядом с ней читаются."""
     page = WEB_PAGE.read_text(encoding="utf-8")
-    match = re.search(r'<script type="application/json" id="vault">(.*?)</script>', page, re.S)
-    if not match:
-        raise ValueError("в странице нет зашифрованного блока")
-    data = webkey.unseal_with_stored_key(json.loads(match.group(1)))
+    if "window.DATA_URL" not in page:
+        raise ValueError("в странице нет ссылки на данные")
+    data_file = PUBLISH / "data.json"
+    data = json.loads(data_file.read_text(encoding="utf-8"))
+    if not data.get("games"):
+        raise ValueError("в данных нет матчей")
     return {
         "games": len(data.get("games", [])),
         "players": len(data.get("players", [])),
-        "size_kb": round(WEB_PAGE.stat().st_size / 1024),
+        "size_kb": round((WEB_PAGE.stat().st_size + data_file.stat().st_size) / 1024),
     }
