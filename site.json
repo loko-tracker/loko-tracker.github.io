@@ -2,6 +2,11 @@
   "public_url": "https://claude.ai/artifact/MJCQF2eSyLMjWJQaTvt9pm",
   "site_url": "https://loko-tracker.github.io",
   "site_url_note": "Свой адрес сайта на GitHub Pages. Нужен поисковикам и ссылкам в соцсетях: в robots.txt, карте сайта и разметке для предпросмотра ссылки адрес должен быть полным.",
+  "verify": {
+    "yandex": "90d0b973a5ac2aeb",
+    "google": "",
+    "note": "Коды подтверждения прав в Яндекс.Вебмастере и Google Search Console. Не секретные: они видны в коде страницы, и в этом весь смысл — по ним поисковик убеждается, что сайтом распоряжаешься ты."
+  },
   "page": "publish/khl-tracker.html",
   "note": "Публичная версия. Страница пересобирается командой `python run.py --no-serve` и публикуется по этому адресу. Код, стили и логотипы опубликованы рядом со страницей отдельными файлами (site_pages.web_asset_map) — их нужно переопубликовать только если менялись web/app.css, web/app.js или логотипы.",
   "my_team": "Локомотив",

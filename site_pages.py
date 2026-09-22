@@ -130,6 +130,17 @@ def _coach(name: str | None) -> str:
     return " ".join([parts[1], parts[0]]) if len(parts) >= 2 else str(name or "")
 
 
+def _verify_meta() -> list[str]:
+    """Подтверждение прав в Яндекс.Вебмастере и Google Search Console."""
+    try:
+        codes = json.loads(SITE_CONFIG.read_text(encoding="utf-8")).get("verify") or {}
+    except (OSError, ValueError):
+        return []
+    names = {"yandex": "yandex-verification", "google": "google-site-verification"}
+    return [f'<meta name="{names[key]}" content="{codes[key]}">'
+            for key in ("yandex", "google") if codes.get(key)]
+
+
 def _standing(payload: dict) -> dict:
     """Строка своего клуба в таблице — из неё складывается описание сайта."""
     mine = payload.get("my_team_id")
@@ -434,6 +445,7 @@ def write_web(payload: dict) -> Path:
             '<meta charset="utf-8">',
             '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
             *_icon_head(_my_team_id(payload), ""),
+            *_verify_meta(),
             *_web_head(payload),
             "</head>",
             "<body>",
