@@ -14,7 +14,7 @@
 </div>
 
 <!--web-->
-<div class="gate" id="gate">
+<div class="gate" id="gate" data-lenis-prevent>
   <form class="gate-card" id="gateForm" autocomplete="on">
     <p class="gate-mark">
       <svg class="puck" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="8.5" rx="9" ry="4.2"/><path d="M3 8.5v7c0 2.3 4 4.2 9 4.2s9-1.9 9-4.2v-7"/></svg>
@@ -88,9 +88,13 @@
 
 <!-- Лист матча: открывается щелчком по сыгранной игре «Локомотива».
      Голы, командные числа, отчёт клуба и пресс-конференция. -->
+<!-- data-lenis-prevent: внутри листа, календаря и входа колесо мыши
+     отдаём браузеру. Плавный скролл иначе перехватывает колесо на
+     всей странице, и длинный текст (например пресс-конференция)
+     прокручивался бы только полосой и клавишами. -->
 <div class="sheet" id="matchSheet" hidden>
   <div class="sheet-back" data-sheet-close></div>
-  <div class="sheet-card" role="dialog" aria-modal="true" aria-label="Подробности матча">
+  <div class="sheet-card" role="dialog" aria-modal="true" aria-label="Подробности матча" data-lenis-prevent>
     <button type="button" class="sheet-x" data-sheet-close aria-label="Закрыть">×</button>
     <div class="sheet-body" id="sheetBody"></div>
   </div>
@@ -173,7 +177,7 @@
     <div class="cols-2">
       <div>
         <h2 class="sec">Календарь</h2>
-        <div class="panel"><div class="table-scroll club-calendar"><table class="grid" id="clubGames"></table></div></div>
+        <div class="panel"><div class="table-scroll club-calendar" data-lenis-prevent><table class="grid" id="clubGames"></table></div></div>
         <p class="watch-line" id="clubWatch"></p>
       </div>
       <div>

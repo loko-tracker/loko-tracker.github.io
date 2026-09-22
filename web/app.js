@@ -2290,6 +2290,8 @@
     sheet.hidden = false;
     document.body.classList.add("sheet-open");
     sheet.querySelector(".sheet-card").scrollTop = 0;
+    // Страница под листом стоит на месте; сам лист прокручивается колесом
+    // сам по себе — на нём стоит data-lenis-prevent.
     if (lenis) lenis.stop();
     if (canAnimate()) {
       window.gsap.fromTo(sheet.querySelector(".sheet-card"),
