@@ -38,6 +38,8 @@ STATIC = {
     "/app.css": ("app.css", "text/css; charset=utf-8"),
     "/app.js": ("app.js", "text/javascript; charset=utf-8"),
     "/logos.css": ("logos.css", "text/css; charset=utf-8"),
+    "/favicon.ico": ("favicon.ico", "image/x-icon"),
+    "/site.webmanifest": ("site.webmanifest", "application/manifest+json"),
 }
 
 MAX_BODY = 256 * 1024

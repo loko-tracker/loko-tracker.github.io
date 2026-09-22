@@ -114,13 +114,70 @@ def _my_team_id(payload: dict | None = None) -> int | None:
         return None
 
 
-def _icon_links(team_id, prefix: str) -> list[str]:
-    """Иконка вкладки и значок для «на главный экран» телефона."""
+def _icon_head(team_id, prefix: str) -> list[str]:
+    """То, что должно стоять именно в <head>: значок и описание приложения.
+
+    Браузер ищет значок в заголовке документа. В публичной версии страница
+    отдаётся без своего <head> (его добавляет claude.ai), поэтому ссылки
+    попадали в тело — и значок не подхватывался. На отдельном сайте
+    (GitHub Pages) заголовок наш, и всё это кладётся туда.
+    """
     if team_id is None or not (LOGOS / f"{team_id}.png").exists():
         return []
     href = f"{prefix}logos/{team_id}.png"
-    return [f'<link rel="icon" type="image/png" href="{href}">',
-            f'<link rel="apple-touch-icon" href="{href}">']
+    return [
+        f'<link rel="icon" type="image/png" href="{href}">',
+        f'<link rel="apple-touch-icon" href="{href}">',
+        f'<link rel="manifest" href="{prefix}site.webmanifest">',
+        '<meta name="theme-color" content="#050810">',
+    ]
+
+
+def _write_favicon(team_id, folder: Path) -> None:
+    """Запасной путь: браузеры сами просят /favicon.ico, даже без ссылки."""
+    source = LOGOS / f"{team_id}.png" if team_id is not None else None
+    if source is None or not source.exists():
+        return
+    try:
+        from PIL import Image
+    except ImportError:
+        return
+    with Image.open(source) as image:
+        image.convert("RGBA").save(folder / "favicon.ico", sizes=[(16, 16), (32, 32), (48, 48)])
+
+
+def _manifest(team_id, club: str | None, prefix: str) -> str:
+    """Имя и значок для «добавить на главный экран» телефона."""
+    icons = []
+    if team_id is not None and (LOGOS / f"{team_id}.png").exists():
+        icons = [{"src": f"{prefix}logos/{team_id}.png", "sizes": "200x200", "type": "image/png"}]
+    return json.dumps(
+        {
+            "name": TITLE,
+            "short_name": club or "КХЛ",
+            "start_url": prefix or ".",
+            "scope": prefix or ".",
+            "display": "standalone",
+            "background_color": "#050810",
+            "theme_color": "#050810",
+            "icons": icons,
+        },
+        ensure_ascii=False,
+        indent=1,
+    )
+
+
+def _club_name(payload: dict | None = None) -> str | None:
+    data = payload
+    if data is None:
+        try:
+            data = json.loads(SITE_DATA.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return None
+    for team in data.get("teams") or ():
+        if team.get("id") == data.get("my_team_id"):
+            return team.get("name")
+    return None
 
 
 def _mark_css(team_id, prefix: str) -> str:
@@ -135,6 +192,8 @@ def write_local() -> Path:
         f'.logo-{i}{{background-image:url("/logos/{i}.png")}}\n' for i in _logo_ids()
     ) + _mark_css(club, "/")
     (WEB / "logos.css").write_text(css, encoding="utf-8")
+    (WEB / "site.webmanifest").write_text(_manifest(club, _club_name(), "/"), encoding="utf-8")
+    _write_favicon(club, WEB)
 
     page = "\n".join([
         "<!doctype html>",
@@ -144,7 +203,7 @@ def write_local() -> Path:
         '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
         '<meta name="color-scheme" content="dark">',
         f"<title>{TITLE}</title>",
-        *_icon_links(club, "/"),
+        *_icon_head(club, "/"),
         FONTS,
         '<link rel="stylesheet" href="/app.css">',
         '<link rel="stylesheet" href="/logos.css">',
@@ -195,7 +254,6 @@ def build_web_page(payload: dict) -> str:
 
     return "\n".join([
         f"<title>{TITLE}</title>",
-        *_icon_links(_my_team_id(payload), ""),
         '<meta name="color-scheme" content="dark">',
         '<meta name="robots" content="noindex, nofollow">',
         FONTS,
@@ -224,6 +282,9 @@ def _write_web_assets(payload: dict) -> None:
     )
     for team_id in _logo_ids():
         shutil.copyfile(LOGOS / f"{team_id}.png", PUBLISH / "logos" / f"{team_id}.png")
+    (PUBLISH / "site.webmanifest").write_text(
+        _manifest(_my_team_id(payload), _club_name(payload), ""), encoding="utf-8")
+    _write_favicon(_my_team_id(payload), PUBLISH)
     for name in _photo_names(payload):
         target = PUBLISH / "photos" / name
         if not target.exists():                  # имя = отпечаток: не меняется
@@ -241,6 +302,7 @@ def write_web(payload: dict) -> Path:
     PAGES_INDEX.write_text(
         "<!doctype html>\n<html lang=\"ru\">\n<head>\n<meta charset=\"utf-8\">\n"
         "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n"
+        + "\n".join(_icon_head(_my_team_id(payload), "")) + "\n"
         "</head>\n<body>\n" + page + "</body>\n</html>\n",
         encoding="utf-8",
     )

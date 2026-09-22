@@ -1,0 +1,16 @@
+{
+ "name": "Трекер сезона КХЛ",
+ "short_name": "Локомотив",
+ "start_url": "/",
+ "scope": "/",
+ "display": "standalone",
+ "background_color": "#050810",
+ "theme_color": "#050810",
+ "icons": [
+  {
+   "src": "/logos/26.png",
+   "sizes": "200x200",
+   "type": "image/png"
+  }
+ ]
+}
