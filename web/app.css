@@ -170,14 +170,14 @@ body {
   white-space: nowrap;
 }
 .wordmark span { color: var(--goal); }
-.puck {
-  width: 19px; height: 19px;
-  fill: none;
-  stroke: var(--ice);
-  stroke-width: 1.6;
-  stroke-linecap: round;
-  filter: drop-shadow(0 0 6px rgba(79,216,255,.5));
+/* Метка сайта — эмблема клуба. Картинку подставляет logos.css, как и
+   остальным логотипам, поэтому здесь только размер. */
+.mark-crest {
+  width: 24px; height: 24px; flex: none;
+  background: center / contain no-repeat;
+  filter: drop-shadow(0 2px 7px rgba(0, 0, 0, .55));
 }
+.gate-mark .mark-crest { width: 30px; height: 30px; }
 
 .tabs { position: relative; display: flex; flex-wrap: wrap; gap: 2px; }
 .tabs a {
@@ -1265,7 +1265,7 @@ body.mourning .beam { opacity: 0; }
 body.mourning .arena::before, body.mourning .arena::after { opacity: 1; }
 
 body.mourning .masthead { background: linear-gradient(to bottom, rgba(9, 9, 10, .96), rgba(9, 9, 10, .8)); }
-body.mourning .puck { filter: drop-shadow(0 0 6px rgba(var(--candle), .45)); }
+body.mourning .mark-crest { filter: grayscale(.85) drop-shadow(0 0 7px rgba(var(--candle), .4)); }
 body.mourning .tab-pill { box-shadow: 0 0 18px -4px rgba(var(--candle), .55); }
 body.mourning .rail-fill { box-shadow: 0 0 10px rgba(var(--candle), .5); }
 

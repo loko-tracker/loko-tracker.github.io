@@ -102,10 +102,36 @@ def _photo_names(payload: dict | None = None) -> list[str]:
 
 # ----------------------------------------------------------------- локальная
 
+def _my_team_id(payload: dict | None = None) -> int | None:
+    """Клуб сайта: его логотип становится иконкой вкладки и меткой в шапке."""
+    if payload and payload.get("my_team_id") is not None:
+        return payload["my_team_id"]
+    try:
+        return json.loads(SITE_DATA.read_text(encoding="utf-8")).get("my_team_id")
+    except (OSError, ValueError):
+        return None
+
+
+def _icon_links(team_id, prefix: str) -> list[str]:
+    """Иконка вкладки и значок для «на главный экран» телефона."""
+    if team_id is None or not (LOGOS / f"{team_id}.png").exists():
+        return []
+    href = f"{prefix}logos/{team_id}.png"
+    return [f'<link rel="icon" type="image/png" href="{href}">',
+            f'<link rel="apple-touch-icon" href="{href}">']
+
+
+def _mark_css(team_id, prefix: str) -> str:
+    if team_id is None or not (LOGOS / f"{team_id}.png").exists():
+        return ""
+    return f'.mark-crest{{background-image:url("{prefix}logos/{team_id}.png")}}\n'
+
+
 def write_local() -> Path:
+    club = _my_team_id()
     css = "".join(
         f'.logo-{i}{{background-image:url("/logos/{i}.png")}}\n' for i in _logo_ids()
-    )
+    ) + _mark_css(club, "/")
     (WEB / "logos.css").write_text(css, encoding="utf-8")
 
     page = "\n".join([
@@ -116,6 +142,7 @@ def write_local() -> Path:
         '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
         '<meta name="color-scheme" content="dark">',
         f"<title>{TITLE}</title>",
+        *_icon_links(club, "/"),
         FONTS,
         '<link rel="stylesheet" href="/app.css">',
         '<link rel="stylesheet" href="/logos.css">',
@@ -166,6 +193,7 @@ def build_web_page(payload: dict) -> str:
 
     return "\n".join([
         f"<title>{TITLE}</title>",
+        *_icon_links(_my_team_id(payload), ""),
         '<meta name="color-scheme" content="dark">',
         '<meta name="robots" content="noindex, nofollow">',
         FONTS,
@@ -188,7 +216,8 @@ def _write_web_assets(payload: dict) -> None:
     shutil.copyfile(WEB / "app.js", PUBLISH / "app.js")
     # Пути к логотипам относительные: файлы опубликованы рядом со страницей.
     (PUBLISH / "logos.css").write_text(
-        "".join(f'.logo-{i}{{background-image:url("logos/{i}.png")}}\n' for i in _logo_ids()),
+        "".join(f'.logo-{i}{{background-image:url("logos/{i}.png")}}\n' for i in _logo_ids())
+        + _mark_css(_my_team_id(payload), ""),
         encoding="utf-8",
     )
     for team_id in _logo_ids():
