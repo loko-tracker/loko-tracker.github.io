@@ -100,6 +100,119 @@ def _photo_names(payload: dict | None = None) -> list[str]:
     return sorted(names)
 
 
+# ------------------------------------------------------------ поиск и ссылки
+
+SITE_CONFIG = ROOT / "site.json"
+
+
+def _site_url() -> str:
+    try:
+        url = json.loads(SITE_CONFIG.read_text(encoding="utf-8")).get("site_url") or ""
+    except (OSError, ValueError):
+        return ""
+    return url.rstrip("/")
+
+
+def _season_label(season: str | None) -> str:
+    """«2026/2027» -> «2026/27»: так короче и так же пишет сама лига."""
+    text = str(season or "")
+    return f"{text[:4]}/{text[-2:]}" if "/" in text else text
+
+
+def _page_title(payload: dict | None = None) -> str:
+    club, season = _club_name(payload), _season_label((payload or {}).get("season"))
+    return f"«{club}» — трекер сезона КХЛ {season}" if club and season else TITLE
+
+
+def _coach(name: str | None) -> str:
+    """В таблице тренер записан фамилией вперёд — читателю привычнее наоборот."""
+    parts = str(name or "").split()
+    return " ".join([parts[1], parts[0]]) if len(parts) >= 2 else str(name or "")
+
+
+def _standing(payload: dict) -> dict:
+    """Строка своего клуба в таблице — из неё складывается описание сайта."""
+    mine = payload.get("my_team_id")
+    for table in (payload.get("standings") or {}).values():
+        for row in table:
+            if row.get("team_id") == mine:
+                return row
+    return {}
+
+
+def _next_game(payload: dict) -> dict:
+    mine = payload.get("my_team_id")
+    for game in payload.get("games") or ():
+        if game.get("state") != "finished" and mine in (game.get("home_id"), game.get("away_id")):
+            return game
+    return {}
+
+
+def _description(payload: dict) -> str:
+    """Строка под ссылкой в поиске. Пересобирается каждый день вместе с сайтом."""
+    row, club = _standing(payload), ""
+    for team in payload.get("teams") or ():
+        if team.get("id") == payload.get("my_team_id"):
+            club = team.get("name") or ""
+    parts = [f"«{club}» в сезоне КХЛ {_season_label(payload.get('season'))}" if club else "Сезон КХЛ"]
+    if row.get("gp"):
+        parts.append(f"{row.get('position')}-е место на {'Западе' if row.get('conference_key') == 'west' else 'Востоке'}, "
+                     f"{row.get('pts')} очков в {row.get('gp')} матчах")
+    parts.append("Расписание, счёт, статистика игроков, лазарет и шансы на плей-офф")
+    return ". ".join(parts) + "."
+
+
+def _noscript(payload: dict) -> str:
+    """Текст для поисковиков: страница рисуется сценарием, а роботы читают HTML.
+
+    Поэтому тот же расклад коротко повторён обычным текстом. Люди его не
+    видят: браузер показывает <noscript> только когда сценарии отключены.
+    """
+    row = _standing(payload)
+    if not row:
+        return ""
+    game = _next_game(payload)
+    rival = ""
+    if game:
+        mine = payload.get("my_team_id")
+        rival = game.get("away") if game.get("home_id") == mine else game.get("home")
+        rival = f"{rival} ({'дома' if game.get('home_id') == mine else 'в гостях'})"
+    players = [p for p in payload.get("players") or () if p.get("team_id") == payload.get("my_team_id")]
+    top = sorted(players, key=lambda p: (p.get("pts") or 0), reverse=True)[:3]
+    scorers = ", ".join(f"{p['name']} ({p.get('pts', 0)})" for p in top)
+    return (
+        "<noscript>"
+        f"<h1>«{row.get('name')}» — сезон КХЛ {_season_label(payload.get('season'))}</h1>"
+        f"<p>{row.get('position')}-е место в конференции {row.get('conference')}, "
+        f"{row.get('pts')} очков в {row.get('gp')} матчах, шайбы {row.get('gf')}:{row.get('ga')}. "
+        f"Тренер — {_coach(row.get('coach'))}.</p>"
+        + (f"<p>Следующий матч: {rival}.</p>" if rival else "")
+        + (f"<p>Лучшие бомбардиры клуба: {scorers}.</p>" if scorers else "")
+        + "<p>На сайте: расписание и результаты всех матчей КХЛ, таблица, статистика игроков, "
+          "разбор матчей с голами и словами тренера, история клуба и шансы на плей-офф. "
+          "Для просмотра нужен включённый JavaScript.</p>"
+        "</noscript>"
+    )
+
+
+def _head_meta(payload: dict) -> list[str]:
+    """Описание сайта и карточка для ссылки в мессенджерах и соцсетях."""
+    url, text = _site_url(), _description(payload)
+    tags = [f'<meta name="description" content="{text}">']
+    if not url:
+        return tags
+    image = f"{url}/logos/{payload.get('my_team_id')}.png"
+    return tags + [
+        f'<link rel="canonical" href="{url}/">',
+        f'<meta property="og:type" content="website">',
+        f'<meta property="og:title" content="{_page_title(payload)}">',
+        f'<meta property="og:description" content="{text}">',
+        f'<meta property="og:url" content="{url}/">',
+        f'<meta property="og:image" content="{image}">',
+        f'<meta name="twitter:card" content="summary">',
+    ]
+
+
 # ----------------------------------------------------------------- локальная
 
 def _my_team_id(payload: dict | None = None) -> int | None:
@@ -200,7 +313,7 @@ def write_local() -> Path:
         '<meta charset="utf-8">',
         '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
         '<meta name="color-scheme" content="dark">',
-        f"<title>{TITLE}</title>",
+        f"<title>{_page_title()}</title>",
         *_icon_head(club, "/"),
         FONTS,
         '<link rel="stylesheet" href="/app.css">',
@@ -240,14 +353,21 @@ def web_asset_map() -> dict[str, str]:
     return files
 
 
-def build_web_page(payload: dict) -> str:
-    return "\n".join([
-        f"<title>{TITLE}</title>",
+def _web_head(payload: dict) -> list[str]:
+    """Заголовок, описание и карточка ссылки — место им в <head>."""
+    return [
+        f"<title>{_page_title(payload)}</title>",
         '<meta name="color-scheme" content="dark">',
-        '<meta name="robots" content="noindex, nofollow">',
+        *_head_meta(payload),
+    ]
+
+
+def _web_body(payload: dict) -> list[str]:
+    return [
         FONTS,
         '<link rel="stylesheet" href="app.css">',
         '<link rel="stylesheet" href="logos.css">',
+        _noscript(payload),
         _variant(_shell(), "web"),
         # Адрес данных страница называет сама: у локальной версии их отдаёт
         # сервер, у опубликованной они лежат файлом рядом.
@@ -255,7 +375,11 @@ def build_web_page(payload: dict) -> str:
         *[f'<script src="{src}"></script>' for src in CDN_SCRIPTS],
         '<script src="app.js"></script>',
         "",
-    ])
+    ]
+
+
+def build_web_page(payload: dict) -> str:
+    return "\n".join([*_web_head(payload), *_web_body(payload)])
 
 
 def _write_web_assets(payload: dict) -> None:
@@ -273,6 +397,16 @@ def _write_web_assets(payload: dict) -> None:
     )
     for team_id in _logo_ids():
         shutil.copyfile(LOGOS / f"{team_id}.png", PUBLISH / "logos" / f"{team_id}.png")
+    url = _site_url()
+    if url:
+        (PUBLISH / "robots.txt").write_text(
+            f"User-agent: *\nAllow: /\nSitemap: {url}/sitemap.xml\n", encoding="utf-8")
+        stamp = str(payload.get("built_at") or "")[:10]
+        (PUBLISH / "sitemap.xml").write_text(
+            '<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+            f"<url><loc>{url}/</loc><lastmod>{stamp}</lastmod><changefreq>daily</changefreq></url>\n"
+            "</urlset>\n", encoding="utf-8")
     (PUBLISH / "site.webmanifest").write_text(
         _manifest(_my_team_id(payload), _club_name(payload), ""), encoding="utf-8")
     _write_favicon(_my_team_id(payload), PUBLISH)
@@ -293,10 +427,21 @@ def write_web(payload: dict) -> Path:
     # Та же страница в полном документе: открыть у себя и проверить вход,
     # а в облаке это главная страница сайта на GitHub Pages.
     PAGES_INDEX.write_text(
-        "<!doctype html>\n<html lang=\"ru\">\n<head>\n<meta charset=\"utf-8\">\n"
-        "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n"
-        + "\n".join(_icon_head(_my_team_id(payload), "")) + "\n"
-        "</head>\n<body>\n" + page + "</body>\n</html>\n",
+        "\n".join([
+            "<!doctype html>",
+            '<html lang="ru">',
+            "<head>",
+            '<meta charset="utf-8">',
+            '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
+            *_icon_head(_my_team_id(payload), ""),
+            *_web_head(payload),
+            "</head>",
+            "<body>",
+            *_web_body(payload),
+            "</body>",
+            "</html>",
+            "",
+        ]),
         encoding="utf-8",
     )
     # Без этого файла Pages прогоняет папку через Jekyll и выбрасывает всё,
