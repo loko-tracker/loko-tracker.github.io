@@ -141,6 +141,29 @@ def _verify_meta() -> list[str]:
             for key in ("yandex", "google") if codes.get(key)]
 
 
+def _counter() -> list[str]:
+    """Счётчик посещений: сколько людей заходит и откуда.
+
+    Официальный код Яндекс.Метрики, но без вебвизора — записывать, как
+    посетитель водит мышью по странице, для трекера ни к чему.
+    """
+    try:
+        number = str(json.loads(SITE_CONFIG.read_text(encoding="utf-8")).get("metrika") or "").strip()
+    except (OSError, ValueError):
+        return []
+    if not number.isdigit():
+        return []
+    return ["""<script>
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+ym(NUMBER, "init", {defer: true, clickmap: true, trackLinks: true, accurateTrackBounce: true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/NUMBER" style="position:absolute; left:-9999px" alt=""></div></noscript>""".replace("NUMBER", number)]
+
+
 def _standing(payload: dict) -> dict:
     """Строка своего клуба в таблице — из неё складывается описание сайта."""
     mine = payload.get("my_team_id")
@@ -450,6 +473,7 @@ def write_web(payload: dict) -> Path:
             "</head>",
             "<body>",
             *_web_body(payload),
+            *_counter(),
             "</body>",
             "</html>",
             "",
