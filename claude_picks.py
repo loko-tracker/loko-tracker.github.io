@@ -22,6 +22,7 @@ import json
 import math
 from pathlib import Path
 
+import clock
 import odds
 
 DATA_FILE = Path(__file__).parent / "data" / "claude_picks.json"
@@ -93,7 +94,7 @@ def update(season: dict, progress=print) -> dict:
     avg = odds.league_average(standings)
     home_adv = odds.home_advantage(games)
     ratings = odds.ratings(standings, avg)
-    now = dt.datetime.now()
+    now = clock.now()
     stamp = now.date().isoformat()
 
     fresh = 0

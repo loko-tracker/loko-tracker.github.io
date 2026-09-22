@@ -26,6 +26,8 @@ import re
 import urllib.request
 from pathlib import Path
 
+import clock
+
 DATA = Path(__file__).parent / "data"
 INJURIES_FILE = DATA / "injuries.json"
 
@@ -185,7 +187,7 @@ def match_headlines(headlines: dict[str, str], players: list[dict],
                     teams: list[dict] | None = None) -> list[dict]:
     """Все совпадения «заголовок о травме ↔ игрок КХЛ», без отбора лучших."""
     by_stem, club_patterns = _indexes(players, teams)
-    found_at = dt.datetime.now().isoformat(timespec="seconds")
+    found_at = clock.stamp()
 
     results: list[dict] = []
     for text, href in headlines.items():
@@ -290,7 +292,7 @@ def load() -> dict:
 
 def save(data: dict) -> Path:
     DATA.mkdir(exist_ok=True)
-    data["updated_at"] = dt.datetime.now().isoformat(timespec="seconds")
+    data["updated_at"] = clock.stamp()
     INJURIES_FILE.write_text(
         json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8"
     )
@@ -324,7 +326,7 @@ def refresh_auto(players: list[dict], teams: list[dict] | None = None,
     пока о травме писали не позже RETAIN_DAYS дней назад.
     """
     data = load()
-    now = dt.datetime.now()
+    now = clock.now()
     stamp = now.isoformat(timespec="seconds")
 
     kept: dict[str, dict] = {}

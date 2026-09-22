@@ -13,6 +13,7 @@ import sys
 from pathlib import Path
 
 import claude_picks
+import clock
 import club_history
 import club_games
 import club_news
@@ -129,7 +130,7 @@ def build(season: dict | None = None, *, sims: int = 10_000, progress=print) -> 
     played = [g for g in games if g.get("state") == "finished"]
     upcoming = [g for g in games if g.get("state") != "finished"]
 
-    now = dt.datetime.now().isoformat(timespec="seconds")
+    now = clock.stamp()
     injuries_data = injuries_module.load()
 
     payload = {

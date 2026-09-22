@@ -11,6 +11,7 @@ import json
 import sys
 from pathlib import Path
 
+import clock
 import khl_api
 
 DATA = Path(__file__).parent / "data"
@@ -30,7 +31,7 @@ PTS_OT_LOSS = 1
 def _iso(ms: int | None) -> str | None:
     if not ms:
         return None
-    return dt.datetime.fromtimestamp(ms / 1000).isoformat(timespec="seconds")
+    return clock.from_unix(ms / 1000).isoformat(timespec="seconds")
 
 
 def _int(value, default: int = 0) -> int:
@@ -247,7 +248,7 @@ def collect(progress=print) -> dict:
              f"без клуба и без матчей в сезоне пропущено: {skipped})")
 
     season = {
-        "fetched_at": dt.datetime.now().isoformat(timespec="seconds"),
+        "fetched_at": clock.stamp(),
         "stage_id": STAGE_ID,
         "teams": teams,
         "standings": standings,

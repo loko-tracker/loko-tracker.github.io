@@ -4,8 +4,10 @@
   * publish/khl-tracker.html      — публичная: данные зашифрованы паролем
                                     (см. webkey.py), код, стили, логотипы
                                     и фото игроков — отдельными файлами рядом;
-  * publish/preview.html          — та же публичная страница, обёрнутая
-                                    в полный документ для проверки у себя.
+  * publish/index.html           — та же публичная страница, обёрнутая
+                                    в полный документ: её открывают у себя,
+                                    её же отдаёт GitHub Pages (публикуется
+                                    папка publish целиком).
 
 Публичная страница собрана по правилам страниц claude.ai: без собственных
 <html>/<head>/<body> (обёртку добавляет платформа), внешние скрипты только
@@ -29,7 +31,7 @@ PUBLISH = ROOT / "publish"
 SITE_DATA = ROOT / "data" / "site_data.json"
 
 WEB_PAGE = PUBLISH / "khl-tracker.html"
-PREVIEW_PAGE = PUBLISH / "preview.html"
+PAGES_INDEX = PUBLISH / "index.html"
 
 TITLE = "Трекер сезона КХЛ"
 
@@ -234,13 +236,17 @@ def write_web(payload: dict) -> Path:
     page = build_web_page(payload)
     WEB_PAGE.write_text(page, encoding="utf-8")
 
-    # Та же страница в полном документе — открыть у себя и проверить вход.
-    PREVIEW_PAGE.write_text(
+    # Та же страница в полном документе: открыть у себя и проверить вход,
+    # а в облаке это главная страница сайта на GitHub Pages.
+    PAGES_INDEX.write_text(
         "<!doctype html>\n<html lang=\"ru\">\n<head>\n<meta charset=\"utf-8\">\n"
         "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n"
         "</head>\n<body>\n" + page + "</body>\n</html>\n",
         encoding="utf-8",
     )
+    # Без этого файла Pages прогоняет папку через Jekyll и выбрасывает всё,
+    # что начинается с подчёркивания.
+    (PUBLISH / ".nojekyll").write_text("", encoding="utf-8")
     return WEB_PAGE
 
 

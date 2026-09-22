@@ -37,6 +37,10 @@ from pathlib import Path
 DATA = Path(__file__).parent / "data"
 KEY_FILE = DATA / "web_key.json"
 
+# В облаке (GitHub Actions) файла с ключом нет: его содержимое приходит
+# секретом в переменной окружения, на диск не ложится.
+KEY_ENV = "KHL_WEB_KEY"
+
 ITERATIONS = 400_000
 SALT_BYTES = 16
 KEY_BYTES = 32
@@ -82,10 +86,13 @@ def create(login: str, password: str) -> Path:
 
 
 def is_configured() -> bool:
-    return KEY_FILE.exists()
+    return bool(os.environ.get(KEY_ENV)) or KEY_FILE.exists()
 
 
 def load() -> dict:
+    from_env = os.environ.get(KEY_ENV)
+    if from_env:
+        return json.loads(from_env)
     if not KEY_FILE.exists():
         raise WebKeyMissing(
             "ключ для сайта не задан — запусти setup-login.bat и введи логин и пароль"

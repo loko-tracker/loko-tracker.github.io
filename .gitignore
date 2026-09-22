@@ -10,7 +10,6 @@ data/site_data.json
 data/memorial.json
 data/club_games.json
 data/club_news.json
-data/claude_picks.json
 data/club_history.json
 data/league_faces.json
 web/vendor/
@@ -26,6 +25,10 @@ publish/
 __pycache__/
 *.pyc
 *.log
+
+# data/claude_picks.json тоже хранится в истории: прогноз Claude на матч
+# замораживается в момент начала игры, и облачное обновление берёт
+# сделанные раньше прогнозы из репозитория.
 
 # data/injuries.json НЕ игнорируется намеренно: там твои ручные отметки
 # о травмах, и их стоит хранить в истории как обычный текст.

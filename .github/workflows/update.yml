@@ -1,0 +1,82 @@
+# Ежедневное обновление сайта в облаке.
+#
+# Раз в сутки GitHub сам запускает этот сценарий: скачивает свежие данные
+# КХЛ и сайта клуба, пересобирает зашифрованную страницу и выкладывает её
+# на GitHub Pages. Домашний компьютер для этого включать не нужно.
+#
+# Пароль от сайта здесь не хранится: в секрете KHL_WEB_KEY лежит ключ
+# шифрования (содержимое data/web_key.json), и GitHub передаёт его только
+# в переменную окружения запуска.
+#
+# Кнопка «Run workflow» на вкладке Actions запускает обновление вручную.
+
+name: Обновить сайт
+
+on:
+  schedule:
+    - cron: "0 5 * * *"        # 08:00 по Москве
+  workflow_dispatch:
+
+permissions:
+  contents: write              # вернуть в репозиторий прогнозы и лазарет
+  pages: write
+  id-token: write
+
+concurrency:
+  group: site
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      # Логотипы, фото игроков и библиотеки оформления не лежат в
+      # репозитории. Без этого их пришлось бы качать заново каждый день.
+      - uses: actions/cache@v4
+        with:
+          path: |
+            web/vendor
+            web/logos
+            web/photos
+            data/league_faces.json
+          key: assets-${{ github.run_id }}
+          restore-keys: assets-
+
+      - name: Собрать сайт
+        env:
+          KHL_WEB_KEY: ${{ secrets.KHL_WEB_KEY }}
+        run: python run.py --no-serve --no-browser
+
+      # Прогноз Claude на матч замораживается в момент начала игры, а
+      # автоматические отметки о травмах помнят, когда их впервые заметили.
+      # Поэтому оба файла возвращаются в репозиторий.
+      - name: Сохранить прогнозы и лазарет
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/injuries.json data/claude_picks.json
+          git diff --cached --quiet || git commit -m "Данные за $(TZ=Europe/Moscow date +%d.%m.%Y)"
+          git push
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: publish
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
