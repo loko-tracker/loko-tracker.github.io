@@ -153,6 +153,36 @@ def _goalies(summary: dict, mine_id) -> list[dict]:
     return out
 
 
+# Кого показывать из соперника: тех, кто набрал очки. Свой состав — весь,
+# из него считается форма игроков.
+def _lineup(summary: dict, mine_id) -> list[dict]:
+    out = []
+    for team in _as_list(summary.get("PlayerStatsList")):
+        for row in _as_list(team.get("PlayerStats")):
+            position = (row.get("@_pos") or "").strip().lower()
+            if position in ("в", "g"):
+                continue                        # вратари отдельно, в _goalies
+            mine = str(row.get("@_clubidt") or team.get("@_teamId")) == str(mine_id)
+            goals, assists = _int(row.get("@_g")), _int(row.get("@_a"))
+            if not mine and not (goals or assists):
+                continue
+            out.append(
+                {
+                    "name": f"{row.get('@_lastname', '')} {row.get('@_firstname', '')}".strip(),
+                    "number": _int(row.get("@_jn")) or None,
+                    "mine": mine,
+                    "pos": position,
+                    "g": goals,
+                    "a": assists,
+                    "pm": _int(row.get("@_pm")),
+                    "pim": _int(row.get("@_pim")),
+                    "shots": _int(row.get("@_sog")),
+                    "toi": row.get("@_toi_avg"),
+                }
+            )
+    return out
+
+
 def _protocol_data(summary: dict, home_is_mine: bool) -> dict:
     """Протокол -> голы и командные числа, всегда парой «мои : соперник»."""
     mine, theirs = ("A", "B") if home_is_mine else ("B", "A")
@@ -189,6 +219,7 @@ def _protocol_data(summary: dict, home_is_mine: bool) -> dict:
     return {
         "goals": goals,
         "goalies": _goalies(summary, mine_id),
+        "lineup": _lineup(summary, mine_id),
         "stats": {k: v for k, v in stats.items() if v},
         "audience": summary.get("@_audience"),
         "coach_mine": summary.get("@_trainA" if home_is_mine else "@_trainB"),

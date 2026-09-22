@@ -75,7 +75,7 @@ def main() -> int:
             club_games.build()
             club_news.sync()
             claude_picks.update(season)
-            club_history.sync()
+            club_history.sync(season["teams"])
             league_faces.save(league_faces.sync(season["players"]))
         except Exception:
             traceback.print_exc()

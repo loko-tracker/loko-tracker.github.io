@@ -1302,6 +1302,102 @@
     };
   }
 
+  /* ====================== звёзды матча и форма игроков ====================== */
+
+  // Три звезды считаем сами: официальных в данных нет. У полевых — очки,
+  // у вратарей — «сухарь» и процент отражённых бросков.
+  function starRating(row) {
+    if (row.goalie) {
+      // Вратарь попадает в звёзды за «сухарь» или большой матч, но не
+      // вытесняет тех, кто набирал очки, просто за то, что стоял в воротах.
+      if (row.shutout) return 6;
+      var pct = row.shots ? (100 * row.saves) / row.shots : 0;
+      return pct >= 94 && row.saves >= 28 ? 4.5 : pct >= 94 ? 3.5 : pct >= 91 && row.saves >= 25 ? 2.5 : 0;
+    }
+    return (row.g + row.a) ? 3 * row.g + 2 * row.a + Math.min(1, (row.shots || 0) * 0.1) : 0;
+  }
+
+  function starLine(row) {
+    if (row.goalie) {
+      return row.saves + " из " + row.shots + " · " + svPct(row) + (row.shutout ? " · «сухарь»" : "");
+    }
+    return row.g + "+" + row.a +
+      (row.shots ? " · " + row.shots + " " + wordForm(row.shots, "бросок", "броска", "бросков") : "") +
+      (row.toi ? " · " + row.toi : "") + " · " + signed(row.pm);
+  }
+
+  function matchStars(info, game) {
+    var rows = (info.lineup || []).map(function (r) { return r; })
+      .concat((info.goalies || []).map(function (g) { return Object.assign({ goalie: true, g: 0, a: 0 }, g); }));
+    return rows.map(function (row) { return { row: row, rate: starRating(row) }; })
+      .filter(function (x) { return x.rate > 0; })
+      .sort(function (a, b) { return b.rate - a.rate; })
+      .slice(0, 3)
+      .map(function (x, i) {
+        var row = x.row;
+        var teamId = row.mine ? APP.data.my_team_id : (game.home_id === APP.data.my_team_id ? game.away_id : game.home_id);
+        return '<li' + (row.mine ? ' class="mine"' : "") + '>' +
+          '<span class="star-no">' + (i + 1) + '</span>' +
+          '<span class="star-who"><b>' + esc(row.name) + '</b>' +
+            '<i>' + crest(teamId) + esc((teamById(teamId) || {}).name || "") + '</i></span>' +
+          '<span class="star-line">' + esc(starLine(row)) + '</span>' +
+        '</li>';
+      }).join("");
+  }
+
+  // Форма игрока: как он провёл последние матчи по протоколам клуба.
+  function playerForm(p, limit) {
+    var games = APP.data.club_games || {}, key = protoKey(p.name), out = [];
+    if (Number(p.team_id) !== Number(APP.data.my_team_id)) return out;
+    Object.keys(games).sort().forEach(function (day) {
+      var info = games[day];
+      (info.lineup || []).forEach(function (row) {
+        if (row.mine && protoKey(row.name) === key) out.push({ day: day, row: row });
+      });
+      (info.goalies || []).forEach(function (row) {
+        if (row.mine && protoKey(row.name) === key) out.push({ day: day, row: Object.assign({ goalie: true }, row) });
+      });
+    });
+    return out.slice(-(limit || 5)).reverse();
+  }
+
+  function formHtml(p) {
+    var form = playerForm(p, 5);
+    if (!form.length) return "";
+    var goalie = !!form[0].row.goalie;
+    var sum = form.reduce(function (acc, x) {
+      acc.g += x.row.g || 0; acc.a += x.row.a || 0; acc.shots += x.row.shots || 0;
+      acc.pm += x.row.pm || 0; acc.saves += x.row.saves || 0;
+      return acc;
+    }, { g: 0, a: 0, shots: 0, pm: 0, saves: 0 });
+
+    var rows = form.map(function (x) {
+      var game = gameByDay(x.day), row = x.row;
+      var rival = game ? (game.home_id === APP.data.my_team_id ? game.away : game.home) : "";
+      var rivalId = game ? (game.home_id === APP.data.my_team_id ? game.away_id : game.home_id) : null;
+      return '<tr class="openable" data-day="' + esc(x.day) + '">' +
+        '<td class="l dim">' + esc(fmtDay(x.day + "T12:00:00")) + '</td>' +
+        '<td class="l">' + (rivalId ? crest(rivalId) : "") + esc(rival) + '</td>' +
+        (goalie
+          ? '<td>' + row.saves + " из " + row.shots + '</td><td class="strong">' + svPct(row) + '</td><td>' +
+            (row.shutout ? "«сухарь»" : "—") + '</td>'
+          : '<td class="strong">' + row.g + "+" + row.a + '</td><td>' + signed(row.pm) + '</td><td>' +
+            (row.shots || 0) + '</td><td class="dim">' + esc(row.toi || "") + '</td>') +
+      '</tr>';
+    }).join("");
+
+    var head = goalie
+      ? '<thead><tr><th class="l">Матч</th><th class="l">Соперник</th><th>Броски</th><th>%ОБ</th><th>Ноль</th></tr></thead>'
+      : '<thead><tr><th class="l">Матч</th><th class="l">Соперник</th><th>Г+П</th><th>+/−</th><th>Бр</th><th>Время</th></tr></thead>';
+    var total = goalie
+      ? "за " + form.length + " " + wordForm(form.length, "матч", "матча", "матчей") + ": " + sum.saves + " сейвов"
+      : "за " + form.length + " " + wordForm(form.length, "матч", "матча", "матчей") + ": " + sum.g + "+" + sum.a +
+        ", " + signed(sum.pm) + ", " + sum.shots + " " + wordForm(sum.shots, "бросок", "броска", "бросков");
+
+    return '<h2 class="sheet-sec">Форма <i class="pl-count">' + esc(total) + '</i></h2>' +
+      '<div class="table-scroll"><table class="grid pl-form">' + head + '<tbody>' + rows + '</tbody></table></div>';
+  }
+
   /* ============================ превью матча ============================ */
 
   // Перед игрой: шансы по модели, место и форма обеих команд, личные
@@ -1392,15 +1488,26 @@
       return '<div class="pv-row"><b>' + esc(r[1]) + '</b><span>' + esc(r[0]) + '</span><b>' + esc(r[2]) + '</b></div>';
     }).join("");
 
-    var meetings = (APP.data.games || []).filter(function (g) {
-      return g.state === "finished" &&
-        ((g.home_id === mineId && g.away_id === oppId) || (g.home_id === oppId && g.away_id === mineId));
-    }).map(function (g) {
-      var info = matchInfo(g);
-      return '<li' + (info ? ' class="openable" data-day="' + esc(matchDay(g)) + '"' : "") + '>' +
-        '<span class="dim">' + esc(fmtDay(g.start_at)) + '</span> ' + esc(g.home) + ' <b>' + esc(g.score) + '</b> ' + esc(g.away) +
-        (info ? ' <span class="open-hint">разбор</span>' : "") + '</li>';
+    // Личные встречи: архив сайта клуба с сезона 2017/18 (там же и этот сезон).
+    var h2h = Number(mineId) === Number(APP.data.my_team_id)
+      ? (((APP.data.club_history || {}).archive) || []).filter(function (g) {
+          return g.opp === oppId && g.stage !== "pre";
+        })
+      : [];
+    var wins = h2h.filter(archiveWin).length;
+    var meetings = h2h.slice().reverse().slice(0, 6).map(function (g) {
+      var day = gameByDay(g.date) ? g.date : "";
+      return '<li' + (day && matchInfo(gameByDay(day)) ? ' class="openable" data-day="' + esc(day) + '"' : "") + '>' +
+        '<span class="dim">' + esc(g.season || g.date.slice(0, 4)) + '</span> ' +
+        esc(g.home) + ' <b>' + esc(g.score) + '</b> ' + esc(g.away) +
+        (g.extra ? ' <span class="dim">ОТ/Б</span>' : "") +
+        (g.stage === "playoff" ? ' <span class="pill cool">плей-офф</span>' : "") + '</li>';
     }).join("");
+    var h2hTotal = h2h.length
+      ? '<p class="pv-hint">С сезона 2017/18: ' + h2h.length + ' ' + wordForm(h2h.length, "матч", "матча", "матчей") +
+        ', ' + wins + ' ' + wordForm(wins, "победа", "победы", "побед") + ' и ' + (h2h.length - wins) + ' ' +
+        wordForm(h2h.length - wins, "поражение", "поражения", "поражений") + '.</p>'
+      : "";
 
     return '<header class="sheet-head">' +
         '<p class="sheet-meta">' + esc([fmtDayFull(game.start_at) + ", " + fmtWeekday(game.start_at) + ", " + fmtTime(game.start_at),
@@ -1417,8 +1524,9 @@
       '<h2 class="sheet-sec">Команды сейчас</h2>' +
       '<div class="pv-head"><b>' + esc(me.team.name) + '</b><span></span><b>' + esc(them.team.name) + '</b></div>' +
       '<div class="pv-cmp">' + cmp + '</div>' +
-      '<h2 class="sheet-sec">Личные встречи в сезоне</h2>' +
-      (meetings ? '<ul class="pv-meet">' + meetings + '</ul>' : '<p class="empty">В этом сезоне ещё не встречались.</p>') +
+      '<h2 class="sheet-sec">Личные встречи</h2>' +
+      (meetings ? h2hTotal + '<ul class="pv-meet">' + meetings + '</ul>'
+                : '<p class="empty">В архиве клуба встреч с этим соперником нет.</p>') +
       '<div class="pv-sides">' + previewSide(me) + previewSide(them) + '</div>';
   }
 
@@ -1994,6 +2102,7 @@
     }).join(" — ");
 
     var goals = (info.goals || []).map(function (g) { return goalRow(g, game); }).join("");
+    var stars = matchStars(info, game);
     var keepers = (info.goalies || []).slice().sort(function (a, b) { return (b.mine ? 1 : 0) - (a.mine ? 1 : 0); })
       .map(function (g) {
         return '<li class="' + (g.mine ? "mine" : "") + '"><b>' + esc(g.name) + '</b><span>' +
@@ -2023,6 +2132,7 @@
       '</header>' +
       '<h2 class="sheet-sec">Голы</h2>' +
       (goals ? '<ol class="goals">' + goals + '</ol>' : '<p class="empty">В этом матче не забивали.</p>') +
+      (stars ? '<h2 class="sheet-sec">Три звезды</h2><ol class="stars">' + stars + '</ol>' : "") +
       (keepers ? '<h2 class="sheet-sec">Вратари</h2><ul class="sheet-goalies">' + keepers + '</ul>' : "") +
       (stats ? '<h2 class="sheet-sec">Матч в числах</h2><div class="sheet-stats">' + stats + '</div>' : "") +
       '<h2 class="sheet-sec">Отчёт клуба</h2>' +
@@ -2243,6 +2353,7 @@
       '<div class="pl-stats">' + playerStats(p) + '</div>' +
       (goalie && !(Number(p.team_id) === Number(APP.data.my_team_id) && goalieTotals()[protoKey(p.name)])
         ? '<p class="pl-hint">Для вратарей лига отдаёт только число матчей — броски и сейвы есть лишь в протоколах «Локомотива».</p>' : "") +
+      formHtml(p) +
       (Number(p.team_id) === Number(APP.data.my_team_id)
         ? '<h2 class="sheet-sec">Голы и передачи' + (moments.length ? ' <i class="pl-count">' + goals + ' + ' + (moments.length - goals) + '</i>' : "") + '</h2>' +
           (moments.length ? '<ol class="pl-moments">' + moments.map(momentRow).join("") + '</ol>'

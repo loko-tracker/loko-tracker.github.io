@@ -35,6 +35,25 @@ PAGE_LEGENDS = 17       # «ИЗВЕСТНЫЕ ИГРОКИ»
 # Трофеи молодёжных команд в том же списке — их отсекаем.
 YOUTH = ("мхл", "нмхл", "молодёжн", "молодежн", "локо-76", "год основания")
 
+# Клубы меняли названия: в архиве они записаны как тогда.
+ALIASES = {
+    "динамо мск": "Динамо М",
+    "куньлунь ред стар": "Драконы",
+    "шанхайские драконы": "Драконы",
+    "металлург": "Металлург Мг",
+    "сочи": "ХК Сочи",
+}
+
+
+def _match_team(name: str, teams: list[dict]) -> int | None:
+    """Имя соперника из архива -> клуб лиги. Кого уже нет в лиге — None."""
+    wanted = ALIASES.get((name or "").strip().lower(), (name or "").strip())
+    for team in teams or ():
+        if (team.get("name") or "").strip().lower() == wanted.lower():
+            return team.get("id")
+    return None
+
+
 # Опорные события по страницам клуба «ИСТОРИЯ» и «История».
 MILESTONES = [
     {"year": "1949", "title": "Первая команда «Локомотив» в Ярославле",
@@ -125,7 +144,7 @@ def parse_legends(lines: list[str]) -> list[dict]:
     return legends
 
 
-def fetch_archive() -> list[dict]:
+def fetch_archive(teams: list[dict] | None = None) -> list[dict]:
     """Все матчи основной команды с «Локомотивом» и счётом, с 2017/18."""
     rows, page = [], 1
     while True:
@@ -147,14 +166,17 @@ def fetch_archive() -> list[dict]:
         entry = item.get("attributes") or {}
         if entry.get("score_1") is None or entry.get("score_2") is None:
             continue
-        teams = str(entry.get("display_value") or "").split(" - ")[0].split(":")
-        if len(teams) != 2:
+        teams_in_game = str(entry.get("display_value") or "").split(" - ")[0].split(":")
+        if len(teams_in_game) != 2:
             continue
         season = club_roster._attrs(entry.get("season"))
         periods = [p for p in re.split(r"[;,]", entry.get("period_scores") or "") if p.strip()]
+        home, away = teams_in_game[0].strip(), teams_in_game[1].strip()
+        rival = away if home == "Локомотив" else home
         games.append({
             "date": str(entry.get("date") or "")[:10],
-            "home": teams[0].strip(), "away": teams[1].strip(),
+            "home": home, "away": away,
+            "opp": _match_team(rival, teams),
             "score": f"{entry['score_1']}:{entry['score_2']}",
             "extra": len(periods) > 3,
             "stage": "playoff" if "гагарин" in (season.get("name") or "").lower()
@@ -164,7 +186,7 @@ def fetch_archive() -> list[dict]:
     return games
 
 
-def sync(progress=print) -> dict:
+def sync(teams: list[dict] | None = None, progress=print) -> dict:
     try:
         data = {
             "achievements": fetch_achievements(),
@@ -172,15 +194,16 @@ def sync(progress=print) -> dict:
             "story": _page(PAGE_STORY),
             "awards": parse_awards(_page(PAGE_AWARDS)),
             "legends": parse_legends(_page(PAGE_LEGENDS)),
-            "archive": fetch_archive(),
+            "archive": fetch_archive(teams),
         }
     except Exception as error:
         progress(f"  история клуба: сайт клуба не ответил ({type(error).__name__}) — беру сохранённое")
         return load()
     DATA_FILE.parent.mkdir(exist_ok=True)
     DATA_FILE.write_text(json.dumps(data, ensure_ascii=False, indent=0), encoding="utf-8")
+    known = sum(1 for g in data["archive"] if g.get("opp"))
     progress(f"  история клуба: трофеев {len(data['achievements'])}, наград {sum(len(g['items']) for g in data['awards'])}, "
-             f"легенд {len(data['legends'])}, матчей в архиве {len(data['archive'])}")
+             f"легенд {len(data['legends'])}, матчей в архиве {len(data['archive'])} (соперник узнан у {known})")
     return data
 
 
@@ -195,7 +218,9 @@ if __name__ == "__main__":
     import sys
 
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-    data = sync()
+    import collect
+
+    data = sync(collect.load().get("teams"))
     for item in data.get("achievements", []):
         print(" ", item["year"], item["kind"], item["title"])
     for group in data.get("awards", []):

@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-09-22T00:56:35",
+ "updated_at": "2026-09-23T00:41:01",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -23,6 +23,19 @@
   }
  ],
  "auto": [
+  {
+   "player": "Римашевский Егор",
+   "player_id": 40555,
+   "team": "Динамо М",
+   "team_id": 8,
+   "headline": "«Динамо» внесло Римашевского в список травмированных до конца октября",
+   "url": "https://www.sports.ru/hockey/1117378043-dinamo-vneslo-rimashevskogo-v-spisok-travmirovannyx-do-koncza-oktyabry.html",
+   "term": "до конца октября",
+   "confidence": "высокая",
+   "found_at": "2026-09-23T00:41:01",
+   "first_seen": "2026-09-23T00:40:59",
+   "last_seen": "2026-09-23T00:40:59"
+  },
   {
    "player": "Телегин Сергей",
    "player_id": 30365,
