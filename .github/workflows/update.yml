@@ -55,13 +55,27 @@ jobs:
       # Прогноз Claude на матч замораживается в момент начала игры, а
       # автоматические отметки о травмах помнят, когда их впервые заметили.
       # Поэтому оба файла возвращаются в репозиторий.
+      # Если в это же время в репозиторий приехали правки, push отбивается.
+      # Тогда пробуем ещё пару раз, а если так и не вышло — не роняем сборку:
+      # сайт важнее, а данные досохранятся следующим запуском.
       - name: Сохранить прогнозы и лазарет
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/injuries.json data/claude_picks.json
-          git diff --cached --quiet || git commit -m "Данные за $(TZ=Europe/Moscow date +%d.%m.%Y)"
-          git push
+          if git diff --cached --quiet; then
+            echo "данные не менялись"
+            exit 0
+          fi
+          git commit -m "Данные за $(TZ=Europe/Moscow date +%d.%m.%Y)"
+          for attempt in 1 2 3; do
+            if git pull --rebase --autostash && git push; then
+              exit 0
+            fi
+            echo "попытка $attempt не прошла, жду"
+            sleep 7
+          done
+          echo "сохранить данные не вышло — сайт собирается дальше"
 
       - uses: actions/upload-pages-artifact@v3
         with:
