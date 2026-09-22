@@ -1214,6 +1214,129 @@
     return home ? Number(s[0]) > Number(s[1]) : Number(s[1]) > Number(s[0]);
   }
 
+  /* --------------------- путь к Кубку Гагарина --------------------- */
+
+  // Раундов в плей-офф КХЛ четыре, и клуб идёт по ним по порядку, поэтому
+  // название раунда берём по счёту серии. Сами серии собираем из архива
+  // клуба: подряд идущие матчи с одним соперником — это одна серия.
+  var ROUNDS = ["1/8 финала", "1/4 финала", "1/2 финала", "финал Кубка Гагарина"];
+  var pathSeason = null;
+
+  function seasonLabel(season) {
+    var start = Number(String(season || "").slice(0, 4));
+    return start ? start + "/" + String(start + 1).slice(2) : String(season || "");
+  }
+
+  // Годы кубков — из списка трофеев клуба: там стоит год финала, не сезона.
+  function cupYears() {
+    return (((APP.data.club_history || {}).achievements) || [])
+      .filter(function (t) { return /кубка гагарина/i.test(t.title); })
+      .map(function (t) { return Number(String(t.year).slice(0, 4)); });
+  }
+
+  // Счёт архивного матча глазами «Локомотива»: [забили, пропустили].
+  function archiveGoals(g) {
+    var parts = String(g.score || "").split(":");
+    return /Локомотив/.test(g.home)
+      ? [Number(parts[0]), Number(parts[1])]
+      : [Number(parts[1]), Number(parts[0])];
+  }
+
+  function playoffRuns() {
+    var cups = cupYears(), bySeason = {};
+    (((APP.data.club_history || {}).archive) || []).forEach(function (g) {
+      if (g.stage === "playoff") (bySeason[g.season] = bySeason[g.season] || []).push(g);
+    });
+    return Object.keys(bySeason).map(function (season) {
+      var games = bySeason[season].slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+      var series = [];
+      games.forEach(function (g) {
+        var rival = /Локомотив/.test(g.home) ? g.away : g.home;
+        var last = series[series.length - 1];
+        if (!last || last.rival !== rival) { last = { rival: rival, opp: g.opp, games: [] }; series.push(last); }
+        last.games.push(g);
+      });
+      series.forEach(function (s, i) {
+        s.wins = s.games.filter(archiveWin).length;
+        s.losses = s.games.length - s.wins;
+        s.won = s.wins > s.losses;
+        s.round = ROUNDS[i] || "раунд " + (i + 1);
+      });
+      var year = Number(String(season).slice(0, 4)) + 1;
+      return { season: season, year: year, games: games, series: series, cup: cups.indexOf(year) >= 0 };
+    }).sort(function (a, b) { return b.year - a.year; });
+  }
+
+  function pathGame(g) {
+    var score = archiveGoals(g), win = score[0] > score[1];
+    var game = gameByDay(g.date);
+    var open = game && matchInfo(game) ? ' data-day="' + esc(g.date) + '"' : "";
+    return '<li class="po-game ' + (win ? "w" : "l") + (open ? " openable" : "") + '"' + open + '>' +
+      '<b>' + score[0] + ':' + score[1] + '</b>' +
+      '<span>' + (/Локомотив/.test(g.home) ? "дома" : "в гостях") + (g.extra ? " · ОТ/Б" : "") + '</span>' +
+      '<i>' + esc(fmtDay(g.date + "T12:00:00")) + '</i></li>';
+  }
+
+  function pathSeries(s, run, index) {
+    var decisive = run.cup && index === run.series.length - 1;
+    return '<li class="po-round ' + (s.won ? "won" : "lost") + (decisive ? " cup" : "") + '">' +
+      '<div class="po-head">' +
+        '<span class="po-name">' + esc(s.round) + '</span>' +
+        '<span class="po-rival">' + crest(s.opp) + esc(s.rival) + '</span>' +
+        '<span class="po-score">' + s.wins + ':' + s.losses + '</span>' +
+      '</div>' +
+      '<ul class="po-games">' + s.games.map(pathGame).join("") + '</ul>' +
+      (decisive ? '<p class="po-cup">Кубок Гагарина ' + run.year + '</p>' : "") +
+    '</li>';
+  }
+
+  function pathHtml(run) {
+    var gf = 0, ga = 0, wins = 0;
+    run.games.forEach(function (g) {
+      var s = archiveGoals(g);
+      gf += s[0]; ga += s[1];
+      if (s[0] > s[1]) wins++;
+    });
+    var last = run.series[run.series.length - 1];
+    var final = last.round === ROUNDS[3];
+    var result = run.cup ? "Кубок" : last.won ? "не доигран" : final ? "финалист" : "вылет";
+    var resultSub = run.cup ? "чемпионы " + run.year
+      : last.won ? "плей-офф остановлен"
+      : final ? "серебро " + run.year + " · «" + last.rival + "»"
+      : last.round + " · «" + last.rival + "»";
+
+    return '<div class="stat-row">' +
+        '<div class="stat"><div class="k">Матчей</div><div class="v">' + run.games.length + '</div>' +
+          '<div class="sub">' + run.series.length + " " + wordForm(run.series.length, "серия", "серии", "серий") + '</div></div>' +
+        '<div class="stat"><div class="k">Побед</div><div class="v">' + wins + '</div>' +
+          '<div class="sub">' + (run.games.length - wins) + " " +
+          wordForm(run.games.length - wins, "поражение", "поражения", "поражений") + '</div></div>' +
+        '<div class="stat"><div class="k">Шайбы</div><div class="v">' + gf + ':' + ga + '</div>' +
+          '<div class="sub">разница ' + signed(gf - ga) + '</div></div>' +
+        '<div class="stat"><div class="k">Итог</div><div class="v' + (run.cup ? " gold" : "") + '">' + esc(result) + '</div>' +
+          '<div class="sub">' + esc(resultSub) + '</div></div>' +
+      '</div>' +
+      '<ol class="po-path">' + run.series.map(function (s, i) { return pathSeries(s, run, i); }).join("") + '</ol>';
+  }
+
+  function renderPath() {
+    var host = $("hsPath");
+    if (!host) return;
+    var runs = playoffRuns();
+    if (!runs.length) {
+      host.innerHTML = '<p class="note">В архиве клуба (с сезона 2017/18) матчей плей-офф нет.</p>';
+      return;
+    }
+    var picked = runs.filter(function (r) { return r.season === pathSeason; })[0] || runs[0];
+    pathSeason = picked.season;
+    host.innerHTML =
+      '<div class="po-chips">' + runs.map(function (r) {
+        return '<button type="button" class="po-chip' + (r.season === pathSeason ? " on" : "") +
+          '" data-season="' + esc(r.season) + '">' + esc(seasonLabel(r.season)) +
+          (r.cup ? ' <i>кубок</i>' : "") + '</button>';
+      }).join("") + '</div>' + pathHtml(picked);
+  }
+
   var KIND_LABEL = { gold: "золото", silver: "серебро", bronze: "бронза", cup: "кубок", start: "событие", memory: "память" };
 
   function renderHistory() {
@@ -1278,6 +1401,11 @@
       '<h2 class="sec">В этот день</h2>' +
       (dayHtml ? '<ul class="hs-day">' + dayHtml + '</ul>' : '<p class="note">В архиве клуба (с сезона 2017/18) в этот день матчей не было.</p>') +
 
+      '<h2 class="sec">Путь к Кубку Гагарина</h2>' +
+      '<p class="note">Плей-офф по годам: каждая серия — с кем играли и чем кончилось. ' +
+        'Счёт в матчах записан от «Локомотива».</p>' +
+      '<div id="hsPath"></div>' +
+
       '<h2 class="sec">Главные события и трофеи</h2>' +
       '<ol class="timeline">' + timeline + '</ol>' +
 
@@ -1294,7 +1422,13 @@
         '</div>' : "") +
       '<p class="legend">По данным официального сайта ХК «Локомотив»: трофеи, награды, легенды и архив матчей с сезона 2017/18.</p>';
 
+    renderPath();
+
     host.onclick = function (event) {
+      var chip = event.target.closest(".po-chip");
+      if (chip) { pathSeason = chip.getAttribute("data-season"); renderPath(); return; }
+      var tile = event.target.closest("[data-day]");
+      if (tile) { var game = gameByDay(tile.getAttribute("data-day")); if (game) openSheet(game); return; }
       if (event.target.closest(".hs-story")) {
         showSheet('<p class="sheet-meta">сайт ХК «Локомотив»</p><article class="sheet-text">' +
           sheetArticle({ title: "История клуба", lead: "", text: h.story }, "", false) + '</article>');

@@ -2190,3 +2190,82 @@ button.watch-go { cursor: pointer; font: inherit; font-family: var(--mono); font
   .stars li { grid-template-columns: 30px 1fr; row-gap: 4px; }
   .star-line { grid-column: 2; text-align: left; }
 }
+
+/* ======================= путь к Кубку Гагарина ======================= */
+
+.po-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; }
+.po-chip {
+  display: inline-flex; align-items: center; gap: 7px; cursor: pointer;
+  padding: 6px 11px; border: 1px solid var(--rule); border-radius: 9px;
+  background: var(--surface); color: var(--ink-2);
+  font: inherit; font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums;
+  transition: border-color .2s ease, color .2s ease, background .2s ease;
+}
+.po-chip:hover { border-color: var(--rule-strong); color: var(--ink); }
+.po-chip i {
+  font-style: normal; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #d8ab48;
+}
+.po-chip.on { border-color: rgba(242, 193, 78, .55); background: rgba(242, 193, 78, .1); color: var(--ink); }
+.po-chip.on i { color: #ffe39a; }
+
+.stat .v.gold {
+  background: linear-gradient(100deg, #b98a2c, #ffe39a 45%, #fff3c9 55%, #b98a2c);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+
+/* Путь по раундам — лесенка сверху вниз, слева линия сезона. */
+.po-path { list-style: none; margin: 14px 0 0; padding: 0 0 0 26px; display: grid; gap: 12px; position: relative; }
+.po-path::before {
+  content: ""; position: absolute; left: 6px; top: 22px; bottom: 22px; width: 2px; background: var(--rule-strong);
+}
+.po-round {
+  position: relative; padding: 14px 16px 13px;
+  border: 1px solid var(--rule); border-radius: 14px; background: var(--surface);
+}
+.po-round::before {
+  content: ""; position: absolute; left: -26px; top: 22px; width: 12px; height: 12px; border-radius: 50%;
+  background: var(--raised); border: 2px solid var(--rule-strong);
+}
+.po-round.won::before { background: var(--good); border-color: var(--good); }
+.po-round.lost::before { background: var(--goal); border-color: var(--goal); }
+.po-round.cup { border-color: rgba(242, 193, 78, .5); }
+.po-round.cup::before { background: #f2c14e; border-color: #f2c14e; box-shadow: 0 0 12px rgba(242, 193, 78, .55); }
+
+.po-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.po-name {
+  flex: 0 0 100%;
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+}
+.po-rival { display: inline-flex; align-items: center; gap: 7px; font-family: var(--disp); font-weight: 500; font-size: 19px; }
+.po-score {
+  margin-left: auto; font-family: var(--disp); font-weight: 600; font-size: 20px; font-variant-numeric: tabular-nums;
+}
+.po-round.won .po-score { color: var(--good); }
+.po-round.lost .po-score { color: var(--goal); }
+
+.po-games { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; margin: 11px 0 0; padding: 0; }
+.po-game {
+  display: grid; gap: 1px; min-width: 84px; padding: 7px 10px 6px;
+  border: 1px solid var(--rule); border-radius: 10px; background: var(--raised);
+}
+.po-game b { font-family: var(--mono); font-size: 14.5px; font-variant-numeric: tabular-nums; }
+.po-game.w b { color: var(--good); }
+.po-game.l b { color: var(--goal); }
+.po-game span { font-size: 10.5px; color: var(--ink-2); }
+.po-game i { font-style: normal; font-family: var(--mono); font-size: 9.5px; color: var(--muted); }
+.po-game.openable { cursor: pointer; }
+.po-game.openable:hover { border-color: rgba(79, 216, 255, .45); }
+
+.po-cup {
+  margin: 12px 0 0; font-family: var(--disp); font-weight: 600; font-size: 15px;
+  letter-spacing: .06em; text-transform: uppercase;
+  background: linear-gradient(100deg, #b98a2c, #ffe39a 45%, #fff3c9 55%, #b98a2c);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+
+@media (max-width: 620px) {
+  .po-path { padding-left: 20px; }
+  .po-path::before { left: 3px; }
+  .po-round::before { left: -20px; }
+  .po-game { min-width: 76px; }
+}
