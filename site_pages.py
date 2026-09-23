@@ -17,6 +17,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -391,18 +392,33 @@ def _web_head(payload: dict) -> list[str]:
     ]
 
 
+def _stamp(name: str) -> str:
+    """«app.js» -> «app.js?v=1a2b3c4d»: отпечаток содержимого в адресе.
+
+    GitHub Pages разрешает браузеру держать файл десять минут, поэтому
+    после обновления сайта человек мог получить новую страницу со старым
+    кодом. Сменилось содержимое — сменился адрес, и такого не выйдет.
+    """
+    target = PUBLISH / name
+    try:
+        digest = hashlib.sha256(target.read_bytes()).hexdigest()[:8]
+    except OSError:
+        return name
+    return f"{name}?v={digest}"
+
+
 def _web_body(payload: dict) -> list[str]:
     return [
         FONTS,
-        '<link rel="stylesheet" href="app.css">',
-        '<link rel="stylesheet" href="logos.css">',
+        f'<link rel="stylesheet" href="{_stamp("app.css")}">',
+        f'<link rel="stylesheet" href="{_stamp("logos.css")}">',
         _noscript(payload),
         _variant(_shell(), "web"),
         # Адрес данных страница называет сама: у локальной версии их отдаёт
         # сервер, у опубликованной они лежат файлом рядом.
-        '<script>window.DATA_URL = "data.json";</script>',
+        f'<script>window.DATA_URL = "{_stamp("data.json")}";</script>',
         *[f'<script src="{src}"></script>' for src in CDN_SCRIPTS],
-        '<script src="app.js"></script>',
+        f'<script src="{_stamp("app.js")}"></script>',
         "",
     ]
 
@@ -456,6 +472,8 @@ def write_web(payload: dict) -> Path:
     _write_web_assets(payload)
     (PUBLISH / "data.json").write_text(
         json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    # Отпечатки берутся с уже записанных файлов, поэтому страница собирается
+    # последней.
     page = build_web_page(payload)
     WEB_PAGE.write_text(page, encoding="utf-8")
 
