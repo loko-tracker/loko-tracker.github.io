@@ -11,7 +11,7 @@ data/memorial.json
 data/club_games.json
 data/club_news.json
 data/club_history.json
-data/league_faces.json
+data/league_rosters.json
 web/vendor/
 web/logos/
 web/photos/
