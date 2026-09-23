@@ -2655,6 +2655,206 @@
     }, 1500);
   }
 
+  /* ============================== прогноз ============================== */
+
+  // Разбор предстоящего матча: счёт и шансы берутся из той же модели, что
+  // играет с тобой в прогнозы, а словами объясняется, почему так вышло.
+  // Каждый довод опирается на число из данных: форма, отдых, личные
+  // встречи, вратарь, лазарет. Нечего сказать — довод молчит.
+
+  function nextMyGame() {
+    var mine = APP.myTeam;
+    return (APP.data.games || []).filter(function (g) {
+      return isAhead(g) && (g.home_id === mine || g.away_id === mine);
+    })[0] || null;
+  }
+
+  // Сколько дней команда отдыхала перед этим матчем.
+  function restDays(teamId, game) {
+    var start = parseDate(game.start_at);
+    if (!start) return null;
+    var prev = (APP.data.games || []).filter(function (g) {
+      var when = parseDate(g.start_at);
+      return g.state === "finished" && (g.home_id === teamId || g.away_id === teamId) && when && when < start;
+    }).pop();
+    var when = prev && parseDate(prev.start_at);
+    return when ? Math.round((start - when) / 86400000) : null;
+  }
+
+  function formWL(teamId, count) {
+    var games = (APP.data.games || []).filter(function (g) {
+      return g.state === "finished" && (g.home_id === teamId || g.away_id === teamId);
+    }).slice(-count);
+    var wins = games.filter(function (g) { var r = outcome(g, teamId); return r && r.win; }).length;
+    return { games: games.length, wins: wins, losses: games.length - wins };
+  }
+
+  // Последний вратарь клуба и как он тащил: только у «Локомотива» есть
+  // протоколы, у соперника такой статистики нет.
+  function lastGoalie() {
+    var games = APP.data.club_games || {};
+    var days = Object.keys(games).sort();
+    for (var i = days.length - 1; i >= 0; i--) {
+      var keeper = (games[days[i]].goalies || []).filter(function (g) { return g.mine; })[0];
+      if (keeper) return keeper;
+    }
+    return null;
+  }
+
+  function teamInjuries(teamId, name) {
+    return (APP.data.injuries || []).filter(function (i) {
+      return i.team_id === teamId || i.team === name;
+    });
+  }
+
+  function forecastNotes(game) {
+    var mineId = APP.myTeam, oppId = game.home_id === mineId ? game.away_id : game.home_id;
+    var me = clubModel(mineId), them = clubModel(oppId);
+    if (!me || !them) return [];
+    var home = game.home_id === mineId;
+    var chances = matchupFor(game, mineId);
+    var notes = [];
+
+    if (chances) {
+      var win = chances.win + chances.otWin;
+      var word = win >= 62 ? "заметный фаворит" : win >= 53 ? "небольшой фаворит"
+               : win >= 47 ? "равный матч" : win >= 38 ? "небольшой аутсайдер" : "заметный аутсайдер";
+      notes.push({
+        k: "Расклад",
+        t: "По модели «" + me.team.name + "» — " + word + ": " + pct(win) + "% на победу в любом виде, " +
+           pct(chances.loss + chances.otLoss) + "% на поражение. " +
+           (home ? "Свой лёд в этой оценке уже учтён." : "Гостевой матч, преимущество площадки у соперника.")
+      });
+    }
+
+    var myForm = formWL(mineId, 5), theirForm = formWL(oppId, 5);
+    if (myForm.games && theirForm.games) {
+      notes.push({
+        k: "Форма",
+        t: "За последние " + myForm.games + " " + wordForm(myForm.games, "матч", "матча", "матчей") +
+           " «" + me.team.name + "» — " + myForm.wins + " " + wordForm(myForm.wins, "победа", "победы", "побед") +
+           ", «" + them.team.name + "» — " + theirForm.wins + "." +
+           (me.streak.count >= 2 ? " Своя серия: " + streakText(me.streak) + "." : "") +
+           (them.streak.count >= 3 ? " У соперника — " + streakText(them.streak) + "." : "")
+      });
+    }
+
+    var myRest = restDays(mineId, game), theirRest = restDays(oppId, game);
+    if (myRest !== null && theirRest !== null) {
+      var diff = myRest - theirRest;
+      notes.push({
+        k: "Отдых",
+        t: "Перерыв после прошлого матча: у нас " + myRest + " " + wordForm(myRest, "день", "дня", "дней") +
+           ", у соперника " + theirRest + "." +
+           (diff <= -2 ? " Соперник свежее — это чувствуется к третьему периоду."
+            : diff >= 2 ? " Мы отдохнули дольше, у соперника ноги будут тяжелее."
+            : " Разница небольшая, на игру влиять не должна.")
+      });
+    }
+
+    var archive = ((APP.data.club_history || {}).archive) || [];
+    var h2h = Number(mineId) === Number(APP.data.my_team_id)
+      ? archive.filter(function (g) { return g.opp === oppId && g.stage !== "pre"; }) : [];
+    if (h2h.length >= 3) {
+      var wins2 = h2h.filter(archiveWin).length;
+      var recent = h2h.slice(-5), recentWins = recent.filter(archiveWin).length;
+      notes.push({
+        k: "Личные встречи",
+        t: "С сезона 2017/18 сыграно " + h2h.length + " " + wordForm(h2h.length, "матч", "матча", "матчей") +
+           ", в них " + wins2 + " " + wordForm(wins2, "победа", "победы", "побед") + ". " +
+           "В последних " + recent.length + ": " + recentWins + "–" + (recent.length - recentWins) + " в нашу пользу." +
+           (wins2 * 2 >= h2h.length * 1.4 ? " Соперник для нас удобный." : "")
+      });
+    }
+
+    var keeper = lastGoalie();
+    if (keeper && keeper.shots) {
+      notes.push({
+        k: "Вратарь",
+        t: "В прошлом матче ворота защищал " + keeper.name + ": " + keeper.saves + " из " + keeper.shots +
+           ", " + svPct(keeper) + (keeper.shutout ? ", матч на ноль." : ".")
+      });
+    }
+
+    var myHurt = teamInjuries(mineId, me.team.name), theirHurt = teamInjuries(oppId, them.team.name);
+    if (myHurt.length || theirHurt.length) {
+      notes.push({
+        k: "Лазарет",
+        t: (myHurt.length ? "У нас вне игры: " + myHurt.map(function (i) { return i.player; }).join(", ") + "."
+                          : "У нас отмеченных травм нет.") +
+           (theirHurt.length ? " У соперника: " + theirHurt.map(function (i) { return i.player; }).join(", ") + "."
+                             : "") +
+           " Список неполный: единого справочника травм в лиге нет."
+      });
+    }
+
+    if (me.row && them.row) {
+      var gap = me.row.pts - them.row.pts;
+      notes.push({
+        k: "Что на кону",
+        t: "Мы — " + placeText(me.row) + ", соперник — " + placeText(them.row) + ". " +
+           (Math.abs(gap) <= 2 ? "Команды идут рядом, и два очка решают много."
+            : gap > 0 ? "Мы выше на " + gap + " " + wordForm(gap, "очко", "очка", "очков") + " — победа отрывает дальше."
+            : "Соперник выше на " + (-gap) + " " + wordForm(-gap, "очко", "очка", "очков") + " — есть что отыгрывать.")
+      });
+    }
+
+    return notes;
+  }
+
+  function renderForecast() {
+    var host = $("view-forecast");
+    if (!host) return;
+    var game = nextMyGame();
+    if (!game) {
+      host.innerHTML = '<h1 class="sec-title">Прогноз</h1><p class="note">Впереди матчей нет — сезон закончился.</p>';
+      return;
+    }
+    var mineId = APP.myTeam;
+    var home = game.home_id === mineId;
+    var oppId = home ? game.away_id : game.home_id;
+    var opp = teamById(oppId) || {};
+    var pick = claudePick(game);
+    var chances = matchupFor(game, mineId);
+    var notes = forecastNotes(game);
+
+    host.innerHTML =
+      '<header class="fc-hero">' +
+        '<p class="eyebrow">Что думает Claude</p>' +
+        '<h1 class="fc-title">' + (home ? "Дома: " : "В гостях: ") + '«' + esc(opp.name || "") + '»</h1>' +
+        '<p class="fc-when">' + esc(fmtDayFull(game.start_at) + ", " + fmtWeekday(game.start_at) +
+          ", " + fmtTime(game.start_at) + (game.location ? " · " + game.location : "")) + '</p>' +
+        '<div class="fc-pick">' +
+          '<div class="fc-score">' +
+            '<span>' + crest(game.home_id, "big").replace('class="crest ', 'class="fc-crest ') + '</span>' +
+            '<b>' + (pick ? esc(pick.h + " : " + pick.a) : "—") + '</b>' +
+            '<span>' + crest(game.away_id, "big").replace('class="crest ', 'class="fc-crest ') + '</span>' +
+          '</div>' +
+          '<p class="fc-k">' + (pick ? "прогноз Claude на счёт" : "прогноз появится ближе к матчу") + '</p>' +
+          (chances ? '<p class="fc-chance">Победа в любом виде — <b>' + pct(chances.win + chances.otWin) +
+            '%</b>, поражение — <b>' + pct(chances.loss + chances.otLoss) + '%</b></p>' : "") +
+        '</div>' +
+        '<p class="sheet-links">' + watchLink(watchLinks().team, "Смотреть матч ↗") +
+          '<button type="button" class="watch-go pv-open fc-full">Полное превью</button></p>' +
+      '</header>' +
+
+      (notes.length ? '<h2 class="sec">Разбор</h2><ol class="fc-notes">' + notes.map(function (n) {
+        return '<li><span class="fc-note-k">' + esc(n.k) + '</span><p>' + esc(n.t) + '</p></li>';
+      }).join("") + '</ol>' : "") +
+
+      '<h2 class="sec">Твой прогноз</h2>' +
+      '<div class="fc-bet">' + betBlock(game) + '</div>' +
+
+      '<p class="legend">Счёт и проценты — из той же модели, что играет с тобой в прогнозы: ' +
+      '10 000 прогонов оставшегося сезона по силе атаки и обороны обеих команд. ' +
+      'Доводы собраны из данных сайта. Это оценка, а не предсказание: хоккей на то и хоккей.</p>';
+
+    host.onclick = function (event) {
+      if (event.target.closest(".fc-full")) { openPreview(game); return; }
+      if (handleBetClick(event)) return;
+    };
+  }
+
   /* ================================= обзор ================================= */
 
   function renderOverview() {
@@ -3378,7 +3578,7 @@
 
   /* ============================== навигация ============================== */
 
-  var VIEWS = ["overview","club","history","memory","games","table","odds","players","injuries"];
+  var VIEWS = ["overview","club","forecast","history","memory","games","table","odds","players","injuries"];
   var rendered = {};
 
   function currentView() {
@@ -3390,6 +3590,7 @@
     if (rendered[view]) return;
     if (view === "overview") renderOverview();
     if (view === "club") renderClub();
+    if (view === "forecast") renderForecast();
     if (view === "memory") renderMemory();
     if (view === "history") renderHistory();
     if (view === "games") renderGames();
@@ -3524,7 +3725,7 @@
   // Перерисовываем только то, где виден счёт; остальное обновится, когда
   // на вкладку зайдут.
   function repaintLive() {
-    ["overview", "club", "games"].forEach(function (view) { rendered[view] = false; });
+    ["overview", "club", "forecast", "games"].forEach(function (view) { rendered[view] = false; });
     paint(currentView());
     syncWings();
   }

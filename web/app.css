@@ -2225,3 +2225,49 @@ button.watch-go { cursor: pointer; font: inherit; font-family: var(--mono); font
 /* Имя лидера в шапке «Обзора» — такая же ссылка на карточку, как в таблицах. */
 .hero-side .n .p-link { color: inherit; text-decoration: none; }
 .hero-side .n .p-link:hover { text-decoration: underline; }
+
+/* =============================== прогноз =============================== */
+
+.fc-hero { padding: 40px 0 8px; }
+.fc-title {
+  font-family: var(--disp); font-weight: 700; text-transform: uppercase;
+  font-size: clamp(30px, 5.4vw, 58px); line-height: 1; margin: 6px 0 8px;
+}
+.fc-when { font-family: var(--mono); font-size: 12.5px; color: var(--muted); margin: 0 0 22px; }
+
+.fc-pick {
+  display: grid; justify-items: center; gap: 6px;
+  padding: 22px 18px 20px; margin-bottom: 18px;
+  border: 1px solid var(--rule); border-radius: 18px;
+  background: var(--glass); backdrop-filter: blur(8px);
+}
+.fc-score { display: flex; align-items: center; gap: 22px; }
+.fc-score b {
+  font-family: var(--disp); font-weight: 700; font-size: clamp(34px, 6vw, 54px);
+  font-variant-numeric: tabular-nums; letter-spacing: .02em;
+}
+.fc-crest { display: block; width: 52px; height: 52px; background: center / contain no-repeat; }
+.fc-k {
+  margin: 0; font-family: var(--mono); font-size: 9.5px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--muted);
+}
+.fc-chance { margin: 8px 0 0; font-size: 14px; color: var(--ink-2); }
+.fc-chance b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+.fc-notes { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 10px; }
+.fc-notes li {
+  display: grid; grid-template-columns: 132px 1fr; gap: 0 20px; align-items: start;
+  padding: 14px 18px; border: 1px solid var(--rule); border-radius: 14px; background: var(--surface);
+}
+.fc-note-k {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--muted); padding-top: 3px;
+}
+.fc-notes p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--ink-2); }
+.fc-bet { max-width: 560px; }
+
+@media (max-width: 620px) {
+  .fc-notes li { grid-template-columns: 1fr; gap: 4px; }
+  .fc-score { gap: 14px; }
+  .fc-crest { width: 40px; height: 40px; }
+}
