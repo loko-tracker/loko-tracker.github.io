@@ -3431,6 +3431,130 @@
     syncWings();
   });
 
+  /* ============================== живой счёт ============================== */
+
+  // Страница собирается утром, а матч идёт вечером. Поэтому счёт идущих
+  // матчей берётся прямо у API лиги из браузера: на своём адресе это
+  // разрешено (API отвечает с нужным заголовком), внутри claude.ai — нет.
+  // Список матчей у API идёт ровно в том же порядке, что и у нас, по 16
+  // штук на странице, — значит, по номеру матча в сезоне видно, какую
+  // страницу спрашивать, и качать весь сезон ради одного счёта не нужно.
+
+  var LIVE_API = "https://khl.api.webcaster.pro/api/khl_mobile/events_v2.json";
+  var LIVE_PAGE = 16;
+  var LIVE_EVERY = 45000;         // как часто спрашивать, пока идёт игра
+  var LIVE_IDLE = 10 * 60000;     // и как часто — когда ничего не идёт
+  var liveTimer = null;
+
+  // Матч мог начаться: от времени начала и три часа после. Раньше начала
+  // спрашивать незачем, позже — матч уже точно в данных со счётом.
+  function maybeLive(game, now) {
+    var start = parseDate(game.start_at);
+    if (!start || game.state === "finished") return false;
+    return now >= start.getTime() - 60000 && now < start.getTime() + 3.5 * 3600000;
+  }
+
+  function liveCandidates() {
+    var now = Date.now();
+    return (APP.data.games || []).filter(function (game) { return maybeLive(game, now); });
+  }
+
+  function livePages(games) {
+    var all = APP.data.games || [], pages = {};
+    games.forEach(function (game) {
+      var index = all.indexOf(game);
+      if (index >= 0) pages[Math.floor(index / LIVE_PAGE) + 1] = true;
+    });
+    return Object.keys(pages);
+  }
+
+  function applyLive(events) {
+    var byId = {}, changed = false;
+    events.forEach(function (row) {
+      var event = row && (row.event || row);
+      if (event && event.id != null) byId[event.id] = event;
+    });
+    (APP.data.games || []).forEach(function (game) {
+      var event = byId[game.id];
+      if (!event) return;
+      var state = event.game_state_key || game.state;
+      var live = state !== "finished" && state !== "not_yet_started";
+      var score = event.score || game.score;
+      var period = event.period > 0 ? event.period : null;
+      if (score !== game.score || state !== game.state || live !== !!game.live || period !== game.period) {
+        changed = true;
+      }
+      game.score = score;
+      game.state = state;
+      game.live = live;
+      game.period = period;
+      var parts = event.scores || {};
+      game.periods = { p1: parts.first_period, p2: parts.second_period,
+                       p3: parts.third_period, ot: parts.overtime, so: parts.bullitt };
+    });
+    return changed;
+  }
+
+  function liveLine(game) {
+    var mine = game.home_id === APP.data.my_team_id || game.away_id === APP.data.my_team_id;
+    var period = game.period ? (game.period <= 3 ? game.period + "-й период" : "овертайм") : "идёт";
+    return '<li' + (mine ? ' class="mine"' : "") + '>' +
+      '<span class="live-dot" aria-hidden="true"></span>' +
+      '<span class="live-team">' + crest(game.home_id) + esc(game.home) + '</span>' +
+      '<b>' + esc(game.score || "0:0") + '</b>' +
+      '<span class="live-team">' + crest(game.away_id) + esc(game.away) + '</span>' +
+      '<i>' + esc(period) + '</i></li>';
+  }
+
+  function renderLive() {
+    var host = $("liveStrip");
+    if (!host) return;
+    var live = (APP.data.games || []).filter(function (game) { return game.live; });
+    host.hidden = !live.length;
+    if (!live.length) return;
+    host.innerHTML = '<span class="live-label">в эфире</span><ul>' + live.map(liveLine).join("") + '</ul>';
+  }
+
+  // Перерисовываем только то, где виден счёт; остальное обновится, когда
+  // на вкладку зайдут.
+  function repaintLive() {
+    ["overview", "club", "games"].forEach(function (view) { rendered[view] = false; });
+    paint(currentView());
+    syncWings();
+  }
+
+  function liveTick() {
+    var games = liveCandidates();
+    if (!games.length) { renderLive(); scheduleLive(); return; }
+    Promise.all(livePages(games).map(function (page) {
+      return fetch(LIVE_API + "?locale=ru&order_direction=asc&page=" + page, { cache: "no-store" })
+        .then(function (response) { return response.ok ? response.json() : []; })
+        .catch(function () { return []; });      // сеть отвалилась — просто ждём следующего раза
+    })).then(function (pages) {
+      var events = [];
+      pages.forEach(function (list) { events = events.concat(list || []); });
+      var changed = applyLive(events);
+      renderLive();
+      if (changed) repaintLive();
+      scheduleLive();
+    });
+  }
+
+  function scheduleLive() {
+    clearTimeout(liveTimer);
+    if (document.hidden) return;                 // вкладку свернули — не дёргаем API
+    liveTimer = setTimeout(liveTick, liveCandidates().length ? LIVE_EVERY : LIVE_IDLE);
+  }
+
+  function startLive() {
+    if (MODE !== "web") return;                  // локальную версию обновляет refresh.bat
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) clearTimeout(liveTimer);
+      else liveTick();
+    });
+    liveTick();
+  }
+
   /* ================================ старт ================================ */
 
   function start(data) {
@@ -3446,6 +3570,7 @@
     updateClubTab();
     setupWings();
     show(currentView());
+    startLive();
   }
 
   function fail(message) {
