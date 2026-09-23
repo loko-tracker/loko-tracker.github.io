@@ -2669,10 +2669,11 @@
       $("heroLeader").innerHTML =
         crest(leader.team_id, "big") +
         '<div class="who"><span class="k">Лучший бомбардир</span>' +
-        '<span class="n">' + esc(leader.name) + '</span>' +
+        '<span class="n">' + personLink(leader) + '</span>' +
         '<span class="t">' + esc(leader.team) + " · " + leader.g + " + " + leader.a + '</span></div>' +
         '<div class="v" id="heroLeaderPts">0</div>';
       countUp($("heroLeaderPts"), leader.pts);
+      wirePlayerRows($("heroLeader"));
     }
 
     var tiles = [
@@ -2713,7 +2714,8 @@
     ];
     $("miniLeaders").innerHTML = packs.map(function (pack) {
       var rows = (pack.rows || []).slice(0, 7).map(function (p, i) {
-        return "<tr><td class='dim'>" + (i + 1) + "</td>" +
+        return "<tr class='openable' data-player='" + esc(p.name) + "' data-team='" + esc(p.team_id) +
+               "' title='Открыть карточку игрока'><td class='dim'>" + (i + 1) + "</td>" +
                "<td class='l'>" + crest(p.team_id) + esc(p.name) + "</td>" +
                "<td class='dim'>" + esc(p.team) + "</td>" +
                "<td class='strong'>" + esc(p.value) + "</td></tr>";
@@ -2721,6 +2723,7 @@
       return '<div class="panel" data-reveal><h3 class="panel-head">' + esc(pack.title) + '</h3>' +
              '<div class="table-scroll"><table class="grid"><tbody>' + rows + '</tbody></table></div></div>';
     }).join("");
+    wirePlayerRows($("miniLeaders"));
 
     startCountdown();
     heroIntro();
