@@ -34,6 +34,15 @@ def _iso(ms: int | None) -> str | None:
     return clock.from_unix(ms / 1000).isoformat(timespec="seconds")
 
 
+# Амплуа защитника лига пишет то в единственном числе, то во множественном;
+# из-за разнобоя такие игроки выпадали из состава на странице клуба.
+ROLE_KEYS = {"defensemen": "defenseman", "defenceman": "defenseman"}
+
+
+def role_key(value: str | None) -> str | None:
+    return ROLE_KEYS.get(value, value)
+
+
 def _int(value, default: int = 0) -> int:
     try:
         return int(value)
@@ -225,7 +234,7 @@ def collect(progress=print) -> dict:
                 "conference": conference_by_team.get(team.get("id"))
                               or _short_conference(team.get("conference")),
                 "role": p.get("role"),
-                "role_key": p.get("role_key"),
+                "role_key": role_key(p.get("role_key")),
                 "number": p.get("shirt_number"),
                 "age": p.get("age"),
                 "country": p.get("country"),

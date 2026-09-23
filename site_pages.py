@@ -78,29 +78,19 @@ def _logo_ids() -> list[str]:
 
 
 def _photo_names(payload: dict | None = None) -> list[str]:
-    """Свои картинки, которые нужно опубликовать рядом со страницей.
+    """Свои картинки, которые публикуются рядом со страницей.
 
-    Фотографии «Локомотива» и новостей клуба сюда не попадают: на них
-    стоят ссылки на сайт клуба. Остаются склеенные портреты игроков лиги
-    (faces-<id>.jpg) — их khl.ru отдаёт только по одной, и без склейки
-    страница делала бы сотни запросов.
+    Таких больше нет: фотографии игроков, снимки с матчей и картинки
+    новостей остались у клуба и у лиги, а в данных на них стоят ссылки.
+    Функция сохранена, чтобы старые снимки убирались из публикации
+    и чтобы было куда вернуть свои картинки, если они появятся.
     """
     if payload is None:
         try:
             payload = json.loads(SITE_DATA.read_text(encoding="utf-8"))
         except (OSError, ValueError):
             return []
-    people = [m for roster in (payload.get("club_rosters") or {}).values() for m in roster]
-    people += (payload.get("memorial") or {}).get("players", [])
-    people += [{"photo": n.get("image")} for n in payload.get("club_news") or []]
-    people += [{"photo": s.get("file")} for s in ((payload.get("faces") or {}).get("sprites") or {}).values()]
-    names = set()
-    for member in people:
-        for field in ("photo", "action"):
-            name = member.get(field)
-            if name and (PHOTOS / name).is_file():
-                names.add(name)
-    return sorted(names)
+    return []
 
 
 # ------------------------------------------------------------ поиск и ссылки

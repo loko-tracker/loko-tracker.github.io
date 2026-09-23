@@ -1,0 +1,5362 @@
+{
+"26": {
+"players": [
+{
+"name": "Радулов Александр",
+"number": 47,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15551/496/320.jpg",
+"url": "https://www.khl.ru/players/496/",
+"country": "Россия"
+},
+{
+"name": "Сергеев Андрей",
+"number": 99,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15551/15416/320.jpg",
+"url": "https://www.khl.ru/players/15416/",
+"country": "Россия"
+},
+{
+"name": "Шалунов Максим",
+"number": 78,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15551/15995/320.jpg",
+"url": "https://www.khl.ru/players/15995/",
+"country": "Россия"
+},
+{
+"name": "Романцев Данил",
+"number": 81,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15551/16892/320.jpg",
+"url": "https://www.khl.ru/players/16892/",
+"country": "Россия"
+},
+{
+"name": "Береглазов Алексей",
+"number": 5,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15551/17609/320.jpg",
+"url": "https://www.khl.ru/players/17609/",
+"country": "Россия"
+},
+{
+"name": "Рафиков Рушан",
+"number": 87,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15551/17954/320.jpg",
+"url": "https://www.khl.ru/players/17954/",
+"country": "Россия"
+},
+{
+"name": "Полунин Александр",
+"number": 90,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15551/22050/320.jpg",
+"url": "https://www.khl.ru/players/22050/",
+"country": "Россия"
+},
+{
+"name": "Черепанов Никита В.",
+"number": 73,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15551/17786/320.jpg",
+"url": "https://www.khl.ru/players/17786/",
+"country": "Россия"
+},
+{
+"name": "Елесин Александр",
+"number": 4,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15551/20955/320.jpg",
+"url": "https://www.khl.ru/players/20955/",
+"country": "Россия"
+},
+{
+"name": "Иванов Георгий",
+"number": 10,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15551/22681/320.jpg",
+"url": "https://www.khl.ru/players/22681/",
+"country": "Россия"
+},
+{
+"name": "Алексеев Денис В.",
+"number": 91,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15551/21886/320.jpg",
+"url": "https://www.khl.ru/players/21886/",
+"country": "Россия"
+},
+{
+"name": "Мельничук Алексей",
+"number": 38,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15551/23462/320.jpg",
+"url": "https://www.khl.ru/players/23462/",
+"country": "Россия"
+},
+{
+"name": "Исаев Даниил А.",
+"number": 92,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15551/25400/320.jpg",
+"url": "https://www.khl.ru/players/25400/",
+"country": "Россия"
+},
+{
+"name": "Мисюль Даниил",
+"number": 93,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15551/25404/320.jpg",
+"url": "https://www.khl.ru/players/25404/",
+"country": "Россия"
+},
+{
+"name": "Фальковский Степан",
+"number": 77,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15551/20724/320.jpg",
+"url": "https://www.khl.ru/players/20724/",
+"country": "Беларусь"
+},
+{
+"name": "Тесанов Даниил",
+"number": 89,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15551/29948/320.jpg",
+"url": "https://www.khl.ru/players/29948/",
+"country": "Россия"
+},
+{
+"name": "Фьоре Джованни",
+"number": 13,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15551/42766/320.jpg",
+"url": "https://www.khl.ru/players/42766/",
+"country": "Канада"
+},
+{
+"name": "Кирьянов Никита В.",
+"number": 7,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15551/32396/320.jpg",
+"url": "https://www.khl.ru/players/32396/",
+"country": "Россия"
+},
+{
+"name": "Сурин Егор",
+"number": 70,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15551/42070/320.jpg",
+"url": "https://www.khl.ru/players/42070/",
+"country": "Россия"
+},
+{
+"name": "Ульев Марк",
+"number": 49,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15551/40474/320.jpg",
+"url": "https://www.khl.ru/players/40474/",
+"country": "Россия"
+},
+{
+"name": "Николаев Илья Е.",
+"number": 9,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15551/29944/320.jpg",
+"url": "https://www.khl.ru/players/29944/",
+"country": "Россия"
+},
+{
+"name": "Боричев Дмитрий",
+"number": 1,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15551/44692/320.jpg",
+"url": "https://www.khl.ru/players/44692/",
+"country": "Россия"
+},
+{
+"name": "Кузин Артём В.",
+"number": 27,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15551/41370/320.jpg",
+"url": "https://www.khl.ru/players/41370/",
+"country": "Россия"
+},
+{
+"name": "Дудоров Вадим",
+"number": 21,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15551/42531/320.jpg",
+"url": "https://www.khl.ru/players/42531/",
+"country": "Россия"
+},
+{
+"name": "Котков Матвей",
+"number": 17,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15551/44320/320.jpg",
+"url": "https://www.khl.ru/players/44320/",
+"country": "Россия"
+},
+{
+"name": "Пустовой Андрей",
+"number": 41,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15551/44006/320.jpg",
+"url": "https://www.khl.ru/players/44006/",
+"country": "Россия"
+},
+{
+"name": "Емельянов Кирилл Д.",
+"number": 97,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15551/42781/320.jpg",
+"url": "https://www.khl.ru/players/42781/",
+"country": "Россия"
+}
+],
+"coach": {
+"name": "Квартальнов Дмитрий Вячеславович",
+"photo": "https://img.khl.ru/teamcoaches/15551/283/320.jpg"
+}
+},
+"30": {
+"players": [
+{
+"name": "Яковлев Егор К.",
+"number": 44,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15552/15661/320.jpg",
+"url": "https://www.khl.ru/players/15661/",
+"country": "Россия"
+},
+{
+"name": "Ткачёв Владимир Э.",
+"number": 19,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15552/19014/320.jpg",
+"url": "https://www.khl.ru/players/19014/",
+"country": "Россия"
+},
+{
+"name": "Михайлис Никита",
+"number": 11,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15552/19045/320.jpg",
+"url": "https://www.khl.ru/players/19045/",
+"country": "Казахстан"
+},
+{
+"name": "Вовченко Даниил",
+"number": 29,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15552/19514/320.jpg",
+"url": "https://www.khl.ru/players/19514/",
+"country": "Россия"
+},
+{
+"name": "Провольнев Владислав",
+"number": 55,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15552/19247/320.jpg",
+"url": "https://www.khl.ru/players/19247/",
+"country": "Россия"
+},
+{
+"name": "Орехов Валерий",
+"number": 9,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15552/24977/320.jpg",
+"url": "https://www.khl.ru/players/24977/",
+"country": "Казахстан"
+},
+{
+"name": "Хабаров Макар",
+"number": 56,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15552/24849/320.jpg",
+"url": "https://www.khl.ru/players/24849/",
+"country": "Россия"
+},
+{
+"name": "Старков Степан",
+"number": 18,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15552/27000/320.jpg",
+"url": "https://www.khl.ru/players/27000/",
+"country": "Россия"
+},
+{
+"name": "Коробкин Егор",
+"number": 94,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15552/23368/320.jpg",
+"url": "https://www.khl.ru/players/23368/",
+"country": "Россия"
+},
+{
+"name": "Толчинский Сергей",
+"number": 28,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15552/17991/320.jpg",
+"url": "https://www.khl.ru/players/17991/",
+"country": "Россия"
+},
+{
+"name": "Коротков Никита А.",
+"number": 96,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15552/21958/320.jpg",
+"url": "https://www.khl.ru/players/21958/",
+"country": "Россия"
+},
+{
+"name": "Минулин Артём",
+"number": 72,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15552/21002/320.jpg",
+"url": "https://www.khl.ru/players/21002/",
+"country": "Россия"
+},
+{
+"name": "Зеленов Егор",
+"number": 58,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15552/33317/320.jpg",
+"url": "https://www.khl.ru/players/33317/",
+"country": "Россия"
+},
+{
+"name": "Паливко Данила",
+"number": 87,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15552/34844/320.jpg",
+"url": "https://www.khl.ru/players/34844/",
+"country": "Беларусь"
+},
+{
+"name": "Силантьев Дмитрий",
+"number": 14,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15552/27708/320.jpg",
+"url": "https://www.khl.ru/players/27708/",
+"country": "Россия"
+},
+{
+"name": "Джонсон Люк",
+"number": 47,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15552/43129/320.jpg",
+"url": "https://www.khl.ru/players/43129/",
+"country": "США"
+},
+{
+"name": "Смолин Александр С.",
+"number": 20,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15552/39515/320.jpg",
+"url": "https://www.khl.ru/players/39515/",
+"country": "Россия"
+},
+{
+"name": "Кадышев Кирилл",
+"number": 92,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15552/34403/320.jpg",
+"url": "https://www.khl.ru/players/34403/",
+"country": "Россия"
+},
+{
+"name": "Сиряцкий Александр",
+"number": 74,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15552/42458/320.jpg",
+"url": "https://www.khl.ru/players/42458/",
+"country": "Россия"
+},
+{
+"name": "Козлов Андрей Е.",
+"number": 39,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15552/40899/320.jpg",
+"url": "https://www.khl.ru/players/40899/",
+"country": "Россия"
+},
+{
+"name": "Тодд Нэйтан",
+"number": 27,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15552/40292/320.jpg",
+"url": "https://www.khl.ru/players/40292/",
+"country": "Канада"
+},
+{
+"name": "Исхаков Руслан",
+"number": 22,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15552/27608/320.jpg",
+"url": "https://www.khl.ru/players/27608/",
+"country": "Россия"
+},
+{
+"name": "Заврагин Егор",
+"number": 30,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15552/40885/320.jpg",
+"url": "https://www.khl.ru/players/40885/",
+"country": "Россия"
+},
+{
+"name": "Фёдоров Михаил",
+"number": 84,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15552/42460/320.jpg",
+"url": "https://www.khl.ru/players/42460/",
+"country": "Россия"
+},
+{
+"name": "Павлинский Василий",
+"number": 85,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15552/44950/320.jpg",
+"url": "https://www.khl.ru/players/44950/",
+"country": "Россия"
+},
+{
+"name": "Нечаев Игорь",
+"number": 93,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15552/42434/320.jpg",
+"url": "https://www.khl.ru/players/42434/",
+"country": "Россия"
+}
+],
+"coach": {
+"name": "Разин Андрей Владимирович",
+"photo": "https://img.khl.ru/teamcoaches/15552/538/320.jpg"
+}
+},
+"40": {
+"players": [
+{
+"name": "Марченко Алексей",
+"number": 53,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15545/15910/320.jpg",
+"url": "https://www.khl.ru/players/15910/",
+"country": "Россия"
+},
+{
+"name": "Стась Андрей",
+"number": 23,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15545/15247/320.jpg",
+"url": "https://www.khl.ru/players/15247/",
+"country": "Россия"
+},
+{
+"name": "Яруллин Альберт",
+"number": 33,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15545/16365/320.jpg",
+"url": "https://www.khl.ru/players/16365/",
+"country": "Россия"
+},
+{
+"name": "Семёнов Кирилл Е.",
+"number": 94,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15545/17695/320.jpg",
+"url": "https://www.khl.ru/players/17695/",
+"country": "Россия"
+},
+{
+"name": "Билялов Тимур",
+"number": 82,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15545/19034/320.jpg",
+"url": "https://www.khl.ru/players/19034/",
+"country": "Россия"
+},
+{
+"name": "Бывальцев Алексей",
+"number": 22,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15545/17664/320.jpg",
+"url": "https://www.khl.ru/players/17664/",
+"country": "Россия"
+},
+{
+"name": "Лямкин Никита",
+"number": 96,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15545/20521/320.jpg",
+"url": "https://www.khl.ru/players/20521/",
+"country": "Россия"
+},
+{
+"name": "Соколов Егор",
+"number": 26,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15545/25387/320.jpg",
+"url": "https://www.khl.ru/players/25387/",
+"country": "Россия"
+},
+{
+"name": "Денисенко Григорий",
+"number": 14,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15545/25397/320.jpg",
+"url": "https://www.khl.ru/players/25397/",
+"country": "Россия"
+},
+{
+"name": "Дыняк Никита",
+"number": 86,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15545/22244/320.jpg",
+"url": "https://www.khl.ru/players/22244/",
+"country": "Россия"
+},
+{
+"name": "Галимов Артём",
+"number": 95,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15545/24897/320.jpg",
+"url": "https://www.khl.ru/players/24897/",
+"country": "Россия"
+},
+{
+"name": "Пустозёров Алексей",
+"number": 71,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15545/25837/320.jpg",
+"url": "https://www.khl.ru/players/25837/",
+"country": "Россия"
+},
+{
+"name": "Кателевский Дмитрий",
+"number": 92,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15545/35605/320.jpg",
+"url": "https://www.khl.ru/players/35605/",
+"country": "Россия"
+},
+{
+"name": "Быков Максим Дм.",
+"number": 37,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15545/32951/320.jpg",
+"url": "https://www.khl.ru/players/32951/",
+"country": "Россия"
+},
+{
+"name": "Евсеев Никита С.",
+"number": 44,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15545/39453/320.jpg",
+"url": "https://www.khl.ru/players/39453/",
+"country": "Россия"
+},
+{
+"name": "Хмелевский Александр",
+"number": 55,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15545/41952/320.jpg",
+"url": "https://www.khl.ru/players/41952/",
+"country": "США"
+},
+{
+"name": "Столпеченков Александр",
+"number": 40,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15545/40252/320.jpg",
+"url": "https://www.khl.ru/players/40252/",
+"country": "Россия"
+},
+{
+"name": "Терехов Семён",
+"number": 59,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15545/34580/320.jpg",
+"url": "https://www.khl.ru/players/34580/",
+"country": "Россия"
+},
+{
+"name": "Арефьев Максим",
+"number": 20,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15545/39096/320.jpg",
+"url": "https://www.khl.ru/players/39096/",
+"country": "Россия"
+},
+{
+"name": "Бардин Игорь",
+"number": 32,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15545/40815/320.jpg",
+"url": "https://www.khl.ru/players/40815/",
+"country": "Россия"
+},
+{
+"name": "Миллер Митчелл",
+"number": 58,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15545/43519/320.jpg",
+"url": "https://www.khl.ru/players/43519/",
+"country": "США"
+},
+{
+"name": "Терехов Степан",
+"number": 28,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15545/41680/320.jpg",
+"url": "https://www.khl.ru/players/41680/",
+"country": "Россия"
+},
+{
+"name": "Иванов Александр В.",
+"number": 75,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15545/44004/320.jpg",
+"url": "https://www.khl.ru/players/44004/",
+"country": "Россия"
+},
+{
+"name": "Кузнецов Иван В.",
+"number": 36,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15545/45205/320.jpg",
+"url": "https://www.khl.ru/players/45205/",
+"country": "Россия"
+},
+{
+"name": "Якупов Равиль",
+"number": 29,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15545/37998/320.jpg",
+"url": "https://www.khl.ru/players/37998/",
+"country": "Россия"
+},
+{
+"name": "Дульнев Андрей",
+"number": 89,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15545/42491/320.jpg",
+"url": "https://www.khl.ru/players/42491/",
+"country": "Россия"
+}
+],
+"coach": {
+"name": "Гатиятулин Анвар Рафаилович",
+"photo": "https://img.khl.ru/teamcoaches/15545/487/320.jpg"
+}
+},
+"46": {
+"players": [
+{
+"name": "Асетов Алихан",
+"number": 96,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15547/20852/320.jpg",
+"url": "https://www.khl.ru/players/20852/",
+"country": "Казахстан"
+},
+{
+"name": "Панюков Кирилл",
+"number": 22,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15547/21575/320.jpg",
+"url": "https://www.khl.ru/players/21575/",
+"country": "Казахстан"
+},
+{
+"name": "Шутов Андрей А.",
+"number": 43,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15547/24925/320.jpg",
+"url": "https://www.khl.ru/players/24925/",
+"country": "Казахстан"
+},
+{
+"name": "Бекетаев Адиль",
+"number": 87,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15547/23815/320.jpg",
+"url": "https://www.khl.ru/players/23815/",
+"country": "Казахстан"
+},
+{
+"name": "Савицкий Кирилл",
+"number": 84,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15547/17901/320.jpg",
+"url": "https://www.khl.ru/players/17901/",
+"country": "Казахстан"
+},
+{
+"name": "Данияр Самат",
+"number": 71,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15547/25020/320.jpg",
+"url": "https://www.khl.ru/players/25020/",
+"country": "Казахстан"
+},
+{
+"name": "Шестаков Аркадий",
+"number": 64,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15547/17906/320.jpg",
+"url": "https://www.khl.ru/players/17906/",
+"country": "Казахстан"
+},
+{
+"name": "Шайхмедденов Ансар",
+"number": 77,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15547/33578/320.jpg",
+"url": "https://www.khl.ru/players/33578/",
+"country": "Казахстан"
+},
+{
+"name": "Кайыржан Динмухамед",
+"number": 13,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15547/39276/320.jpg",
+"url": "https://www.khl.ru/players/39276/",
+"country": "Казахстан"
+},
+{
+"name": "Диханбек Мади",
+"number": 91,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15547/31961/320.jpg",
+"url": "https://www.khl.ru/players/31961/",
+"country": "Казахстан"
+},
+{
+"name": "Логвин Всеволод",
+"number": 12,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15547/42976/320.jpg",
+"url": "https://www.khl.ru/players/42976/",
+"country": "Казахстан"
+},
+{
+"name": "Омирбеков Алихан",
+"number": 17,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15547/31982/320.jpg",
+"url": "https://www.khl.ru/players/31982/",
+"country": "Казахстан"
+},
+{
+"name": "Маккошен Иэн",
+"number": 3,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15547/19787/320.jpg",
+"url": "https://www.khl.ru/players/19787/",
+"country": "США"
+},
+{
+"name": "Оразов Бейбарыс",
+"number": 19,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15547/42941/320.jpg",
+"url": "https://www.khl.ru/players/42941/",
+"country": "Казахстан"
+},
+{
+"name": "Симонов Семён",
+"number": 70,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15547/42944/320.jpg",
+"url": "https://www.khl.ru/players/42944/",
+"country": "Казахстан"
+},
+{
+"name": "Дэй Логан",
+"number": 26,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15547/44766/320.jpg",
+"url": "https://www.khl.ru/players/44766/",
+"country": "США"
+},
+{
+"name": "Ляпунов Кирилл",
+"number": 29,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15547/42301/320.jpg",
+"url": "https://www.khl.ru/players/42301/",
+"country": "Казахстан"
+},
+{
+"name": "Приски Чейз Эванс",
+"number": 4,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15547/45392/320.jpg",
+"url": "https://www.khl.ru/players/45392/",
+"country": "США"
+},
+{
+"name": "Томпсон Тайс",
+"number": 9,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15547/45620/320.jpg",
+"url": "https://www.khl.ru/players/45620/",
+"country": "США"
+},
+{
+"name": "Масси Джейк",
+"number": 2,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15547/45586/320.jpg",
+"url": "https://www.khl.ru/players/45586/",
+"country": "Канада"
+},
+{
+"name": "Морелли Мэйсон",
+"number": 11,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15547/45622/320.jpg",
+"url": "https://www.khl.ru/players/45622/",
+"country": "США"
+},
+{
+"name": "Бэйли Джастин",
+"number": 8,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15547/46550/320.jpg",
+"url": "https://www.khl.ru/players/46550/",
+"country": "США"
+},
+{
+"name": "Пилон Гарретт",
+"number": 14,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15547/46355/320.jpg",
+"url": "https://www.khl.ru/players/46355/",
+"country": "Канада"
+},
+{
+"name": "Шепард Хантер",
+"number": 32,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15547/46549/320.jpg",
+"url": "https://www.khl.ru/players/46549/",
+"country": "США"
+},
+{
+"name": "Алибек Абзал",
+"number": 10,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15547/42907/320.jpg",
+"url": "https://www.khl.ru/players/42907/",
+"country": "Казахстан"
+},
+{
+"name": "Бритиков Дамир",
+"number": 7,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15547/45417/320.jpg",
+"url": "https://www.khl.ru/players/45417/",
+"country": "Казахстан"
+},
+{
+"name": "Нурек Владислав",
+"number": 66,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15547/28140/320.jpg",
+"url": "https://www.khl.ru/players/28140/",
+"country": "Казахстан"
+},
+{
+"name": "Саркенов Асанали",
+"number": 28,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15547/42908/320.jpg",
+"url": "https://www.khl.ru/players/42908/",
+"country": "Казахстан"
+}
+],
+"coach": {
+"name": "Кравец Михаил Григорьевич",
+"photo": "https://img.khl.ru/teamcoaches/15547/163/320.jpg"
+}
+},
+"44": {
+"players": [
+{
+"name": "Зайцев Никита И.",
+"number": 22,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15557/16024/320.jpg",
+"url": "https://www.khl.ru/players/16024/",
+"country": "Россия"
+},
+{
+"name": "Плотников Сергей",
+"number": 16,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15557/15668/320.jpg",
+"url": "https://www.khl.ru/players/15668/",
+"country": "Россия"
+},
+{
+"name": "Маклюков Алексей",
+"number": 85,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15557/16631/320.jpg",
+"url": "https://www.khl.ru/players/16631/",
+"country": "Россия"
+},
+{
+"name": "Чебыкин Николай",
+"number": 97,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15557/22161/320.jpg",
+"url": "https://www.khl.ru/players/22161/",
+"country": "Россия"
+},
+{
+"name": "Сёмин Владислав",
+"number": 42,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15557/23020/320.jpg",
+"url": "https://www.khl.ru/players/23020/",
+"country": "Россия"
+},
+{
+"name": "Мироманов Даниил",
+"number": 62,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15557/22177/320.jpg",
+"url": "https://www.khl.ru/players/22177/",
+"country": "Россия"
+},
+{
+"name": "Педан Андрей",
+"number": 3,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15557/16668/320.jpg",
+"url": "https://www.khl.ru/players/16668/",
+"country": "Россия"
+},
+{
+"name": "Кныжов Николай",
+"number": 5,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15557/25747/320.jpg",
+"url": "https://www.khl.ru/players/25747/",
+"country": "Россия"
+},
+{
+"name": "Аймурзин Данил",
+"number": 53,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15557/35353/320.jpg",
+"url": "https://www.khl.ru/players/35353/",
+"country": "Россия"
+},
+{
+"name": "Глотов Василий",
+"number": 7,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15557/22700/320.jpg",
+"url": "https://www.khl.ru/players/22700/",
+"country": "Россия"
+},
+{
+"name": "Голдобин Николай",
+"number": 87,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15557/18547/320.jpg",
+"url": "https://www.khl.ru/players/18547/",
+"country": "Россия"
+},
+{
+"name": "Ларионов Игорь",
+"number": 69,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15557/35170/320.jpg",
+"url": "https://www.khl.ru/players/35170/",
+"country": "Россия"
+},
+{
+"name": "Сапего Сергей",
+"number": 9,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15557/39875/320.jpg",
+"url": "https://www.khl.ru/players/39875/",
+"country": "Беларусь"
+},
+{
+"name": "Плешков Артемий",
+"number": 73,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15557/34163/320.jpg",
+"url": "https://www.khl.ru/players/34163/",
+"country": "Россия"
+},
+{
+"name": "Иванов Сергей Вл.",
+"number": 1,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15557/39444/320.jpg",
+"url": "https://www.khl.ru/players/39444/",
+"country": "Россия"
+},
+{
+"name": "Савиков Егор",
+"number": 34,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15557/39249/320.jpg",
+"url": "https://www.khl.ru/players/39249/",
+"country": "Россия"
+},
+{
+"name": "Зыков Валентин",
+"number": 90,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15557/17992/320.jpg",
+"url": "https://www.khl.ru/players/17992/",
+"country": "Россия"
+},
+{
+"name": "Атанасов Василий",
+"number": 17,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15557/35838/320.jpg",
+"url": "https://www.khl.ru/players/35838/",
+"country": "Россия"
+},
+{
+"name": "Уилсон Скотт",
+"number": 20,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15557/41974/320.jpg",
+"url": "https://www.khl.ru/players/41974/",
+"country": "Канада"
+},
+{
+"name": "Гримальди Рокко",
+"number": 23,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15557/23579/320.jpg",
+"url": "https://www.khl.ru/players/23579/",
+"country": "США"
+},
+{
+"name": "Дишковский Никита",
+"number": 55,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15557/33884/320.jpg",
+"url": "https://www.khl.ru/players/33884/",
+"country": "Россия"
+}
+],
+"coach": {
+"name": "Ларионов Игорь Николаевич",
+"photo": "https://img.khl.ru/teamcoaches/15557/2235/320.jpg"
+}
+},
+"18": {
+"players": [
+{
+"name": "Вишневский Дмитрий",
+"number": 55,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15558/15299/320.jpg",
+"url": "https://www.khl.ru/players/15299/",
+"country": "Россия"
+},
+{
+"name": "Миронов Андрей А.",
+"number": 94,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15558/17624/320.jpg",
+"url": "https://www.khl.ru/players/17624/",
+"country": "Россия"
+},
+{
+"name": "Брынцев Александр",
+"number": 74,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15558/19062/320.jpg",
+"url": "https://www.khl.ru/players/19062/",
+"country": "Россия"
+},
+{
+"name": "Федотов Иван",
+"number": 28,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15558/20870/320.jpg",
+"url": "https://www.khl.ru/players/20870/",
+"country": "Россия"
+},
+{
+"name": "Загидулин Артём",
+"number": 50,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15558/19184/320.jpg",
+"url": "https://www.khl.ru/players/19184/",
+"country": "Россия"
+},
+{
+"name": "Порядин Павел",
+"number": 24,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15558/19258/320.jpg",
+"url": "https://www.khl.ru/players/19258/",
+"country": "Россия"
+},
+{
+"name": "Рубцов Герман",
+"number": 95,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15558/22494/320.jpg",
+"url": "https://www.khl.ru/players/22494/",
+"country": "Россия"
+},
+{
+"name": "Мальцев Михаил Г.",
+"number": 13,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15558/23461/320.jpg",
+"url": "https://www.khl.ru/players/23461/",
+"country": "Россия"
+},
+{
+"name": "Филин Егор",
+"number": 99,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15558/24118/320.jpg",
+"url": "https://www.khl.ru/players/24118/",
+"country": "Россия"
+},
+{
+"name": "Локхарт Лукас",
+"number": 20,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15558/27992/320.jpg",
+"url": "https://www.khl.ru/players/27992/",
+"country": "Канада"
+},
+{
+"name": "Мансуров Демид",
+"number": 65,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15558/26303/320.jpg",
+"url": "https://www.khl.ru/players/26303/",
+"country": "Россия"
+},
+{
+"name": "Беляев Александр Вл.",
+"number": 98,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15558/24862/320.jpg",
+"url": "https://www.khl.ru/players/24862/",
+"country": "Россия"
+},
+{
+"name": "Гутик Даниил",
+"number": 78,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15558/29928/320.jpg",
+"url": "https://www.khl.ru/players/29928/",
+"country": "Россия"
+},
+{
+"name": "Кин Джозеф",
+"number": 4,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15558/41928/320.jpg",
+"url": "https://www.khl.ru/players/41928/",
+"country": "США"
+},
+{
+"name": "Ярош Кристиан",
+"number": 48,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15558/20791/320.jpg",
+"url": "https://www.khl.ru/players/20791/",
+"country": "Словакия"
+},
+{
+"name": "Орлов Даниил Р.",
+"number": 62,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15558/39327/320.jpg",
+"url": "https://www.khl.ru/players/39327/",
+"country": "Россия"
+},
+{
+"name": "Соловьёв Дмитрий И.",
+"number": 41,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15558/35099/320.jpg",
+"url": "https://www.khl.ru/players/35099/",
+"country": "Россия"
+},
+{
+"name": "Князев Артемий",
+"number": 8,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15558/29100/320.jpg",
+"url": "https://www.khl.ru/players/29100/",
+"country": "Россия"
+},
+{
+"name": "Пивчулин Данил",
+"number": 16,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15558/40673/320.jpg",
+"url": "https://www.khl.ru/players/40673/",
+"country": "Россия"
+},
+{
+"name": "Рябов Иван Мих.",
+"number": 6,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15558/40920/320.jpg",
+"url": "https://www.khl.ru/players/40920/",
+"country": "Россия"
+},
+{
+"name": "Лукьянцев Сергей",
+"number": 76,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15558/40628/320.jpg",
+"url": "https://www.khl.ru/players/40628/",
+"country": "Россия"
+},
+{
+"name": "Райлли Уилл",
+"number": 44,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15558/24359/320.jpg",
+"url": "https://www.khl.ru/players/24359/",
+"country": "Канада"
+},
+{
+"name": "Котляров Илья",
+"number": 38,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15558/42675/320.jpg",
+"url": "https://www.khl.ru/players/42675/",
+"country": "Россия"
+},
+{
+"name": "Дронов Николай",
+"number": 49,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15558/43948/320.jpg",
+"url": "https://www.khl.ru/players/43948/",
+"country": "Россия"
+}
+],
+"coach": {
+"name": "Жамнов Алексей Юрьевич",
+"photo": "https://img.khl.ru/teamcoaches/15558/1445/320.jpg"
+}
+},
+"22": {
+"players": [
+{
+"name": "Ткачёв Владимир А.",
+"number": 55,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15559/15481/320.jpg",
+"url": "https://www.khl.ru/players/15481/",
+"country": "Россия"
+},
+{
+"name": "Дыбленко Ярослав",
+"number": 73,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15559/16968/320.jpg",
+"url": "https://www.khl.ru/players/16968/",
+"country": "Россия"
+},
+{
+"name": "Камалов Никита",
+"number": 21,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15559/20462/320.jpg",
+"url": "https://www.khl.ru/players/20462/",
+"country": "Россия"
+},
+{
+"name": "Костин Денис",
+"number": 72,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15559/19222/320.jpg",
+"url": "https://www.khl.ru/players/19222/",
+"country": "Россия"
+},
+{
+"name": "Красковский Павел",
+"number": 63,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15559/20310/320.jpg",
+"url": "https://www.khl.ru/players/20310/",
+"country": "Россия"
+},
+{
+"name": "Сизов Антон",
+"number": 36,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15559/19176/320.jpg",
+"url": "https://www.khl.ru/players/19176/",
+"country": "Россия"
+},
+{
+"name": "Воробьёв Михаил С.",
+"number": 42,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15559/22096/320.jpg",
+"url": "https://www.khl.ru/players/22096/",
+"country": "Россия"
+},
+{
+"name": "Гераськин Игорь",
+"number": 89,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15559/23184/320.jpg",
+"url": "https://www.khl.ru/players/23184/",
+"country": "Россия"
+},
+{
+"name": "Журавлёв Даниил",
+"number": 2,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15559/25699/320.jpg",
+"url": "https://www.khl.ru/players/25699/",
+"country": "Россия"
+},
+{
+"name": "Белевич Андрей",
+"number": 93,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15559/22930/320.jpg",
+"url": "https://www.khl.ru/players/22930/",
+"country": "Беларусь"
+},
+{
+"name": "Гончарук Сергей",
+"number": 27,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15559/25024/320.jpg",
+"url": "https://www.khl.ru/players/25024/",
+"country": "Россия"
+},
+{
+"name": "Шугаев Дмитрий",
+"number": 30,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15559/25147/320.jpg",
+"url": "https://www.khl.ru/players/25147/",
+"country": "Россия"
+},
+{
+"name": "Гараев Амир",
+"number": 68,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15559/28624/320.jpg",
+"url": "https://www.khl.ru/players/28624/",
+"country": "Россия"
+},
+{
+"name": "Виноградов Егор",
+"number": 92,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15559/40272/320.jpg",
+"url": "https://www.khl.ru/players/40272/",
+"country": "Россия"
+},
+{
+"name": "Конюшков Богдан",
+"number": 6,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15559/35740/320.jpg",
+"url": "https://www.khl.ru/players/35740/",
+"country": "Россия"
+},
+{
+"name": "Фирстов Владислав",
+"number": 10,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15559/29956/320.jpg",
+"url": "https://www.khl.ru/players/29956/",
+"country": "Россия"
+},
+{
+"name": "Сероух Даниил",
+"number": 97,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15559/25122/320.jpg",
+"url": "https://www.khl.ru/players/25122/",
+"country": "Россия"
+},
+{
+"name": "Бреус Дмитрий",
+"number": 44,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15559/41438/320.jpg",
+"url": "https://www.khl.ru/players/41438/",
+"country": "Казахстан"
+},
+{
+"name": "Нарделла Роберт",
+"number": 77,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15559/44935/320.jpg",
+"url": "https://www.khl.ru/players/44935/",
+"country": "США"
+},
+{
+"name": "Веккьоне Майкл",
+"number": 91,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15559/45400/320.jpg",
+"url": "https://www.khl.ru/players/45400/",
+"country": "США"
+},
+{
+"name": "Фёдоров Виктор С.",
+"number": 41,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15559/44358/320.jpg",
+"url": "https://www.khl.ru/players/44358/",
+"country": "Россия"
+},
+{
+"name": "Брики Рональд",
+"number": 8,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15559/46436/320.jpg",
+"url": "https://www.khl.ru/players/46436/",
+"country": "США"
+},
+{
+"name": "Морилов Игорь",
+"number": 1,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15559/44300/320.jpg",
+"url": "https://www.khl.ru/players/44300/",
+"country": "Россия"
+},
+{
+"name": "Мельников Ян",
+"number": 75,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15559/43837/320.jpg",
+"url": "https://www.khl.ru/players/43837/",
+"country": "Россия"
+},
+{
+"name": "Чесноков Иван",
+"number": 65,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15559/41967/320.jpg",
+"url": "https://www.khl.ru/players/41967/",
+"country": "Россия"
+}
+],
+"coach": {
+"name": "Исаков Алексей Геннадьевич",
+"photo": "https://img.khl.ru/teamcoaches/15559/386/320.jpg"
+}
+},
+"16": {
+"players": [
+{
+"name": "Нестеров Никита Д.",
+"number": 89,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15562/15993/320.jpg",
+"url": "https://www.khl.ru/players/15993/",
+"country": "Россия"
+},
+{
+"name": "Самонов Александр",
+"number": 31,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15562/19676/320.jpg",
+"url": "https://www.khl.ru/players/19676/",
+"country": "Россия"
+},
+{
+"name": "Гурьянов Денис",
+"number": 34,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15562/21080/320.jpg",
+"url": "https://www.khl.ru/players/21080/",
+"country": "Россия"
+},
+{
+"name": "Мамин Максим В.",
+"number": 98,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15562/18366/320.jpg",
+"url": "https://www.khl.ru/players/18366/",
+"country": "Россия"
+},
+{
+"name": "Хайруллин Марат",
+"number": 61,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15562/21246/320.jpg",
+"url": "https://www.khl.ru/players/21246/",
+"country": "Россия"
+},
+{
+"name": "Зернов Денис",
+"number": 16,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15562/23355/320.jpg",
+"url": "https://www.khl.ru/players/23355/",
+"country": "Россия"
+},
+{
+"name": "Карнаухов Павел",
+"number": 15,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15562/21106/320.jpg",
+"url": "https://www.khl.ru/players/21106/",
+"country": "Россия"
+},
+{
+"name": "Костин Клим",
+"number": 10,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15562/24576/320.jpg",
+"url": "https://www.khl.ru/players/24576/",
+"country": "Россия"
+},
+{
+"name": "Охотюк Никита",
+"number": 55,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15562/25388/320.jpg",
+"url": "https://www.khl.ru/players/25388/",
+"country": "Россия"
+},
+{
+"name": "Коваленко Николай",
+"number": 51,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15562/24381/320.jpg",
+"url": "https://www.khl.ru/players/24381/",
+"country": "Россия"
+},
+{
+"name": "Дроздов Иван",
+"number": 19,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15562/30752/320.jpg",
+"url": "https://www.khl.ru/players/30752/",
+"country": "Беларусь"
+},
+{
+"name": "Соркин Максим",
+"number": 27,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15562/26195/320.jpg",
+"url": "https://www.khl.ru/players/26195/",
+"country": "Россия"
+},
+{
+"name": "Саморуков Дмитрий",
+"number": 5,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15562/24005/320.jpg",
+"url": "https://www.khl.ru/players/24005/",
+"country": "Россия"
+},
+{
+"name": "Гамзин Дмитрий",
+"number": 33,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15562/35221/320.jpg",
+"url": "https://www.khl.ru/players/35221/",
+"country": "Россия"
+},
+{
+"name": "Полтапов Прохор",
+"number": 13,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15562/35061/320.jpg",
+"url": "https://www.khl.ru/players/35061/",
+"country": "Россия"
+},
+{
+"name": "Бучельников Дмитрий",
+"number": 72,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15562/39102/320.jpg",
+"url": "https://www.khl.ru/players/39102/",
+"country": "Россия"
+},
+{
+"name": "Рой Джереми",
+"number": 79,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15562/22154/320.jpg",
+"url": "https://www.khl.ru/players/22154/",
+"country": "Канада"
+},
+{
+"name": "Хэмилтон Роберт",
+"number": 22,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15562/42322/320.jpg",
+"url": "https://www.khl.ru/players/42322/",
+"country": "Канада"
+},
+{
+"name": "Барак Дерек",
+"number": 26,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15562/42735/320.jpg",
+"url": "https://www.khl.ru/players/42735/",
+"country": "США"
+},
+{
+"name": "Майстренко Олег",
+"number": 69,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15562/41317/320.jpg",
+"url": "https://www.khl.ru/players/41317/",
+"country": "Россия"
+},
+{
+"name": "Патрихаев Иван",
+"number": 28,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15562/41594/320.jpg",
+"url": "https://www.khl.ru/players/41594/",
+"country": "Россия"
+},
+{
+"name": "Коттон Алекс",
+"number": 65,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15562/45002/320.jpg",
+"url": "https://www.khl.ru/players/45002/",
+"country": "Канада"
+},
+{
+"name": "Замула Егор",
+"number": 9,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15562/26806/320.jpg",
+"url": "https://www.khl.ru/players/26806/",
+"country": "Россия"
+},
+{
+"name": "Привалов Назар",
+"number": 95,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15562/45169/320.jpg",
+"url": "https://www.khl.ru/players/45169/",
+"country": "Россия"
+},
+{
+"name": "Хабаров Ерофей",
+"number": 30,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15562/45176/320.jpg",
+"url": "https://www.khl.ru/players/45176/",
+"country": "Россия"
+},
+{
+"name": "Юкин Иван",
+"number": 4,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15562/43292/320.jpg",
+"url": "https://www.khl.ru/players/43292/",
+"country": "Россия"
+}
+],
+"coach": {
+"name": "Никитин Игорь Валерьевич",
+"photo": "https://img.khl.ru/teamcoaches/15562/252/320.jpg"
+}
+},
+"36": {
+"players": [
+{
+"name": "Жафяров Дамир",
+"number": 88,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15553/17591/320.jpg",
+"url": "https://www.khl.ru/players/17591/",
+"country": "Россия"
+},
+{
+"name": "Хлыстов Никита",
+"number": 7,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15553/17881/320.jpg",
+"url": "https://www.khl.ru/players/17881/",
+"country": "Россия"
+},
+{
+"name": "Митякин Евгений",
+"number": 52,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15553/21309/320.jpg",
+"url": "https://www.khl.ru/players/21309/",
+"country": "Россия"
+},
+{
+"name": "Заседа Матвей",
+"number": 8,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15553/23715/320.jpg",
+"url": "https://www.khl.ru/players/23715/",
+"country": "Россия"
+},
+{
+"name": "Бикмуллин Рафаэль",
+"number": 10,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15553/22424/320.jpg",
+"url": "https://www.khl.ru/players/22424/",
+"country": "Россия"
+},
+{
+"name": "Петунин Александр",
+"number": 23,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15553/22158/320.jpg",
+"url": "https://www.khl.ru/players/22158/",
+"country": "Россия"
+},
+{
+"name": "Николишин Иван",
+"number": 11,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15553/19216/320.jpg",
+"url": "https://www.khl.ru/players/19216/",
+"country": "Россия"
+},
+{
+"name": "Белозёров Андрей Ал.",
+"number": 71,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15553/20700/320.jpg",
+"url": "https://www.khl.ru/players/20700/",
+"country": "Россия"
+},
+{
+"name": "Ерёменко Владислав",
+"number": 81,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15553/24754/320.jpg",
+"url": "https://www.khl.ru/players/24754/",
+"country": "Беларусь"
+},
+{
+"name": "Пастухов Илья",
+"number": 55,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15553/31247/320.jpg",
+"url": "https://www.khl.ru/players/31247/",
+"country": "Россия"
+},
+{
+"name": "Озолин Ярослав",
+"number": 31,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15553/27072/320.jpg",
+"url": "https://www.khl.ru/players/27072/",
+"country": "Россия"
+},
+{
+"name": "Ботов Матвей",
+"number": 37,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15553/30554/320.jpg",
+"url": "https://www.khl.ru/players/30554/",
+"country": "Россия"
+},
+{
+"name": "Ручкин Семён",
+"number": 57,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15553/21392/320.jpg",
+"url": "https://www.khl.ru/players/21392/",
+"country": "Россия"
+},
+{
+"name": "Сериков Артём",
+"number": 24,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15553/27216/320.jpg",
+"url": "https://www.khl.ru/players/27216/",
+"country": "Россия"
+},
+{
+"name": "Федотов Максим С.",
+"number": 65,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15553/35032/320.jpg",
+"url": "https://www.khl.ru/players/35032/",
+"country": "Россия"
+},
+{
+"name": "Тянулин Артур",
+"number": 97,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15553/21928/320.jpg",
+"url": "https://www.khl.ru/players/21928/",
+"country": "Россия"
+},
+{
+"name": "Хайруллин Тимур",
+"number": 29,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15553/27904/320.jpg",
+"url": "https://www.khl.ru/players/27904/",
+"country": "Россия"
+},
+{
+"name": "Точилкин Герман",
+"number": 33,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15553/39868/320.jpg",
+"url": "https://www.khl.ru/players/39868/",
+"country": "Россия"
+},
+{
+"name": "Долганов Филипп",
+"number": 53,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15553/23431/320.jpg",
+"url": "https://www.khl.ru/players/23431/",
+"country": "Россия"
+},
+{
+"name": "Хоружев Никита",
+"number": 61,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15553/40421/320.jpg",
+"url": "https://www.khl.ru/players/40421/",
+"country": "Россия"
+},
+{
+"name": "Кол Тимур",
+"number": 22,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15553/41615/320.jpg",
+"url": "https://www.khl.ru/players/41615/",
+"country": "Россия"
+},
+{
+"name": "Селезнёв Григорий",
+"number": 21,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15553/35141/320.jpg",
+"url": "https://www.khl.ru/players/35141/",
+"country": "Россия"
+},
+{
+"name": "Надворный Матвей",
+"number": 17,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15553/35038/320.jpg",
+"url": "https://www.khl.ru/players/35038/",
+"country": "Россия"
+},
+{
+"name": "Соколов Севастьян",
+"number": 87,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15553/42742/320.jpg",
+"url": "https://www.khl.ru/players/42742/",
+"country": "Россия"
+},
+{
+"name": "Артемьев Сергей",
+"number": 84,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15553/40847/320.jpg",
+"url": "https://www.khl.ru/players/40847/",
+"country": "Россия"
+},
+{
+"name": "Ловелл Тимоти",
+"number": 27,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15553/46433/320.jpg",
+"url": "https://www.khl.ru/players/46433/",
+"country": "США"
+},
+{
+"name": "Андрейченко Виктор",
+"number": 44,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15553/39787/320.jpg",
+"url": "https://www.khl.ru/players/39787/",
+"country": "Россия"
+}
+],
+"coach": {
+"name": "Гришин Игорь Владимирович",
+"photo": "https://img.khl.ru/teamcoaches/15553/669/320.jpg"
+}
+},
+"32": {
+"players": [
+{
+"name": "Панин Григорий",
+"number": 11,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15554/5524/320.jpg",
+"url": "https://www.khl.ru/players/5524/",
+"country": "Россия"
+},
+{
+"name": "Шипачёв Вадим",
+"number": 87,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15554/14466/320.jpg",
+"url": "https://www.khl.ru/players/14466/",
+"country": "Россия"
+},
+{
+"name": "Кулик Евгений",
+"number": 43,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15554/17345/320.jpg",
+"url": "https://www.khl.ru/players/17345/",
+"country": "Россия"
+},
+{
+"name": "Богданов Никита В.",
+"number": 33,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15554/14498/320.jpg",
+"url": "https://www.khl.ru/players/14498/",
+"country": "Россия"
+},
+{
+"name": "Орлович-Грудков Денис",
+"number": 78,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15554/19457/320.jpg",
+"url": "https://www.khl.ru/players/19457/",
+"country": "Россия"
+},
+{
+"name": "Ефремов Владислав",
+"number": 65,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15554/19532/320.jpg",
+"url": "https://www.khl.ru/players/19532/",
+"country": "Россия"
+},
+{
+"name": "Алалыкин Данил",
+"number": 61,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15554/34493/320.jpg",
+"url": "https://www.khl.ru/players/34493/",
+"country": "Россия"
+},
+{
+"name": "Сучков Егор",
+"number": 72,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15554/31088/320.jpg",
+"url": "https://www.khl.ru/players/31088/",
+"country": "Россия"
+},
+{
+"name": "Варлов Сергей",
+"number": 32,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15554/26210/320.jpg",
+"url": "https://www.khl.ru/players/26210/",
+"country": "Россия"
+},
+{
+"name": "Алексеев Александр",
+"number": 4,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15554/24511/320.jpg",
+"url": "https://www.khl.ru/players/24511/",
+"country": "Россия"
+},
+{
+"name": "Зоркин Никита",
+"number": 52,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15554/26738/320.jpg",
+"url": "https://www.khl.ru/players/26738/",
+"country": "Россия"
+},
+{
+"name": "Вязовой Семён",
+"number": 35,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15554/35352/320.jpg",
+"url": "https://www.khl.ru/players/35352/",
+"country": "Россия"
+},
+{
+"name": "Комаров Александр С.",
+"number": 8,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15554/37741/320.jpg",
+"url": "https://www.khl.ru/players/37741/",
+"country": "Россия"
+},
+{
+"name": "Родуолд Джек",
+"number": 21,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15554/41865/320.jpg",
+"url": "https://www.khl.ru/players/41865/",
+"country": "Канада"
+},
+{
+"name": "Цулыгин Ярослав",
+"number": 73,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15554/40226/320.jpg",
+"url": "https://www.khl.ru/players/40226/",
+"country": "Россия"
+},
+{
+"name": "Броссо Девин",
+"number": 57,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15554/42125/320.jpg",
+"url": "https://www.khl.ru/players/42125/",
+"country": "Канада"
+},
+{
+"name": "Мозговой Ярослав",
+"number": 50,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15554/40795/320.jpg",
+"url": "https://www.khl.ru/players/40795/",
+"country": "Россия"
+},
+{
+"name": "Кузнецов Максим Н.",
+"number": 71,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15554/35853/320.jpg",
+"url": "https://www.khl.ru/players/35853/",
+"country": "Россия"
+},
+{
+"name": "Газимов Ильдан",
+"number": 96,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15554/31091/320.jpg",
+"url": "https://www.khl.ru/players/31091/",
+"country": "Россия"
+},
+{
+"name": "Ремпал Шелдон",
+"number": 56,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15554/44032/320.jpg",
+"url": "https://www.khl.ru/players/44032/",
+"country": "Канада"
+},
+{
+"name": "Стюарт Дин",
+"number": 18,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15554/43791/320.jpg",
+"url": "https://www.khl.ru/players/43791/",
+"country": "Канада"
+},
+{
+"name": "Набиев Артём",
+"number": 79,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15554/41187/320.jpg",
+"url": "https://www.khl.ru/players/41187/",
+"country": "Россия"
+},
+{
+"name": "Загребин Максим",
+"number": 37,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15554/42569/320.jpg",
+"url": "https://www.khl.ru/players/42569/",
+"country": "Россия"
+},
+{
+"name": "Жаровский Александр",
+"number": 97,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15554/43419/320.jpg",
+"url": "https://www.khl.ru/players/43419/",
+"country": "Россия"
+},
+{
+"name": "Щербаков Никита",
+"number": 89,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15554/43628/320.jpg",
+"url": "https://www.khl.ru/players/43628/",
+"country": "Россия"
+},
+{
+"name": "Маджио Мэттью",
+"number": 81,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15554/46650/320.jpg",
+"url": "https://www.khl.ru/players/46650/",
+"country": "Канада"
+}
+],
+"coach": {
+"name": "Козлов Виктор Николаевич",
+"photo": "https://img.khl.ru/teamcoaches/15554/1204/320.jpg"
+}
+},
+"8": {
+"players": [
+{
+"name": "Ожиганов Игорь",
+"number": 92,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15549/16010/320.jpg",
+"url": "https://www.khl.ru/players/16010/",
+"country": "Россия"
+},
+{
+"name": "Подъяпольский Владислав",
+"number": 59,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15549/20532/320.jpg",
+"url": "https://www.khl.ru/players/20532/",
+"country": "Россия"
+},
+{
+"name": "Блажиевский Артём",
+"number": 88,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15549/17760/320.jpg",
+"url": "https://www.khl.ru/players/17760/",
+"country": "Россия"
+},
+{
+"name": "Швец-Роговой Артём",
+"number": 57,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15549/19299/320.jpg",
+"url": "https://www.khl.ru/players/19299/",
+"country": "Россия"
+},
+{
+"name": "Сергеев Артём М.",
+"number": 93,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15549/16675/320.jpg",
+"url": "https://www.khl.ru/players/16675/",
+"country": "Россия"
+},
+{
+"name": "Шафигуллин Булат",
+"number": 29,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15549/24782/320.jpg",
+"url": "https://www.khl.ru/players/24782/",
+"country": "Россия"
+},
+{
+"name": "Шэн Павел",
+"number": 16,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15549/24881/320.jpg",
+"url": "https://www.khl.ru/players/24881/",
+"country": "Россия"
+},
+{
+"name": "Зборовский Сергей",
+"number": 5,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15549/20989/320.jpg",
+"url": "https://www.khl.ru/players/20989/",
+"country": "Россия"
+},
+{
+"name": "Мартынов Игорь",
+"number": 70,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15549/24756/320.jpg",
+"url": "https://www.khl.ru/players/24756/",
+"country": "Беларусь"
+},
+{
+"name": "Пыленков Даниил",
+"number": 45,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15549/26646/320.jpg",
+"url": "https://www.khl.ru/players/26646/",
+"country": "Россия"
+},
+{
+"name": "Никонов Андрей",
+"number": 79,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15549/32408/320.jpg",
+"url": "https://www.khl.ru/players/32408/",
+"country": "Россия"
+},
+{
+"name": "Моторыгин Максим",
+"number": 99,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15549/32630/320.jpg",
+"url": "https://www.khl.ru/players/32630/",
+"country": "Россия"
+},
+{
+"name": "Коростелёв Никита",
+"number": 35,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15549/22149/320.jpg",
+"url": "https://www.khl.ru/players/22149/",
+"country": "Россия"
+},
+{
+"name": "Зуган Дмитрий",
+"number": 77,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15549/33998/320.jpg",
+"url": "https://www.khl.ru/players/33998/",
+"country": "Россия"
+},
+{
+"name": "Новиков Никита В.",
+"number": 94,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15549/35037/320.jpg",
+"url": "https://www.khl.ru/players/35037/",
+"country": "Россия"
+},
+{
+"name": "Уил Джордан",
+"number": 91,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15549/23540/320.jpg",
+"url": "https://www.khl.ru/players/23540/",
+"country": "Канада"
+},
+{
+"name": "Меркли Ник",
+"number": 10,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15549/41966/320.jpg",
+"url": "https://www.khl.ru/players/41966/",
+"country": "Канада"
+},
+{
+"name": "Летунов Максим",
+"number": 7,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15549/20770/320.jpg",
+"url": "https://www.khl.ru/players/20770/",
+"country": "Россия"
+},
+{
+"name": "Паталаха Марио",
+"number": 75,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15549/40835/320.jpg",
+"url": "https://www.khl.ru/players/40835/",
+"country": "Россия"
+},
+{
+"name": "Шараканов Магомед",
+"number": 96,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15549/39223/320.jpg",
+"url": "https://www.khl.ru/players/39223/",
+"country": "Россия"
+},
+{
+"name": "Сикьюра Дилан",
+"number": 90,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15549/43883/320.jpg",
+"url": "https://www.khl.ru/players/43883/",
+"country": "Канада"
+},
+{
+"name": "Профака Лука",
+"number": 22,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15549/43943/320.jpg",
+"url": "https://www.khl.ru/players/43943/",
+"country": "Канада"
+},
+{
+"name": "Бондарь Артём",
+"number": 47,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15549/41593/320.jpg",
+"url": "https://www.khl.ru/players/41593/",
+"country": "Россия"
+},
+{
+"name": "Селиванов Владимир",
+"number": 30,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15549/44435/320.jpg",
+"url": "https://www.khl.ru/players/44435/",
+"country": "Россия"
+},
+{
+"name": "Меликов Михаил Г.",
+"number": 27,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15549/44033/320.jpg",
+"url": "https://www.khl.ru/players/44033/",
+"country": "Россия"
+}
+],
+"coach": {
+"name": "Тамбиев Леонид Григорьевич",
+"photo": "https://img.khl.ru/teamcoaches/15549/296/320.jpg"
+}
+},
+"38": {
+"players": [
+{
+"name": "Калинин Сергей",
+"number": 40,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15548/16019/320.jpg",
+"url": "https://www.khl.ru/players/16019/",
+"country": "Россия"
+},
+{
+"name": "Демченко Василий",
+"number": 94,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15548/16184/320.jpg",
+"url": "https://www.khl.ru/players/16184/",
+"country": "Россия"
+},
+{
+"name": "Галиев Станислав",
+"number": 97,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15548/16307/320.jpg",
+"url": "https://www.khl.ru/players/16307/",
+"country": "Россия"
+},
+{
+"name": "Алистров Владимир",
+"number": 72,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15548/34802/320.jpg",
+"url": "https://www.khl.ru/players/34802/",
+"country": "Беларусь"
+},
+{
+"name": "Усов Илья",
+"number": 80,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15548/35223/320.jpg",
+"url": "https://www.khl.ru/players/35223/",
+"country": "Беларусь"
+},
+{
+"name": "Кузнецов Сергей С.",
+"number": 14,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15548/34811/320.jpg",
+"url": "https://www.khl.ru/players/34811/",
+"country": "Беларусь"
+},
+{
+"name": "Пышкайло Никита",
+"number": 91,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15548/34796/320.jpg",
+"url": "https://www.khl.ru/players/34796/",
+"country": "Беларусь"
+},
+{
+"name": "Сотишвили Даниил",
+"number": 26,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15548/41276/320.jpg",
+"url": "https://www.khl.ru/players/41276/",
+"country": "Беларусь"
+},
+{
+"name": "Ковгореня Тимофей",
+"number": 88,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15548/41927/320.jpg",
+"url": "https://www.khl.ru/players/41927/",
+"country": "Беларусь"
+},
+{
+"name": "Фукале Зак",
+"number": 60,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15548/42970/320.jpg",
+"url": "https://www.khl.ru/players/42970/",
+"country": "Канада"
+},
+{
+"name": "Энэс Сэм",
+"number": 7,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15548/43033/320.jpg",
+"url": "https://www.khl.ru/players/43033/",
+"country": "США"
+},
+{
+"name": "Липский Даниил А.",
+"number": 9,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15548/41508/320.jpg",
+"url": "https://www.khl.ru/players/41508/",
+"country": "Беларусь"
+},
+{
+"name": "Брук Джошуа",
+"number": 27,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15548/43855/320.jpg",
+"url": "https://www.khl.ru/players/43855/",
+"country": "Канада"
+},
+{
+"name": "Лайл Брэйди",
+"number": 33,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15548/43854/320.jpg",
+"url": "https://www.khl.ru/players/43854/",
+"country": "Канада"
+},
+{
+"name": "Уэлле Ксавье",
+"number": 61,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15548/19692/320.jpg",
+"url": "https://www.khl.ru/players/19692/",
+"country": "Канада"
+},
+{
+"name": "Тирни Кристофер",
+"number": 71,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15548/44593/320.jpg",
+"url": "https://www.khl.ru/players/44593/",
+"country": "Канада"
+},
+{
+"name": "Прохоров Евгений Д.",
+"number": 31,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15548/41933/320.jpg",
+"url": "https://www.khl.ru/players/41933/",
+"country": "Беларусь"
+},
+{
+"name": "Гарднер Ретт",
+"number": 22,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15548/45290/320.jpg",
+"url": "https://www.khl.ru/players/45290/",
+"country": "Канада"
+},
+{
+"name": "Бишофф Джейк",
+"number": 28,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15548/45490/320.jpg",
+"url": "https://www.khl.ru/players/45490/",
+"country": "США"
+},
+{
+"name": "Мальцев Максим В.",
+"number": 76,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15548/39898/320.jpg",
+"url": "https://www.khl.ru/players/39898/",
+"country": "Россия"
+},
+{
+"name": "Смит Тай",
+"number": 24,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15548/45394/320.jpg",
+"url": "https://www.khl.ru/players/45394/",
+"country": "Канада"
+},
+{
+"name": "Белкин Богдан",
+"number": 68,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15548/42511/320.jpg",
+"url": "https://www.khl.ru/players/42511/",
+"country": "Беларусь"
+},
+{
+"name": "Воронов Павел",
+"number": 38,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15548/34766/320.jpg",
+"url": "https://www.khl.ru/players/34766/",
+"country": "Беларусь"
+},
+{
+"name": "Кузьмин Дмитрий С.",
+"number": 93,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15548/37679/320.jpg",
+"url": "https://www.khl.ru/players/37679/",
+"country": "Беларусь"
+},
+{
+"name": "Обе-Кюбель Николя",
+"number": 96,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15548/46627/320.jpg",
+"url": "https://www.khl.ru/players/46627/",
+"country": "Канада"
+},
+{
+"name": "Лозовский Кирилл",
+"number": 62,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15548/43664/320.jpg",
+"url": "https://www.khl.ru/players/43664/",
+"country": "Беларусь"
+},
+{
+"name": "Чухраев Арсений",
+"number": 37,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15548/43488/320.jpg",
+"url": "https://www.khl.ru/players/43488/",
+"country": "Беларусь"
+}
+],
+"coach": {
+"name": "Брылин Сергей Владимирович",
+"photo": "https://img.khl.ru/teamcoaches/15548/2857/320.jpg"
+}
+},
+"10": {
+"players": [
+{
+"name": "Якупов Наиль",
+"number": 65,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15542/16391/320.jpg",
+"url": "https://www.khl.ru/players/16391/",
+"country": "Россия"
+},
+{
+"name": "Окулов Константин",
+"number": 17,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15542/18770/320.jpg",
+"url": "https://www.khl.ru/players/18770/",
+"country": "Россия"
+},
+{
+"name": "Адамчук Кирилл",
+"number": 77,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15542/18961/320.jpg",
+"url": "https://www.khl.ru/players/18961/",
+"country": "Россия"
+},
+{
+"name": "Серебряков Никита",
+"number": 54,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15542/17854/320.jpg",
+"url": "https://www.khl.ru/players/17854/",
+"country": "Россия"
+},
+{
+"name": "Ильенко Артём",
+"number": 34,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15542/20949/320.jpg",
+"url": "https://www.khl.ru/players/20949/",
+"country": "Россия"
+},
+{
+"name": "Кожевников Кирилл",
+"number": 86,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15542/24261/320.jpg",
+"url": "https://www.khl.ru/players/24261/",
+"country": "Россия"
+},
+{
+"name": "Ибрагимов Марсель",
+"number": 28,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15542/22135/320.jpg",
+"url": "https://www.khl.ru/players/22135/",
+"country": "Россия"
+},
+{
+"name": "Чистяков Семён",
+"number": 66,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15542/30162/320.jpg",
+"url": "https://www.khl.ru/players/30162/",
+"country": "Россия"
+},
+{
+"name": "Стариков Лев",
+"number": 95,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15542/25729/320.jpg",
+"url": "https://www.khl.ru/players/25729/",
+"country": "Россия"
+},
+{
+"name": "Афанасьев Егор Ю.",
+"number": 11,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15542/31046/320.jpg",
+"url": "https://www.khl.ru/players/31046/",
+"country": "Россия"
+},
+{
+"name": "Чайка Даниил",
+"number": 5,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15542/34643/320.jpg",
+"url": "https://www.khl.ru/players/34643/",
+"country": "Россия"
+},
+{
+"name": "Рашевский Дмитрий",
+"number": 96,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15542/27840/320.jpg",
+"url": "https://www.khl.ru/players/27840/",
+"country": "Россия"
+},
+{
+"name": "Пономарёв Василий",
+"number": 92,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15542/32294/320.jpg",
+"url": "https://www.khl.ru/players/32294/",
+"country": "Россия"
+},
+{
+"name": "Гуляев Михаил",
+"number": 84,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15542/40811/320.jpg",
+"url": "https://www.khl.ru/players/40811/",
+"country": "Россия"
+},
+{
+"name": "Долженков Кирилл",
+"number": 26,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15542/39294/320.jpg",
+"url": "https://www.khl.ru/players/39294/",
+"country": "Россия"
+},
+{
+"name": "Казачёк Антон",
+"number": 76,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15542/38378/320.jpg",
+"url": "https://www.khl.ru/players/38378/",
+"country": "Россия"
+},
+{
+"name": "Ливо Джошуа",
+"number": 90,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15542/43403/320.jpg",
+"url": "https://www.khl.ru/players/43403/",
+"country": "Канада"
+},
+{
+"name": "Малов Вячеслав",
+"number": 93,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15542/39330/320.jpg",
+"url": "https://www.khl.ru/players/39330/",
+"country": "Россия"
+},
+{
+"name": "Просветов Иван",
+"number": 1,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15542/24950/320.jpg",
+"url": "https://www.khl.ru/players/24950/",
+"country": "Россия"
+},
+{
+"name": "Потуральски Эндрю",
+"number": 22,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15542/45426/320.jpg",
+"url": "https://www.khl.ru/players/45426/",
+"country": "США"
+},
+{
+"name": "Чеккони Джозеф",
+"number": 55,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15542/45427/320.jpg",
+"url": "https://www.khl.ru/players/45427/",
+"country": "США"
+},
+{
+"name": "Бурлака Глеб",
+"number": 87,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15542/44722/320.jpg",
+"url": "https://www.khl.ru/players/44722/",
+"country": "Россия"
+},
+{
+"name": "Казанцев Родион",
+"number": 73,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15542/43175/320.jpg",
+"url": "https://www.khl.ru/players/43175/",
+"country": "Россия"
+}
+],
+"coach": {
+"name": "Буше Ги",
+"photo": "https://img.khl.ru/teamcoaches/15542/2695/320.jpg"
+}
+},
+"56": {
+"players": [
+{
+"name": "Слепышев Антон",
+"number": 72,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15543/17504/320.jpg",
+"url": "https://www.khl.ru/players/17504/",
+"country": "Россия"
+},
+{
+"name": "Трямкин Никита",
+"number": 88,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15543/17594/320.jpg",
+"url": "https://www.khl.ru/players/17594/",
+"country": "Россия"
+},
+{
+"name": "Кадейкин Александр",
+"number": 78,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15543/16696/320.jpg",
+"url": "https://www.khl.ru/players/16696/",
+"country": "Россия"
+},
+{
+"name": "Голышев Анатолий",
+"number": 15,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15543/19058/320.jpg",
+"url": "https://www.khl.ru/players/19058/",
+"country": "Россия"
+},
+{
+"name": "Юдин Дмитрий",
+"number": 44,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15543/18977/320.jpg",
+"url": "https://www.khl.ru/players/18977/",
+"country": "Россия"
+},
+{
+"name": "Барабанов Александр",
+"number": 17,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15543/17210/320.jpg",
+"url": "https://www.khl.ru/players/17210/",
+"country": "Россия"
+},
+{
+"name": "Шаров Александр А.",
+"number": 86,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15543/19000/320.jpg",
+"url": "https://www.khl.ru/players/19000/",
+"country": "Россия"
+},
+{
+"name": "Воробьёв Кирилл",
+"number": 55,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15543/18999/320.jpg",
+"url": "https://www.khl.ru/players/18999/",
+"country": "Россия"
+},
+{
+"name": "Аликин Евгений",
+"number": 18,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15543/18488/320.jpg",
+"url": "https://www.khl.ru/players/18488/",
+"country": "Россия"
+},
+{
+"name": "Карпухин Илья",
+"number": 89,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15543/23446/320.jpg",
+"url": "https://www.khl.ru/players/23446/",
+"country": "Россия"
+},
+{
+"name": "Горбунов Роман С.",
+"number": 92,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15543/21055/320.jpg",
+"url": "https://www.khl.ru/players/21055/",
+"country": "Беларусь"
+},
+{
+"name": "Блэкер Джесси",
+"number": 9,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15543/27236/320.jpg",
+"url": "https://www.khl.ru/players/27236/",
+"country": "Казахстан"
+},
+{
+"name": "Денежкин Максим",
+"number": 24,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15543/25396/320.jpg",
+"url": "https://www.khl.ru/players/25396/",
+"country": "Россия"
+},
+{
+"name": "Галкин Владимир",
+"number": 1,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15543/27076/320.jpg",
+"url": "https://www.khl.ru/players/27076/",
+"country": "Россия"
+},
+{
+"name": "Бусыгин Ярослав",
+"number": 7,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15543/35799/320.jpg",
+"url": "https://www.khl.ru/players/35799/",
+"country": "Россия"
+},
+{
+"name": "Каштанов Артём",
+"number": 76,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15543/40130/320.jpg",
+"url": "https://www.khl.ru/players/40130/",
+"country": "Россия"
+},
+{
+"name": "Капустин Кирилл Е.",
+"number": 33,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15543/39928/320.jpg",
+"url": "https://www.khl.ru/players/39928/",
+"country": "Россия"
+},
+{
+"name": "Гросс Джордан",
+"number": 79,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15543/44127/320.jpg",
+"url": "https://www.khl.ru/players/44127/",
+"country": "США"
+},
+{
+"name": "Ружичка Адам",
+"number": 21,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15543/24959/320.jpg",
+"url": "https://www.khl.ru/players/24959/",
+"country": "Словакия"
+},
+{
+"name": "Черников Егор",
+"number": 19,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15543/33515/320.jpg",
+"url": "https://www.khl.ru/players/33515/",
+"country": "Россия"
+},
+{
+"name": "Спронг Даниэль",
+"number": 11,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15543/45421/320.jpg",
+"url": "https://www.khl.ru/players/45421/",
+"country": "Нидерланды"
+},
+{
+"name": "Тарасов Максим",
+"number": 77,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15543/41506/320.jpg",
+"url": "https://www.khl.ru/players/41506/",
+"country": "Россия"
+},
+{
+"name": "Клэг Кейл",
+"number": 10,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15543/46084/320.jpg",
+"url": "https://www.khl.ru/players/46084/",
+"country": "Канада"
+},
+{
+"name": "Гущин Данил",
+"number": 66,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15543/34649/320.jpg",
+"url": "https://www.khl.ru/players/34649/",
+"country": "Россия"
+}
+],
+"coach": {
+"name": "Кудашов Алексей Николаевич",
+"photo": "https://img.khl.ru/teamcoaches/15543/583/320.jpg"
+}
+},
+"61": {
+"players": [
+{
+"name": "Ващенко Григорий",
+"number": 16,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15544/14155/320.jpg",
+"url": "https://www.khl.ru/players/14155/",
+"country": "Россия"
+},
+{
+"name": "Моисеев Данила",
+"number": 93,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15544/23931/320.jpg",
+"url": "https://www.khl.ru/players/23931/",
+"country": "Россия"
+},
+{
+"name": "Муранов Иван",
+"number": 71,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15544/24796/320.jpg",
+"url": "https://www.khl.ru/players/24796/",
+"country": "Россия"
+},
+{
+"name": "Морозов Илья Д.",
+"number": 7,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15544/25022/320.jpg",
+"url": "https://www.khl.ru/players/25022/",
+"country": "Россия"
+},
+{
+"name": "Шулак Либор",
+"number": 73,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15544/18004/320.jpg",
+"url": "https://www.khl.ru/players/18004/",
+"country": "Чехия"
+},
+{
+"name": "Ефремов Никита",
+"number": 94,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15544/29048/320.jpg",
+"url": "https://www.khl.ru/players/29048/",
+"country": "Россия"
+},
+{
+"name": "Мусоров Максим",
+"number": 24,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15544/27548/320.jpg",
+"url": "https://www.khl.ru/players/27548/",
+"country": "Казахстан"
+},
+{
+"name": "Дарьин Александр",
+"number": 41,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15544/26282/320.jpg",
+"url": "https://www.khl.ru/players/26282/",
+"country": "Россия"
+},
+{
+"name": "Кульбаков Иван",
+"number": 35,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15544/24300/320.jpg",
+"url": "https://www.khl.ru/players/24300/",
+"country": "Беларусь"
+},
+{
+"name": "Завгородний Дмитрий",
+"number": 17,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15544/25893/320.jpg",
+"url": "https://www.khl.ru/players/25893/",
+"country": "Россия"
+},
+{
+"name": "Лучевников Константин",
+"number": 65,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15544/19077/320.jpg",
+"url": "https://www.khl.ru/players/19077/",
+"country": "Россия"
+},
+{
+"name": "Хулапов Данила",
+"number": 21,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15544/30989/320.jpg",
+"url": "https://www.khl.ru/players/30989/",
+"country": "Россия"
+},
+{
+"name": "Бояркин Никита",
+"number": 1,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15544/28244/320.jpg",
+"url": "https://www.khl.ru/players/28244/",
+"country": "Казахстан"
+},
+{
+"name": "Чезганов Егор",
+"number": 11,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15544/39341/320.jpg",
+"url": "https://www.khl.ru/players/39341/",
+"country": "Беларусь"
+},
+{
+"name": "Крощинский Фёдор",
+"number": 55,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15544/32390/320.jpg",
+"url": "https://www.khl.ru/players/32390/",
+"country": "Россия"
+},
+{
+"name": "Цыба Арсений",
+"number": 50,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15544/33830/320.jpg",
+"url": "https://www.khl.ru/players/33830/",
+"country": "Россия"
+},
+{
+"name": "Камара Энтони",
+"number": 36,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15544/41583/320.jpg",
+"url": "https://www.khl.ru/players/41583/",
+"country": "Канада"
+},
+{
+"name": "Волков Александр С.",
+"number": 97,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15544/6377/320.jpg",
+"url": "https://www.khl.ru/players/6377/",
+"country": "Россия"
+},
+{
+"name": "Усманов Даниэль",
+"number": 47,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15544/35096/320.jpg",
+"url": "https://www.khl.ru/players/35096/",
+"country": "Россия"
+},
+{
+"name": "Ибрагимов Семён",
+"number": 28,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15544/39473/320.jpg",
+"url": "https://www.khl.ru/players/39473/",
+"country": "Россия"
+},
+{
+"name": "Жуков Кирилл",
+"number": 44,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15544/39439/320.jpg",
+"url": "https://www.khl.ru/players/39439/",
+"country": "Россия"
+},
+{
+"name": "Грасс Михаил",
+"number": 15,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15544/40219/320.jpg",
+"url": "https://www.khl.ru/players/40219/",
+"country": "Россия"
+},
+{
+"name": "Янченко Иван",
+"number": 70,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15544/40189/320.jpg",
+"url": "https://www.khl.ru/players/40189/",
+"country": "Россия"
+},
+{
+"name": "Кудашов Артём",
+"number": 23,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15544/40553/320.jpg",
+"url": "https://www.khl.ru/players/40553/",
+"country": "Россия"
+},
+{
+"name": "Корбит Егор",
+"number": 95,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15544/26336/320.jpg",
+"url": "https://www.khl.ru/players/26336/",
+"country": "Россия"
+},
+{
+"name": "Булавчук Оскар",
+"number": 72,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15544/40286/320.jpg",
+"url": "https://www.khl.ru/players/40286/",
+"country": "Россия"
+},
+{
+"name": "Мухтаров Дмитрий",
+"number": 45,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15544/42443/320.jpg",
+"url": "https://www.khl.ru/players/42443/",
+"country": "Россия"
+}
+],
+"coach": {
+"name": "Браташ Олег Владимирович",
+"photo": "https://img.khl.ru/teamcoaches/15544/148/320.jpg"
+}
+},
+"315": {
+"players": [
+{
+"name": "Науменков Михаил",
+"number": 38,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15563/16400/320.jpg",
+"url": "https://www.khl.ru/players/16400/",
+"country": "Россия"
+},
+{
+"name": "Коледов Павел",
+"number": 77,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15563/17330/320.jpg",
+"url": "https://www.khl.ru/players/17330/",
+"country": "Россия"
+},
+{
+"name": "Хрипунов Степан",
+"number": 32,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15563/19035/320.jpg",
+"url": "https://www.khl.ru/players/19035/",
+"country": "Россия"
+},
+{
+"name": "Котляревский Михаил",
+"number": 53,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15563/22864/320.jpg",
+"url": "https://www.khl.ru/players/22864/",
+"country": "Россия"
+},
+{
+"name": "Хомченко Павел",
+"number": 30,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15563/17592/320.jpg",
+"url": "https://www.khl.ru/players/17592/",
+"country": "Россия"
+},
+{
+"name": "Кузнецов Владимир В.",
+"number": 11,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15563/20995/320.jpg",
+"url": "https://www.khl.ru/players/20995/",
+"country": "Россия"
+},
+{
+"name": "Мифтахов Амир",
+"number": 35,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15563/25702/320.jpg",
+"url": "https://www.khl.ru/players/25702/",
+"country": "Россия"
+},
+{
+"name": "Бойков Сергей",
+"number": 96,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15563/20492/320.jpg",
+"url": "https://www.khl.ru/players/20492/",
+"country": "Россия"
+},
+{
+"name": "Яшкин Дмитрий",
+"number": 23,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15563/16657/320.jpg",
+"url": "https://www.khl.ru/players/16657/",
+"country": "Россия"
+},
+{
+"name": "Менелл Бреннан",
+"number": 27,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15563/39679/320.jpg",
+"url": "https://www.khl.ru/players/39679/",
+"country": "Россия"
+},
+{
+"name": "Мингачёв Тахир",
+"number": 63,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15563/32174/320.jpg",
+"url": "https://www.khl.ru/players/32174/",
+"country": "Россия"
+},
+{
+"name": "Бутеец Вячеслав",
+"number": 31,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15563/34394/320.jpg",
+"url": "https://www.khl.ru/players/34394/",
+"country": "Россия"
+},
+{
+"name": "Барулин Владислав Ю.",
+"number": 22,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15563/20803/320.jpg",
+"url": "https://www.khl.ru/players/20803/",
+"country": "Россия"
+},
+{
+"name": "Оттенбрайт Тёрнер",
+"number": 2,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15563/43268/320.jpg",
+"url": "https://www.khl.ru/players/43268/",
+"country": "Канада"
+},
+{
+"name": "Малоросиянов Даниил",
+"number": 19,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15563/41352/320.jpg",
+"url": "https://www.khl.ru/players/41352/",
+"country": "Россия"
+},
+{
+"name": "Соловьёв Егор С.",
+"number": 17,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15563/40830/320.jpg",
+"url": "https://www.khl.ru/players/40830/",
+"country": "Россия"
+},
+{
+"name": "Петан Николас",
+"number": 7,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15563/44370/320.jpg",
+"url": "https://www.khl.ru/players/44370/",
+"country": "Канада"
+},
+{
+"name": "Чернов Артём А.",
+"number": 12,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15563/21259/320.jpg",
+"url": "https://www.khl.ru/players/21259/",
+"country": "Россия"
+},
+{
+"name": "Саттер Райли",
+"number": 14,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15563/45491/320.jpg",
+"url": "https://www.khl.ru/players/45491/",
+"country": "Канада"
+},
+{
+"name": "Сукезе Нэйт",
+"number": 37,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15563/45345/320.jpg",
+"url": "https://www.khl.ru/players/45345/",
+"country": "США"
+},
+{
+"name": "Мюррэй Бретт",
+"number": 21,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15563/46148/320.jpg",
+"url": "https://www.khl.ru/players/46148/",
+"country": "Канада"
+},
+{
+"name": "Смит Дживани",
+"number": 54,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15563/46425/320.jpg",
+"url": "https://www.khl.ru/players/46425/",
+"country": "Канада"
+},
+{
+"name": "Чен Дэвид",
+"number": 9,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15563/46326/320.jpg",
+"url": "https://www.khl.ru/players/46326/",
+"country": "США"
+},
+{
+"name": "Чичек Ник",
+"number": 4,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15563/46481/320.jpg",
+"url": "https://www.khl.ru/players/46481/",
+"country": "Канада"
+},
+{
+"name": "Эддисон Кейлен",
+"number": 6,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15563/46679/320.jpg",
+"url": "https://www.khl.ru/players/46679/",
+"country": "Канада"
+},
+{
+"name": "Александров Никита И.",
+"number": 59,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15563/39994/320.jpg",
+"url": "https://www.khl.ru/players/39994/",
+"country": "Россия"
+}
+],
+"coach": {
+"name": "Лав Митч",
+"photo": "https://img.khl.ru/teamcoaches/15563/2834/320.jpg"
+}
+},
+"12": {
+"players": [
+{
+"name": "Кручинин Алексей",
+"number": 78,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15546/16355/320.jpg",
+"url": "https://www.khl.ru/players/16355/",
+"country": "Россия"
+},
+{
+"name": "Василевский Алексей А.",
+"number": 93,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15546/16423/320.jpg",
+"url": "https://www.khl.ru/players/16423/",
+"country": "Россия"
+},
+{
+"name": "Трушков Александр А.",
+"number": 1,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15546/20693/320.jpg",
+"url": "https://www.khl.ru/players/20693/",
+"country": "Россия"
+},
+{
+"name": "Ли Олег",
+"number": 90,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15546/16069/320.jpg",
+"url": "https://www.khl.ru/players/16069/",
+"country": "Россия"
+},
+{
+"name": "Воронков Егор",
+"number": 57,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15546/21992/320.jpg",
+"url": "https://www.khl.ru/players/21992/",
+"country": "Россия"
+},
+{
+"name": "Пилипенко Кирилл",
+"number": 13,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15546/19533/320.jpg",
+"url": "https://www.khl.ru/players/19533/",
+"country": "Россия"
+},
+{
+"name": "Дорожко Максим",
+"number": 83,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15546/23467/320.jpg",
+"url": "https://www.khl.ru/players/23467/",
+"country": "Россия"
+},
+{
+"name": "Войнов Вячеслав",
+"number": 26,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15546/14651/320.jpg",
+"url": "https://www.khl.ru/players/14651/",
+"country": "Россия"
+},
+{
+"name": "Ураков Кирилл",
+"number": 21,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15546/22017/320.jpg",
+"url": "https://www.khl.ru/players/22017/",
+"country": "Россия"
+},
+{
+"name": "Петьков Кирилл",
+"number": 98,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15546/23247/320.jpg",
+"url": "https://www.khl.ru/players/23247/",
+"country": "Россия"
+},
+{
+"name": "Юртайкин Данил",
+"number": 50,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15546/21896/320.jpg",
+"url": "https://www.khl.ru/players/21896/",
+"country": "Россия"
+},
+{
+"name": "Лукин Константин",
+"number": 34,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15546/30890/320.jpg",
+"url": "https://www.khl.ru/players/30890/",
+"country": "Россия"
+},
+{
+"name": "Соловьёв Алексей А.",
+"number": 24,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15546/38968/320.jpg",
+"url": "https://www.khl.ru/players/38968/",
+"country": "Россия"
+},
+{
+"name": "Кровяков Максим",
+"number": 88,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15546/33692/320.jpg",
+"url": "https://www.khl.ru/players/33692/",
+"country": "Россия"
+},
+{
+"name": "Шварёв Артём",
+"number": 77,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15546/30905/320.jpg",
+"url": "https://www.khl.ru/players/30905/",
+"country": "Россия"
+},
+{
+"name": "Чехович Иван",
+"number": 82,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15546/24581/320.jpg",
+"url": "https://www.khl.ru/players/24581/",
+"country": "Россия"
+},
+{
+"name": "Абрамов Виталий",
+"number": 11,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15546/23248/320.jpg",
+"url": "https://www.khl.ru/players/23248/",
+"country": "Россия"
+},
+{
+"name": "Костенко Дмитрий",
+"number": 8,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15546/31007/320.jpg",
+"url": "https://www.khl.ru/players/31007/",
+"country": "Россия"
+},
+{
+"name": "Кобозев Виктор",
+"number": 60,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15546/40354/320.jpg",
+"url": "https://www.khl.ru/players/40354/",
+"country": "Россия"
+},
+{
+"name": "Мачулин Василий",
+"number": 23,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15546/33926/320.jpg",
+"url": "https://www.khl.ru/players/33926/",
+"country": "Россия"
+},
+{
+"name": "Лихачёв Ярослав",
+"number": 10,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15546/29932/320.jpg",
+"url": "https://www.khl.ru/players/29932/",
+"country": "Россия"
+},
+{
+"name": "Климович Иван",
+"number": 16,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15546/37924/320.jpg",
+"url": "https://www.khl.ru/players/37924/",
+"country": "Россия"
+},
+{
+"name": "Акмальдинов Рауль",
+"number": 19,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15546/33710/320.jpg",
+"url": "https://www.khl.ru/players/33710/",
+"country": "Россия"
+},
+{
+"name": "Филатьев Александр",
+"number": 12,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15546/40197/320.jpg",
+"url": "https://www.khl.ru/players/40197/",
+"country": "Россия"
+},
+{
+"name": "Кузьмин Григорий Д.",
+"number": 56,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15546/35395/320.jpg",
+"url": "https://www.khl.ru/players/35395/",
+"country": "Россия"
+},
+{
+"name": "Дёминский Ярослав",
+"number": 2,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15546/44863/320.jpg",
+"url": "https://www.khl.ru/players/44863/",
+"country": "Россия"
+},
+{
+"name": "Борин Борис",
+"number": 25,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15546/43753/320.jpg",
+"url": "https://www.khl.ru/players/43753/",
+"country": "Россия"
+},
+{
+"name": "Храпов Фёдор",
+"number": 4,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15546/41540/320.jpg",
+"url": "https://www.khl.ru/players/41540/",
+"country": "Россия"
+}
+],
+"coach": {
+"name": "Андриевский Александр Леонидович",
+"photo": "https://img.khl.ru/teamcoaches/15546/281/320.jpg"
+}
+},
+"105": {
+"players": [
+{
+"name": "Кугрышев Дмитрий",
+"number": 18,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15550/15925/320.jpg",
+"url": "https://www.khl.ru/players/15925/",
+"country": "Россия"
+},
+{
+"name": "Сетдиков Никита",
+"number": 88,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15550/18485/320.jpg",
+"url": "https://www.khl.ru/players/18485/",
+"country": "Россия"
+},
+{
+"name": "Волков Артём А.",
+"number": 49,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15550/22160/320.jpg",
+"url": "https://www.khl.ru/players/22160/",
+"country": "Россия"
+},
+{
+"name": "Беляев Михаил",
+"number": 83,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15550/22680/320.jpg",
+"url": "https://www.khl.ru/players/22680/",
+"country": "Россия"
+},
+{
+"name": "Кудрявцев Павел",
+"number": 22,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15550/22429/320.jpg",
+"url": "https://www.khl.ru/players/22429/",
+"country": "Россия"
+},
+{
+"name": "Алтыбармакян Андрей",
+"number": 84,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15550/22290/320.jpg",
+"url": "https://www.khl.ru/players/22290/",
+"country": "Россия"
+},
+{
+"name": "Подскребалин Никита",
+"number": 73,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15550/23557/320.jpg",
+"url": "https://www.khl.ru/players/23557/",
+"country": "Россия"
+},
+{
+"name": "Михайлов Никита В.",
+"number": 66,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15550/22790/320.jpg",
+"url": "https://www.khl.ru/players/22790/",
+"country": "Россия"
+},
+{
+"name": "Червоненко Владислав",
+"number": 23,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15550/24650/320.jpg",
+"url": "https://www.khl.ru/players/24650/",
+"country": "Россия"
+},
+{
+"name": "Леонтьев Владислав",
+"number": 96,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15550/26366/320.jpg",
+"url": "https://www.khl.ru/players/26366/",
+"country": "Россия"
+},
+{
+"name": "Чивилёв Андрей",
+"number": 10,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15550/27124/320.jpg",
+"url": "https://www.khl.ru/players/27124/",
+"country": "Россия"
+},
+{
+"name": "Дяденькин Данила",
+"number": 97,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15550/25399/320.jpg",
+"url": "https://www.khl.ru/players/25399/",
+"country": "Россия"
+},
+{
+"name": "Макаров Николай",
+"number": 99,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15550/35060/320.jpg",
+"url": "https://www.khl.ru/players/35060/",
+"country": "Россия"
+},
+{
+"name": "Мишуров Андрей",
+"number": 1,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15550/31778/320.jpg",
+"url": "https://www.khl.ru/players/31778/",
+"country": "Россия"
+},
+{
+"name": "Зинченко Иван Вяч.",
+"number": 19,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15550/34034/320.jpg",
+"url": "https://www.khl.ru/players/34034/",
+"country": "Россия"
+},
+{
+"name": "Сомерби Дойл",
+"number": 27,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15550/41948/320.jpg",
+"url": "https://www.khl.ru/players/41948/",
+"country": "США"
+},
+{
+"name": "Савчик Иван",
+"number": 21,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15550/31829/320.jpg",
+"url": "https://www.khl.ru/players/31829/",
+"country": "Россия"
+},
+{
+"name": "Сафин Остап",
+"number": 17,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15550/25503/320.jpg",
+"url": "https://www.khl.ru/players/25503/",
+"country": "Россия"
+},
+{
+"name": "Грошев Евгений",
+"number": 63,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15550/24693/320.jpg",
+"url": "https://www.khl.ru/players/24693/",
+"country": "Россия"
+},
+{
+"name": "Морозов Егор Ан.",
+"number": 47,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15550/34355/320.jpg",
+"url": "https://www.khl.ru/players/34355/",
+"country": "Россия"
+},
+{
+"name": "Гроло Жереми",
+"number": 75,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15550/45343/320.jpg",
+"url": "https://www.khl.ru/players/45343/",
+"country": "Канада"
+},
+{
+"name": "Савчук Райли",
+"number": 13,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15550/45031/320.jpg",
+"url": "https://www.khl.ru/players/45031/",
+"country": "Канада"
+},
+{
+"name": "Белоусов Максим",
+"number": 64,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15550/41373/320.jpg",
+"url": "https://www.khl.ru/players/41373/",
+"country": "Россия"
+},
+{
+"name": "Карпов Артём",
+"number": 89,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15550/40465/320.jpg",
+"url": "https://www.khl.ru/players/40465/",
+"country": "Россия"
+},
+{
+"name": "Таймазов Арсен",
+"number": 28,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15550/41962/320.jpg",
+"url": "https://www.khl.ru/players/41962/",
+"country": "Россия"
+},
+{
+"name": "Кинг Бен",
+"number": 14,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15550/46479/320.jpg",
+"url": "https://www.khl.ru/players/46479/",
+"country": "Канада"
+},
+{
+"name": "Миллмэн Мэйсон",
+"number": 12,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15550/46488/320.jpg",
+"url": "https://www.khl.ru/players/46488/",
+"country": "Канада"
+},
+{
+"name": "Умеров Руслан",
+"number": 9,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15550/45621/320.jpg",
+"url": "https://www.khl.ru/players/45621/",
+"country": "Россия"
+},
+{
+"name": "Шакиров Расим",
+"number": 71,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15550/34364/320.jpg",
+"url": "https://www.khl.ru/players/34364/",
+"country": "Россия"
+}
+],
+"coach": {
+"name": "Зубов Павел Владимирович",
+"photo": "https://img.khl.ru/teamcoaches/15550/707/320.jpg"
+}
+},
+"42": {
+"players": [
+{
+"name": "Самойлов Александр",
+"number": 29,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15555/22139/320.jpg",
+"url": "https://www.khl.ru/players/22139/",
+"country": "Россия"
+},
+{
+"name": "Веряев Данил",
+"number": 18,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15555/22908/320.jpg",
+"url": "https://www.khl.ru/players/22908/",
+"country": "Россия"
+},
+{
+"name": "Попугаев Никита А.",
+"number": 71,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15555/22684/320.jpg",
+"url": "https://www.khl.ru/players/22684/",
+"country": "Россия"
+},
+{
+"name": "Скотников Всеволод",
+"number": 30,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15555/28416/320.jpg",
+"url": "https://www.khl.ru/players/28416/",
+"country": "Россия"
+},
+{
+"name": "Кизимов Семён",
+"number": 97,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15555/25697/320.jpg",
+"url": "https://www.khl.ru/players/25697/",
+"country": "Россия"
+},
+{
+"name": "Думбадзе Давид",
+"number": 88,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15555/19267/320.jpg",
+"url": "https://www.khl.ru/players/19267/",
+"country": "Россия"
+},
+{
+"name": "Иванцов Илья",
+"number": 6,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15555/35393/320.jpg",
+"url": "https://www.khl.ru/players/35393/",
+"country": "Россия"
+},
+{
+"name": "Чуркин Андрей",
+"number": 54,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15555/19449/320.jpg",
+"url": "https://www.khl.ru/players/19449/",
+"country": "Россия"
+},
+{
+"name": "Квочко Илья",
+"number": 51,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15555/39445/320.jpg",
+"url": "https://www.khl.ru/players/39445/",
+"country": "Россия"
+},
+{
+"name": "Чефанов Илья",
+"number": 90,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15555/30656/320.jpg",
+"url": "https://www.khl.ru/players/30656/",
+"country": "Россия"
+},
+{
+"name": "Абросимов Руслан",
+"number": 17,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15555/30629/320.jpg",
+"url": "https://www.khl.ru/players/30629/",
+"country": "Россия"
+},
+{
+"name": "Грудинин Владимир",
+"number": 2,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15555/35064/320.jpg",
+"url": "https://www.khl.ru/players/35064/",
+"country": "Россия"
+},
+{
+"name": "Подшивалов Иван",
+"number": 66,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15555/35326/320.jpg",
+"url": "https://www.khl.ru/players/35326/",
+"country": "Россия"
+},
+{
+"name": "Давыдов Тимофей",
+"number": 75,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15555/34373/320.jpg",
+"url": "https://www.khl.ru/players/34373/",
+"country": "Россия"
+},
+{
+"name": "Танков Кирилл",
+"number": 42,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15555/32981/320.jpg",
+"url": "https://www.khl.ru/players/32981/",
+"country": "Россия"
+},
+{
+"name": "Ян Денис",
+"number": 11,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15555/22166/320.jpg",
+"url": "https://www.khl.ru/players/22166/",
+"country": "Россия"
+},
+{
+"name": "Кожевников Алексей М.",
+"number": 55,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15555/33410/320.jpg",
+"url": "https://www.khl.ru/players/33410/",
+"country": "Россия"
+},
+{
+"name": "Ремезовский Иван",
+"number": 21,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15555/40669/320.jpg",
+"url": "https://www.khl.ru/players/40669/",
+"country": "Россия"
+},
+{
+"name": "Скоренов Александр",
+"number": 12,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15555/37802/320.jpg",
+"url": "https://www.khl.ru/players/37802/",
+"country": "Беларусь"
+},
+{
+"name": "Артамонов Никита",
+"number": 79,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15555/41257/320.jpg",
+"url": "https://www.khl.ru/players/41257/",
+"country": "Россия"
+},
+{
+"name": "Калдис Иоаннис",
+"number": 8,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15555/43034/320.jpg",
+"url": "https://www.khl.ru/players/43034/",
+"country": "Канада"
+},
+{
+"name": "Жуков Артём В.",
+"number": 73,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15555/39260/320.jpg",
+"url": "https://www.khl.ru/players/39260/",
+"country": "Россия"
+},
+{
+"name": "Рейнгардт Илья",
+"number": 37,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15555/38376/320.jpg",
+"url": "https://www.khl.ru/players/38376/",
+"country": "Россия"
+},
+{
+"name": "Никитин Всеволод",
+"number": 16,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15555/39409/320.jpg",
+"url": "https://www.khl.ru/players/39409/",
+"country": "Россия"
+},
+{
+"name": "Фомин Макар",
+"number": 77,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15555/42087/320.jpg",
+"url": "https://www.khl.ru/players/42087/",
+"country": "Россия"
+},
+{
+"name": "Смирнов Егор Д.",
+"number": 47,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15555/40906/320.jpg",
+"url": "https://www.khl.ru/players/40906/",
+"country": "Россия"
+},
+{
+"name": "Грегуар Томас",
+"number": 32,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15555/44956/320.jpg",
+"url": "https://www.khl.ru/players/44956/",
+"country": "Канада"
+},
+{
+"name": "Филимонов Ефим",
+"number": 83,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15555/44133/320.jpg",
+"url": "https://www.khl.ru/players/44133/",
+"country": "Россия"
+},
+{
+"name": "Граф Егор",
+"number": 70,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15555/41748/320.jpg",
+"url": "https://www.khl.ru/players/41748/",
+"country": "Россия"
+},
+{
+"name": "Чуклинов Семён",
+"number": 78,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15555/44494/320.jpg",
+"url": "https://www.khl.ru/players/44494/",
+"country": "Россия"
+}
+],
+"coach": {
+"name": "Козырев Андрей Леонидович",
+"photo": "https://img.khl.ru/teamcoaches/15555/448/320.jpg"
+}
+},
+"24": {
+"players": [
+{
+"name": "Кузнецов Евгений",
+"number": 92,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15556/15306/320.jpg",
+"url": "https://www.khl.ru/players/15306/",
+"country": "Россия"
+},
+{
+"name": "Осипов Максим И.",
+"number": 23,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15556/17459/320.jpg",
+"url": "https://www.khl.ru/players/17459/",
+"country": "Россия"
+},
+{
+"name": "Яковлев Алексей Ан.",
+"number": 61,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15556/17661/320.jpg",
+"url": "https://www.khl.ru/players/17661/",
+"country": "Россия"
+},
+{
+"name": "Коршков Егор",
+"number": 96,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15556/20766/320.jpg",
+"url": "https://www.khl.ru/players/20766/",
+"country": "Россия"
+},
+{
+"name": "Красоткин Антон",
+"number": 33,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15556/21516/320.jpg",
+"url": "https://www.khl.ru/players/21516/",
+"country": "Россия"
+},
+{
+"name": "Кошелев Семён",
+"number": 11,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15556/17903/320.jpg",
+"url": "https://www.khl.ru/players/17903/",
+"country": "Россия"
+},
+{
+"name": "Неколенко Архип",
+"number": 12,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15556/19277/320.jpg",
+"url": "https://www.khl.ru/players/19277/",
+"country": "Россия"
+},
+{
+"name": "Яремчук Александр",
+"number": 95,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15556/24882/320.jpg",
+"url": "https://www.khl.ru/players/24882/",
+"country": "Россия"
+},
+{
+"name": "Бек Тэйлор",
+"number": 85,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15556/27280/320.jpg",
+"url": "https://www.khl.ru/players/27280/",
+"country": "Канада"
+},
+{
+"name": "Диц Даррен",
+"number": 44,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15556/27268/320.jpg",
+"url": "https://www.khl.ru/players/27268/",
+"country": "Канада"
+},
+{
+"name": "Мищенко Иван",
+"number": 47,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15556/19761/320.jpg",
+"url": "https://www.khl.ru/players/19761/",
+"country": "Россия"
+},
+{
+"name": "Орлов Михаил",
+"number": 74,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15556/17414/320.jpg",
+"url": "https://www.khl.ru/players/17414/",
+"country": "Россия"
+},
+{
+"name": "Валитов Даниил",
+"number": 91,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15556/25801/320.jpg",
+"url": "https://www.khl.ru/players/25801/",
+"country": "Россия"
+},
+{
+"name": "Аланов Егор",
+"number": 21,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15556/26698/320.jpg",
+"url": "https://www.khl.ru/players/26698/",
+"country": "Россия"
+},
+{
+"name": "Сушко Максим",
+"number": 24,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15556/24302/320.jpg",
+"url": "https://www.khl.ru/players/24302/",
+"country": "Беларусь"
+},
+{
+"name": "Бердин Михаил",
+"number": 1,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15556/22513/320.jpg",
+"url": "https://www.khl.ru/players/22513/",
+"country": "Россия"
+},
+{
+"name": "Тютнев Павел",
+"number": 18,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15556/33176/320.jpg",
+"url": "https://www.khl.ru/players/33176/",
+"country": "Россия"
+},
+{
+"name": "Никулин Степан",
+"number": 13,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15556/30641/320.jpg",
+"url": "https://www.khl.ru/players/30641/",
+"country": "Россия"
+},
+{
+"name": "Смирнов Никита Анд.",
+"number": 6,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15556/33887/320.jpg",
+"url": "https://www.khl.ru/players/33887/",
+"country": "Россия"
+},
+{
+"name": "Косолапов Антон",
+"number": 15,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15556/32627/320.jpg",
+"url": "https://www.khl.ru/players/32627/",
+"country": "Россия"
+},
+{
+"name": "Воробьёв Иван В.",
+"number": 88,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15556/33545/320.jpg",
+"url": "https://www.khl.ru/players/33545/",
+"country": "Россия"
+},
+{
+"name": "Попов Сергей С.",
+"number": 34,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15556/41382/320.jpg",
+"url": "https://www.khl.ru/players/41382/",
+"country": "Россия"
+},
+{
+"name": "Гордеев Фёдор",
+"number": 27,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15556/43049/320.jpg",
+"url": "https://www.khl.ru/players/43049/",
+"country": "Россия"
+},
+{
+"name": "Мирзабалаев Александр",
+"number": 31,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15556/34526/320.jpg",
+"url": "https://www.khl.ru/players/34526/",
+"country": "Россия"
+},
+{
+"name": "Абрамов Михаил Б.",
+"number": 97,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15556/30941/320.jpg",
+"url": "https://www.khl.ru/players/30941/",
+"country": "Россия"
+},
+{
+"name": "Першаков Александр",
+"number": 28,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15556/42479/320.jpg",
+"url": "https://www.khl.ru/players/42479/",
+"country": "Россия"
+},
+{
+"name": "Баклашёв Никита",
+"number": 38,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15556/41136/320.jpg",
+"url": "https://www.khl.ru/players/41136/",
+"country": "Россия"
+},
+{
+"name": "Волков Даниил",
+"number": 4,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15556/42807/320.jpg",
+"url": "https://www.khl.ru/players/42807/",
+"country": "Россия"
+},
+{
+"name": "Сумароков Богдан",
+"number": 70,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15556/45362/320.jpg",
+"url": "https://www.khl.ru/players/45362/",
+"country": "Россия"
+}
+],
+"coach": {
+"name": "Люзенков Ярослав Игоревич",
+"photo": "https://img.khl.ru/teamcoaches/15556/743/320.jpg"
+}
+},
+"28": {
+"players": [
+{
+"name": "Жарков Владимир",
+"number": 25,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15560/14527/320.jpg",
+"url": "https://www.khl.ru/players/14527/",
+"country": "Россия"
+},
+{
+"name": "Сошников Никита",
+"number": 90,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15560/16731/320.jpg",
+"url": "https://www.khl.ru/players/16731/",
+"country": "Россия"
+},
+{
+"name": "Светлаков Андрей",
+"number": 87,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15560/19218/320.jpg",
+"url": "https://www.khl.ru/players/19218/",
+"country": "Россия"
+},
+{
+"name": "Джиошвили Максим",
+"number": 7,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15560/23644/320.jpg",
+"url": "https://www.khl.ru/players/23644/",
+"country": "Россия"
+},
+{
+"name": "Дронов Григорий",
+"number": 2,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15560/23471/320.jpg",
+"url": "https://www.khl.ru/players/23471/",
+"country": "Россия"
+},
+{
+"name": "Мыльников Сергей И.",
+"number": 20,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15560/24799/320.jpg",
+"url": "https://www.khl.ru/players/24799/",
+"country": "Россия"
+},
+{
+"name": "Валенцов Владислав",
+"number": 9,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15560/20722/320.jpg",
+"url": "https://www.khl.ru/players/20722/",
+"country": "Россия"
+},
+{
+"name": "Григоренко Михаил",
+"number": 94,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15560/16874/320.jpg",
+"url": "https://www.khl.ru/players/16874/",
+"country": "Россия"
+},
+{
+"name": "Прибыльский Андрей",
+"number": 82,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15560/28556/320.jpg",
+"url": "https://www.khl.ru/players/28556/",
+"country": "Россия"
+},
+{
+"name": "Николаев Дмитрий Н.",
+"number": 70,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15560/25222/320.jpg",
+"url": "https://www.khl.ru/players/25222/",
+"country": "Россия"
+},
+{
+"name": "Рольгизер Михаил",
+"number": 45,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15560/34397/320.jpg",
+"url": "https://www.khl.ru/players/34397/",
+"country": "Россия"
+},
+{
+"name": "Рыков Александр",
+"number": 12,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15560/40434/320.jpg",
+"url": "https://www.khl.ru/players/40434/",
+"country": "Россия"
+},
+{
+"name": "Выдренков Иван",
+"number": 84,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15560/40268/320.jpg",
+"url": "https://www.khl.ru/players/40268/",
+"country": "Россия"
+},
+{
+"name": "Рыкманов Алексей",
+"number": 33,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15560/39837/320.jpg",
+"url": "https://www.khl.ru/players/39837/",
+"country": "Россия"
+},
+{
+"name": "Горбунов Степан",
+"number": 11,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15560/42464/320.jpg",
+"url": "https://www.khl.ru/players/42464/",
+"country": "Россия"
+},
+{
+"name": "Агламзянов Руслан",
+"number": 95,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15467/40373/320.jpg",
+"url": "https://www.khl.ru/players/40373/",
+"country": "Россия"
+},
+{
+"name": "Федосеев Ярослав",
+"number": 89,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15560/42814/320.jpg",
+"url": "https://www.khl.ru/players/42814/",
+"country": "Россия"
+},
+{
+"name": "Юсупов Владислав Р.",
+"number": 42,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15560/40428/320.jpg",
+"url": "https://www.khl.ru/players/40428/",
+"country": "Россия"
+},
+{
+"name": "Низамеев Артемий",
+"number": 10,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15560/40425/320.jpg",
+"url": "https://www.khl.ru/players/40425/",
+"country": "Россия"
+},
+{
+"name": "Родионов Марк",
+"number": 77,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15560/42465/320.jpg",
+"url": "https://www.khl.ru/players/42465/",
+"country": "Россия"
+},
+{
+"name": "Легаре Нэйтан",
+"number": 29,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15560/46519/320.jpg",
+"url": "https://www.khl.ru/players/46519/",
+"country": "Канада"
+},
+{
+"name": "Хёукеланд Хенрик",
+"number": 40,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15560/24761/320.jpg",
+"url": "https://www.khl.ru/players/24761/",
+"country": "Норвегия"
+},
+{
+"name": "Катчук Борис",
+"number": 13,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15560/23559/320.jpg",
+"url": "https://www.khl.ru/players/23559/",
+"country": "Канада"
+},
+{
+"name": "Шэн Александр",
+"number": 16,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15560/41702/320.jpg",
+"url": "https://www.khl.ru/players/41702/",
+"country": "Россия"
+},
+{
+"name": "Савельев Алексей",
+"number": 79,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15560/37757/320.jpg",
+"url": "https://www.khl.ru/players/37757/",
+"country": "Россия"
+}
+],
+"coach": {
+"name": "Гордон Скотт",
+"photo": "https://img.khl.ru/teamcoaches/15560/2854/320.jpg"
+}
+},
+"113": {
+"players": [
+{
+"name": "Кагарлицкий Дмитрий",
+"number": 9,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15561/14840/320.jpg",
+"url": "https://www.khl.ru/players/14840/",
+"country": "Россия"
+},
+{
+"name": "Хохлачёв Александр",
+"number": 93,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15561/15860/320.jpg",
+"url": "https://www.khl.ru/players/15860/",
+"country": "Россия"
+},
+{
+"name": "Бочаров Иван",
+"number": 60,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15561/19029/320.jpg",
+"url": "https://www.khl.ru/players/19029/",
+"country": "Россия"
+},
+{
+"name": "Балдаев Виктор",
+"number": 74,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15561/18974/320.jpg",
+"url": "https://www.khl.ru/players/18974/",
+"country": "Россия"
+},
+{
+"name": "Воронин Кирилл",
+"number": 41,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15561/17354/320.jpg",
+"url": "https://www.khl.ru/players/17354/",
+"country": "Россия"
+},
+{
+"name": "Гиздатуллин Артур",
+"number": 18,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15561/22208/320.jpg",
+"url": "https://www.khl.ru/players/22208/",
+"country": "Россия"
+},
+{
+"name": "Слепец Кирилл",
+"number": 29,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15561/24043/320.jpg",
+"url": "https://www.khl.ru/players/24043/",
+"country": "Россия"
+},
+{
+"name": "Кара Владислав",
+"number": 86,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15561/22888/320.jpg",
+"url": "https://www.khl.ru/players/22888/",
+"country": "Россия"
+},
+{
+"name": "Петухов Егор",
+"number": 15,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15561/18590/320.jpg",
+"url": "https://www.khl.ru/players/18590/",
+"country": "Россия"
+},
+{
+"name": "Солянников Георгий",
+"number": 62,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15561/21395/320.jpg",
+"url": "https://www.khl.ru/players/21395/",
+"country": "Россия"
+},
+{
+"name": "Ахияров Тимур",
+"number": 76,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15561/25168/320.jpg",
+"url": "https://www.khl.ru/players/25168/",
+"country": "Россия"
+},
+{
+"name": "Овчинников Дмитрий",
+"number": 97,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15561/31214/320.jpg",
+"url": "https://www.khl.ru/players/31214/",
+"country": "Россия"
+},
+{
+"name": "Николаев Илья В.",
+"number": 88,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15561/30767/320.jpg",
+"url": "https://www.khl.ru/players/30767/",
+"country": "Россия"
+},
+{
+"name": "Венгрыжановский Денис",
+"number": 10,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15561/31892/320.jpg",
+"url": "https://www.khl.ru/players/31892/",
+"country": "Россия"
+},
+{
+"name": "Поляков Николай П.",
+"number": 14,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15561/26866/320.jpg",
+"url": "https://www.khl.ru/players/26866/",
+"country": "Россия"
+},
+{
+"name": "Гуслистов Никита",
+"number": 89,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15561/33536/320.jpg",
+"url": "https://www.khl.ru/players/33536/",
+"country": "Россия"
+},
+{
+"name": "Гуськов Матвей",
+"number": 77,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15561/29136/320.jpg",
+"url": "https://www.khl.ru/players/29136/",
+"country": "Россия"
+},
+{
+"name": "Сушко Илья",
+"number": 55,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15561/22691/320.jpg",
+"url": "https://www.khl.ru/players/22691/",
+"country": "Беларусь"
+},
+{
+"name": "Уильямс Колби",
+"number": 22,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15561/41896/320.jpg",
+"url": "https://www.khl.ru/players/41896/",
+"country": "Канада"
+},
+{
+"name": "Грэм Джесси",
+"number": 64,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15561/41861/320.jpg",
+"url": "https://www.khl.ru/players/41861/",
+"country": "Канада"
+},
+{
+"name": "Ли Кэмерон",
+"number": 67,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15561/41965/320.jpg",
+"url": "https://www.khl.ru/players/41965/",
+"country": "Россия"
+},
+{
+"name": "Беляков Ярослав",
+"number": 13,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15561/42361/320.jpg",
+"url": "https://www.khl.ru/players/42361/",
+"country": "Россия"
+},
+{
+"name": "Шаймарданов Дамир",
+"number": 39,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15561/39461/320.jpg",
+"url": "https://www.khl.ru/players/39461/",
+"country": "Россия"
+},
+{
+"name": "Андреянов Пётр",
+"number": 1,
+"role_key": "goaltender",
+"role": "вратарь",
+"photo": "https://img.khl.ru/teamplayers/15561/43282/320.jpg",
+"url": "https://www.khl.ru/players/43282/",
+"country": "Россия"
+},
+{
+"name": "Куинни Гейдж",
+"number": 72,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15561/45344/320.jpg",
+"url": "https://www.khl.ru/players/45344/",
+"country": "США"
+},
+{
+"name": "Коростелёв Максим",
+"number": 27,
+"role_key": "forward",
+"role": "нападающий",
+"photo": "https://img.khl.ru/teamplayers/15561/35732/320.jpg",
+"url": "https://www.khl.ru/players/35732/",
+"country": "Россия"
+},
+{
+"name": "Гурьев Артём",
+"number": 57,
+"role_key": "defenseman",
+"role": "защитник",
+"photo": "https://img.khl.ru/teamplayers/15561/38005/320.jpg",
+"url": "https://www.khl.ru/players/38005/",
+"country": "Россия"
+}
+],
+"coach": {
+"name": "Миронов Андрей Викторович",
+"photo": "https://img.khl.ru/teamcoaches/15561/765/320.jpg"
+}
+}
+}

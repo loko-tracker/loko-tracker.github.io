@@ -20,7 +20,6 @@ import club_news
 import club_roster
 import collect
 import injuries as injuries_module
-import league_faces
 import memorial
 import odds as odds_module
 
@@ -67,7 +66,8 @@ def _member(member: dict) -> dict:
         url = member.get(f"{field}_url")
         if url:
             out[field] = url
-    out["url"] = club_roster.player_url(member.get("player_id"))
+    if member.get("player_id"):                # свой сайт клуба знает профиль
+        out["url"] = club_roster.player_url(member["player_id"])
     out.pop("player_id", None)
     return {k: v for k, v in out.items() if v not in (None, "")}
 
@@ -203,13 +203,17 @@ def build(season: dict | None = None, *, sims: int = 10_000, progress=print) -> 
             team: [_member(m) for m in roster]
             for team, roster in season.get("club_rosters", {}).items()
         },
+        # Откуда состав: со своего сайта клуба или из заявки в лиге.
+        "roster_source": {
+            team: ("club" if int(team) in club_roster.OFFICIAL else "league")
+            for team in season.get("club_rosters", {})
+        },
         "club_facts": {str(team): facts for team, facts in club_roster.FACTS.items()},
         "memorial": memorial.payload(),
         "club_games": club_games.load(),
         "club_news": club_news.load(),
         "claude_picks": claude_picks.load(),
         "club_history": club_history.load(),
-        "faces": league_faces.load(),
         "injuries_updated_at": injuries_data.get("updated_at"),
     }
 

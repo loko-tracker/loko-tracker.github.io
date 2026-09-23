@@ -24,7 +24,7 @@ import club_history
 import club_roster
 import collect
 import injuries as injuries_module
-import league_faces
+import league_rosters
 import memorial
 import serve
 import site_pages
@@ -67,13 +67,13 @@ def main() -> int:
             season = collect.collect()
             step("Официальные составы клубов")
             club_roster.apply(season)
+            league_rosters.apply(season, league_rosters.sync(season["teams"]))
             collect.save(season)
             memorial.sync()
             club_games.build()
             club_news.sync()
             claude_picks.update(season)
             club_history.sync(season["teams"])
-            league_faces.save(league_faces.sync(season["players"]))
         except Exception:
             traceback.print_exc()
             print()

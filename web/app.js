@@ -609,8 +609,11 @@
         }).join("") + "</tbody></table></div>"
       : '<p class="empty">Статистики пока нет.</p>';
 
-    $("clubRosterNote").textContent = club.official
+    var source = (APP.data.roster_source || {})[String(club.team.id)];
+    $("clubRosterNote").textContent = source === "club"
       ? "Состав — по данным официального сайта клуба (" + club.roster.length + " игроков), статистика — по данным лиги. У тех, кто ещё не выходил на лёд, нули."
+      : source === "league"
+      ? "Состав — по заявке клуба в лиге (" + club.roster.length + " игроков). У тех, кто ещё не выходил на лёд, нули."
       : "Состав — по данным лиги: в нём только игроки, у которых уже есть статистика в сезоне.";
 
     var photos = clubPhotos(club.team.id), hurt = hurtKeys(club);
@@ -946,32 +949,15 @@
       : "";
   }
 
-  /* ============================ портреты лиги ============================ */
+  /* ============================ портреты игроков ============================ */
 
-  // У «Локомотива» — фото с сайта клуба, у остальных — клетка из общей
-  // картинки команды (league_faces.py): одна картинка на клуб вместо
-  // трёх десятков файлов.
-  function faceStyle(p) {
-    var faces = APP.data.faces || {};
-    var spot = (faces.players || {})[String(p.id)];
-    var sprite = spot && (faces.sprites || {})[String(spot[0])];
-    if (!sprite) return "";
-    var col = spot[1] % sprite.cols, row = Math.floor(spot[1] / sprite.cols);
-    var x = sprite.cols > 1 ? (100 * col) / (sprite.cols - 1) : 0;
-    var y = sprite.rows > 1 ? (100 * row) / (sprite.rows - 1) : 0;
-    return "background-image:url(&quot;" + esc(photoUrl(sprite.file)) + "?v=" + esc(sprite.v) + "&quot;);" +
-      "background-size:" + sprite.cols * 100 + "% " + sprite.rows * 100 + "%;" +
-      "background-position:" + x.toFixed(3) + "% " + y.toFixed(3) + "%;";
-  }
-
+  // У «Локомотива» — фото с сайта клуба, у остальных — из заявки в лиге.
+  // И то и другое лежит на чужих серверах, у нас только ссылки.
   function faceHtml(p, cls, lazy) {
     var media = clubPhotos(p.team_id)[nameKey(p.name)] || {};
-    if (media.photo) {
-      return '<img class="' + cls + '" src="' + esc(photoUrl(media.photo)) + '" alt=""' +
-        (lazy ? ' loading="lazy" decoding="async"' : "") + '>';
-    }
-    var style = faceStyle(p);
-    return style ? '<span class="' + cls + ' face-sprite" style="' + style + '" aria-hidden="true"></span>' : "";
+    if (!media.photo) return "";
+    return '<img class="' + cls + '" src="' + esc(photoUrl(media.photo)) + '" alt=""' +
+      (lazy ? ' loading="lazy" decoding="async"' : "") + '>';
   }
 
   /* =========================== именинники =========================== */
