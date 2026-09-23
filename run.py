@@ -18,7 +18,6 @@ import traceback
 import auth
 import build
 import club_games
-import club_media
 import club_news
 import claude_picks
 import club_history
@@ -68,7 +67,6 @@ def main() -> int:
             season = collect.collect()
             step("Официальные составы клубов")
             club_roster.apply(season)
-            club_media.sync(season)
             collect.save(season)
             memorial.sync()
             club_games.build()

@@ -18,7 +18,6 @@ import json
 import urllib.parse
 from pathlib import Path
 
-import club_media
 import club_roster
 
 DATA_FILE = Path(__file__).parent / "data" / "memorial.json"
@@ -26,7 +25,6 @@ DATA_FILE = Path(__file__).parent / "data" / "memorial.json"
 CRASH_DAY = dt.date(2011, 9, 7)
 ROSTER_SEASON = "2012MEN"          # сезон 2011/12 по счёту клуба
 EXPECTED_PLAYERS = 26
-PORTRAIT = (320, 340)
 
 CAPTAIN = ("Ткаченко", "Иван")
 # Галимов выжил при падении и умер в больнице через пять дней.
@@ -135,9 +133,7 @@ def sync(progress=print) -> dict:
         progress(f"  «Помним»: на сайте клуба {len(players)} из {EXPECTED_PLAYERS} — беру сохранённое")
         return load()
 
-    names, _ = club_media.fetch_many(
-        [(p["photo_url"], "mem", PORTRAIT) for p in players if p["photo_url"]]
-    )
+    names = {p["photo_url"]: p["photo_url"] for p in players if p["photo_url"]}
     for p in players:
         photo = names.get(p.pop("photo_url") or "")
         if photo:

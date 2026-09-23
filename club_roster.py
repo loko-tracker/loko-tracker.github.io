@@ -11,7 +11,7 @@
 а флаг стоял false. Поэтому травмы клуба — только дополнение к лазарету.
 
 Отсюда же берутся фото игроков (портрет на сезон и снимок с матча) —
-их скачивает и ужимает club_media.py.
+на них стоят ссылки: фотографии остаются на сервере клуба.
 
 Сейчас подключён «Локомотив» (api.hclokomotiv.ru — оттуда же берёт данные
 официальный сайт клуба). Другие клубы добавляются в OFFICIAL по образцу.
@@ -103,6 +103,44 @@ def bio_sections(raw: str | None) -> list[dict]:
 
 
 GRIPS = {"л": "левый", "п": "правый", "l": "левый", "r": "правый"}
+
+
+# Тексты и фотографии принадлежат клубу. Раньше сайт был личным, и копия
+# у себя никого не задевала; теперь он открыт, поэтому у себя остаётся
+# только короткая выдержка, а дальше — ссылка на страницу клуба.
+CLUB_SITE = "https://hclokomotiv.ru"
+EXCERPT_CHARS = 400
+
+
+def article_url(article_id) -> str | None:
+    return f"{CLUB_SITE}/article/{article_id}" if article_id else None
+
+
+def player_url(player_id, season_code: str | None = None) -> str | None:
+    if not player_id:
+        return None
+    tail = f"?season={season_code}" if season_code else ""
+    return f"{CLUB_SITE}/player/{player_id}{tail}"
+
+
+def page_url(page_id) -> str | None:
+    return f"{CLUB_SITE}/static-page/{page_id}" if page_id else None
+
+
+def excerpt(lines: list[str] | None, limit: int = EXCERPT_CHARS) -> list[str]:
+    """Первые абзацы, пока не набралось примерно limit знаков."""
+    out, size = [], 0
+    for line in lines or ():
+        piece = _clip(line, limit)
+        out.append(piece)
+        size += len(piece)
+        if size >= limit:
+            break
+    return out
+
+
+def _entry_id(node) -> int | None:
+    return ((node or {}).get("data") or {}).get("id")
 
 
 def _media_url(node, prefer: tuple[str, ...] = ()) -> str | None:
@@ -205,10 +243,17 @@ def fetch_lokomotiv(season: str) -> list[dict]:
                 "photo_url": _media_url(player.get("photo")),
                 "action_url": _media_url(player.get("bg_photo"), ("medium", "small"))
                               or _media_url(player.get("main_bg_photo"), ("medium", "small")),
+                "player_id": _entry_id(entry.get("player")),
                 "bio": _bio(player),
             }
         )
     return roster
+
+
+def _bio_excerpt(raw: str | None) -> list[dict]:
+    """Только начало последнего сезона из биографии — дальше сайт клуба."""
+    sections = bio_sections(raw)[:1]
+    return [{"title": part["title"], "text": excerpt(part["text"])} for part in sections]
 
 
 def _bio(player: dict) -> dict:
@@ -224,7 +269,7 @@ def _bio(player: dict) -> dict:
         "school": (player.get("hockey_school") or "").strip(),
         "debut": player.get("debut"),
         "contract_ends": None if player.get("hide_contract_info") else player.get("contract_ends"),
-        "story": bio_sections(player.get("details")),
+        "story": _bio_excerpt(player.get("details")),
     }
     return {key: value for key, value in facts.items() if value}
 
@@ -325,6 +370,7 @@ def apply(season_data: dict, season: str = "2026/2027", progress=print) -> dict:
                 **{k: m[k] for k in ("name", "number", "role_key", "role", "injured", "farm_club")},
                 "photo_url": member.get("photo_url"),
                 "action_url": member.get("action_url"),
+                "player_id": member.get("player_id"),
                 "bio": member.get("bio") or {},
             }
             for m, member in zip(merged, official)

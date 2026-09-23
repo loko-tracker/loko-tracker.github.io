@@ -688,8 +688,13 @@
   var WING_SCROLL = 0.35;      // какую долю прокрутки страницы повторяют ленты
   var wingState = { lanes: [], running: false, last: 0, shown: null };
 
+  // Фотографии «Локомотива» и новостей клуба лежат у клуба — в данных на
+  // них стоят полные адреса. Свои файлы остались только у склеенных
+  // портретов игроков лиги, их адрес собирается здесь.
   function photoUrl(name) {
-    return (MODE === "web" ? "photos/" : "/photos/") + encodeURIComponent(name);
+    var text = String(name || "");
+    if (/^https?:\/\//i.test(text)) return text;
+    return (MODE === "web" ? "photos/" : "/photos/") + encodeURIComponent(text);
   }
 
   // Клуб пишет «Берёзкин», лига иногда «Березкин» — сравниваем без «ё».
@@ -1430,7 +1435,8 @@
       if (tile) { var game = gameByDay(tile.getAttribute("data-day")); if (game) openSheet(game); return; }
       if (event.target.closest(".hs-story")) {
         showSheet('<p class="sheet-meta">сайт ХК «Локомотив»</p><article class="sheet-text">' +
-          sheetArticle({ title: "История клуба", lead: "", text: h.story }, "", false) + '</article>');
+          sheetArticle({ title: "История клуба", lead: "", text: h.story, url: h.story_url },
+                      "", false) + '</article>');
       }
     };
   }
@@ -2216,7 +2222,16 @@
       });
     });
     return '<h3>' + esc(article.title) + '</h3>' +
-      (article.lead ? '<p class="lead">' + esc(article.lead) + '</p>' : "") + body.join("");
+      (article.lead ? '<p class="lead">' + esc(article.lead) + '</p>' : "") + body.join("") +
+      sourceLink(article.url, "Читать целиком на сайте клуба");
+  }
+
+  // Текст и фотографии принадлежат клубу: у себя показываем начало,
+  // а дальше отправляем к первоисточнику.
+  function sourceLink(url, label) {
+    var safe = safeUrl(url);
+    return safe ? '<p class="source"><a href="' + esc(safe) + '" target="_blank" rel="noopener">' +
+      esc(label) + ' →</a></p>' : "";
   }
 
   function sheetHtml(game, info) {
@@ -2494,8 +2509,10 @@
           (moments.length ? '<ol class="pl-moments">' + moments.map(momentRow).join("") + '</ol>'
                           : '<p class="empty">В протоколах этого сезона его голов и передач пока нет.</p>')
         : "") +
-      (story ? '<h2 class="sheet-sec">Биография</h2><article class="sheet-text">' + story +
-        '<p class="pl-source">По материалам официального сайта ХК «Локомотив».</p></article>' : "");
+      (story || media.url
+        ? '<h2 class="sheet-sec">Биография</h2><article class="sheet-text">' + story +
+          sourceLink(media.url, "Профиль на сайте клуба") + '</article>'
+        : "");
   }
 
   function openPlayer(name, teamId) {

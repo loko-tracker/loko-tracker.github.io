@@ -60,6 +60,18 @@ def _leaders(players: list[dict], field: str, *, limit: int = LEADER_LIMIT,
     ]
 
 
+def _member(member: dict) -> dict:
+    """Участник состава для страницы: ссылки на фото вместо своих копий."""
+    out = {k: v for k, v in member.items() if not k.endswith("_url")}
+    for field in ("photo", "action"):
+        url = member.get(f"{field}_url")
+        if url:
+            out[field] = url
+    out["url"] = club_roster.player_url(member.get("player_id"))
+    out.pop("player_id", None)
+    return {k: v for k, v in out.items() if v not in (None, "")}
+
+
 def watch_links() -> dict:
     """Ссылки «Смотреть» из site.json: трансляции идут у правообладателя."""
     try:
@@ -186,8 +198,9 @@ def build(season: dict | None = None, *, sims: int = 10_000, progress=print) -> 
         "my_team_id": my_team_id(season["teams"]),
         "watch": watch_links(),
         # Ссылки на сайт клуба странице не нужны — только имена скачанных фото.
+        # Фото остаются на сервере клуба: в составе лежат ссылки на них.
         "club_rosters": {
-            team: [{k: v for k, v in m.items() if not k.endswith("_url")} for m in roster]
+            team: [_member(m) for m in roster]
             for team, roster in season.get("club_rosters", {}).items()
         },
         "club_facts": {str(team): facts for team, facts in club_roster.FACTS.items()},

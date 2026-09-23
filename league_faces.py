@@ -11,7 +11,8 @@ claude.ai ограничено число файлов. Поэтому порт�
 содержимого (?v=...) — сменился состав, сменился и адрес, так что браузер
 не покажет старые лица на новых местах.
 
-«Локомотив» пропускаем: у него свои фото с сайта клуба (club_media.py).
+«Локомотив» пропускаем: его игроков сайт показывает фотографиями
+с сайта клуба, взятыми по ссылке.
 """
 
 from __future__ import annotations
@@ -22,14 +23,19 @@ import json
 import re
 from pathlib import Path
 
-import club_media
-
 try:
     from PIL import Image
 except ImportError:                     # без Pillow спрайты не собрать
     Image = None
 
-PHOTOS = club_media.PHOTOS
+PHOTOS = Path(__file__).parent / "web" / "photos"
+TIMEOUT = 30
+HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/140.0 Safari/537.36"
+    ),
+}
 CACHE = PHOTOS / "khl"
 DATA_FILE = Path(__file__).parent / "data" / "league_faces.json"
 CELL = 128
@@ -50,13 +56,13 @@ def _download(jobs: list[tuple[str, str]], progress) -> int:
     from concurrent.futures import ThreadPoolExecutor
     import urllib.request
 
-    headers = {**club_media.HEADERS, "Referer": "https://www.khl.ru/"}
+    headers = {**HEADERS, "Referer": "https://www.khl.ru/"}
 
     def fetch(job):
         url, name = job
         try:
             request = urllib.request.Request(url, headers=headers)
-            with urllib.request.urlopen(request, timeout=club_media.TIMEOUT) as response:
+            with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
                 (CACHE / name).write_bytes(response.read())
             return True
         except Exception:

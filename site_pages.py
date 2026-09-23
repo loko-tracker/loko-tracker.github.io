@@ -78,9 +78,12 @@ def _logo_ids() -> list[str]:
 
 
 def _photo_names(payload: dict | None = None) -> list[str]:
-    """Фото, на которые ссылается текущая сборка, — и только они.
+    """Свои картинки, которые нужно опубликовать рядом со страницей.
 
-    Старые снимки остаются в web/photos как кэш, но на сайт не попадают.
+    Фотографии «Локомотива» и новостей клуба сюда не попадают: на них
+    стоят ссылки на сайт клуба. Остаются склеенные портреты игроков лиги
+    (faces-<id>.jpg) — их khl.ru отдаёт только по одной, и без склейки
+    страница делала бы сотни запросов.
     """
     if payload is None:
         try:
@@ -444,10 +447,16 @@ def _write_web_assets(payload: dict) -> None:
     (PUBLISH / "site.webmanifest").write_text(
         _manifest(_my_team_id(payload), _club_name(payload), ""), encoding="utf-8")
     _write_favicon(_my_team_id(payload), PUBLISH)
-    for name in _photo_names(payload):
+    wanted = set(_photo_names(payload))
+    for name in wanted:
         target = PUBLISH / "photos" / name
         if not target.exists():                  # имя = отпечаток: не меняется
             shutil.copyfile(PHOTOS / name, target)
+    # Лишнее убираем: на сайт уходит вся папка целиком, и снимки, на которые
+    # больше никто не ссылается, иначе остались бы висеть.
+    for stale in (PUBLISH / "photos").glob("*"):
+        if stale.is_file() and stale.name not in wanted:
+            stale.unlink()
 
 
 def write_web(payload: dict) -> Path:

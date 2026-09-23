@@ -36,6 +36,8 @@ paragraphs = club_roster.paragraphs
 
 
 def _article(node) -> dict | None:
+    """Отчёт клуба и стенограмма пресс-конференции — чужой текст, поэтому
+    у себя держим только начало, а читать целиком отправляем к клубу."""
     data = club_roster._attrs(node)
     if not data.get("title"):
         return None
@@ -43,7 +45,8 @@ def _article(node) -> dict | None:
         "title": (data.get("title") or "").strip(),
         "lead": (data.get("annotation") or "").strip(),
         "date": data.get("date"),
-        "text": paragraphs(data.get("full_text")),
+        "text": club_roster.excerpt(paragraphs(data.get("full_text"))),
+        "url": club_roster.article_url(club_roster._entry_id(node)),
     }
 
 
@@ -297,7 +300,8 @@ def build(season: str = SEASON, progress=print) -> dict:
             said = presser.get("attributes") or {}
             moment = _moment(said.get("date"))
             if moment and when <= moment <= when + PRESSER_WINDOW:
-                match["presser"] = _article({"data": {"attributes": said}})
+                match["presser"] = _article(
+                    {"data": {"id": presser.get("id"), "attributes": said}})
                 break
 
         out[(when + MSK).date().isoformat()] = match

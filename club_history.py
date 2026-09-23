@@ -191,7 +191,8 @@ def sync(teams: list[dict] | None = None, progress=print) -> dict:
         data = {
             "achievements": fetch_achievements(),
             "milestones": MILESTONES,
-            "story": _page(PAGE_STORY),
+            "story": club_roster.excerpt(_page(PAGE_STORY), 700),
+            "story_url": club_roster.page_url(PAGE_STORY),
             "awards": parse_awards(_page(PAGE_AWARDS)),
             "legends": parse_legends(_page(PAGE_LEGENDS)),
             "archive": fetch_archive(teams),
