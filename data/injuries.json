@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-09-24T00:54:03",
+ "updated_at": "2026-09-24T22:00:45",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -23,6 +23,32 @@
   }
  ],
  "auto": [
+  {
+   "player": "Арефьев Максим",
+   "player_id": 41191,
+   "team": "Ак Барс",
+   "team_id": 40,
+   "headline": "Голкипер «Ак Барса» Арефьев травмировал ногу и пропустит ближайшие матчи («Сила Спорта»)",
+   "url": "https://www.sports.ru/hockey/1117379887-golkiper-ak-barsa-arefev-propustit-blizhajshie-igry-iz-za-travmy-nogi-.html",
+   "term": null,
+   "confidence": "высокая",
+   "found_at": "2026-09-24T22:00:44",
+   "first_seen": "2026-09-24T22:00:39",
+   "last_seen": "2026-09-24T22:00:39"
+  },
+  {
+   "player": "Кузнецов Иван В.",
+   "player_id": 48367,
+   "team": "Ак Барс",
+   "team_id": 40,
+   "headline": "Кузнецов не сыграет с «Ак Барсом» из-за повреждения",
+   "url": "https://www.sports.ru/hockey/1117379956-kuzneczov-ne-sygraet-s-ak-barsom-iz-za-povrezhdeniya.html",
+   "term": null,
+   "confidence": "высокая",
+   "found_at": "2026-09-24T22:00:44",
+   "first_seen": "2026-09-24T22:00:39",
+   "last_seen": "2026-09-24T22:00:39"
+  },
   {
    "player": "Римашевский Егор",
    "player_id": 40555,
