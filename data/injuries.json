@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-09-24T22:05:02",
+ "updated_at": "2026-09-24T23:43:45",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -32,9 +32,9 @@
    "url": "https://www.sports.ru/hockey/1117379887-golkiper-ak-barsa-arefev-propustit-blizhajshie-igry-iz-za-travmy-nogi-.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-09-24T22:05:02",
+   "found_at": "2026-09-24T23:43:44",
    "first_seen": "2026-09-24T22:00:39",
-   "last_seen": "2026-09-24T22:04:56"
+   "last_seen": "2026-09-24T23:43:39"
   },
   {
    "player": "Кузнецов Иван В.",
@@ -45,9 +45,9 @@
    "url": "https://www.sports.ru/hockey/1117379956-kuzneczov-ne-sygraet-s-ak-barsom-iz-za-povrezhdeniya.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-09-24T22:05:02",
+   "found_at": "2026-09-24T23:43:44",
    "first_seen": "2026-09-24T22:00:39",
-   "last_seen": "2026-09-24T22:04:56"
+   "last_seen": "2026-09-24T23:43:39"
   },
   {
    "player": "Римашевский Егор",
@@ -87,6 +87,19 @@
    "found_at": "2026-09-18T00:47:14",
    "first_seen": "2026-09-18T00:47:14",
    "last_seen": "2026-09-18T00:47:14"
+  },
+  {
+   "player": "Серебряков Никита",
+   "player_id": 5077,
+   "team": "Авангард",
+   "team_id": 10,
+   "headline": "Ги Буше о том, сколько пропустит Серебряков: «Может быть и семь дней, может, и три месяца, сложно сказать. Не буду углубляться в характер травмы»",
+   "url": "https://www.sports.ru/hockey/1117380483-gi-bushe-o-tom-skolko-propustit-serebryakov-mozhet-byt-i-sem-dnej-mozh.html",
+   "term": null,
+   "confidence": "средняя",
+   "found_at": "2026-09-24T23:43:44",
+   "first_seen": "2026-09-24T23:43:39",
+   "last_seen": "2026-09-24T23:43:39"
   }
  ]
 }
