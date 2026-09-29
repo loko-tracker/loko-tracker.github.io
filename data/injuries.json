@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-09-29T15:46:41",
+ "updated_at": "2026-09-29T23:45:07",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -123,9 +123,22 @@
    "url": "https://www.sports.ru/hockey/1117384625-fetisov-ob-ovechkine-novost-o-travme-mogla-byt-utkoj-u-veteranov-svoj-.html",
    "term": null,
    "confidence": "средняя",
-   "found_at": "2026-09-29T15:46:41",
+   "found_at": "2026-09-29T23:45:07",
    "first_seen": "2026-09-29T15:46:36",
-   "last_seen": "2026-09-29T15:46:36"
+   "last_seen": "2026-09-29T23:45:02"
+  },
+  {
+   "player": "Марченко Алексей",
+   "player_id": 1104,
+   "team": "Ак Барс",
+   "team_id": 40,
+   "headline": "Марченко может пропустить старт сезона. Новичку «Торонто» нужно решить вопрос с визой",
+   "url": "https://www.sports.ru/hockey/1117384953-marchenko-mozhet-propustit-start-sezona-novichku-toronto-nuzhno-reshit.html",
+   "term": null,
+   "confidence": "средняя",
+   "found_at": "2026-09-29T23:45:07",
+   "first_seen": "2026-09-29T23:45:02",
+   "last_seen": "2026-09-29T23:45:02"
   }
  ]
 }
