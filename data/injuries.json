@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-09-29T08:06:23",
+ "updated_at": "2026-09-29T15:46:41",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -113,6 +113,19 @@
    "found_at": "2026-09-18T00:47:14",
    "first_seen": "2026-09-18T00:47:14",
    "last_seen": "2026-09-18T00:47:14"
+  },
+  {
+   "player": "Граф Егор",
+   "player_id": 50184,
+   "team": "Северсталь",
+   "team_id": 42,
+   "headline": "Фетисов о травме Овечкина на предсезонке: «Новость могла быть уткой, у ветеранов свой график и договоренности. В хорошей форме надо подойти к концу сезона»",
+   "url": "https://www.sports.ru/hockey/1117384625-fetisov-ob-ovechkine-novost-o-travme-mogla-byt-utkoj-u-veteranov-svoj-.html",
+   "term": null,
+   "confidence": "средняя",
+   "found_at": "2026-09-29T15:46:41",
+   "first_seen": "2026-09-29T15:46:36",
+   "last_seen": "2026-09-29T15:46:36"
   }
  ]
 }
