@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-01T15:47:26",
+ "updated_at": "2026-10-01T23:46:36",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -93,13 +93,13 @@
    "player_id": 3189,
    "team": "Трактор",
    "team_id": 28,
-   "headline": "Сошников может пропустить 1,5 месяца. У форварда «Трактора» растяжение шейных мышц и связок, ушибы лба, висков и спины («Mash на спорте»)",
-   "url": "https://www.sports.ru/hockey/1117386424-soshnikov-mozhet-propustit-1-5-mesyacza-u-forvarda-traktora-rastyazhen.html",
+   "headline": "Сошников пропустит 3 недели из-за травмы. Форвард «Трактора» влетел головой в борт в матче со «Спартаком»",
+   "url": "https://www.sports.ru/hockey/1117386655-soshnikov-propustit-3-nedeli-iz-za-travmy-forvard-traktora-vletel-golo.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-10-01T15:47:26",
+   "found_at": "2026-10-01T23:46:36",
    "first_seen": "2026-10-01T08:06:54",
-   "last_seen": "2026-10-01T15:47:22"
+   "last_seen": "2026-10-01T23:46:31"
   },
   {
    "player": "Телегин Сергей",
