@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-09-30T23:45:00",
+ "updated_at": "2026-10-01T08:06:57",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -87,6 +87,19 @@
    "found_at": "2026-09-25T15:43:07",
    "first_seen": "2026-09-24T23:43:39",
    "last_seen": "2026-09-25T15:43:02"
+  },
+  {
+   "player": "Сошников Никита",
+   "player_id": 3189,
+   "team": "Трактор",
+   "team_id": 28,
+   "headline": "Сошникова увезли в больницу после игры со «Спартаком». У форварда «Трактора» подозрение на сотрясение",
+   "url": "https://www.sports.ru/hockey/1117386192-soshnikova-uvezli-v-bolniczu-posle-igry-so-spartakom-u-forvarda-trakto.html",
+   "term": null,
+   "confidence": "высокая",
+   "found_at": "2026-10-01T08:06:57",
+   "first_seen": "2026-10-01T08:06:54",
+   "last_seen": "2026-10-01T08:06:54"
   },
   {
    "player": "Телегин Сергей",
