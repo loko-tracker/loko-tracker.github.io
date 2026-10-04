@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-04T21:21:04",
+ "updated_at": "2026-10-05T00:31:52",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -139,6 +139,19 @@
    "found_at": "2026-09-30T15:49:14",
    "first_seen": "2026-09-29T15:46:36",
    "last_seen": "2026-09-30T15:49:09"
+  },
+  {
+   "player": "Комтуа Максим",
+   "player_id": 42759,
+   "team": "Спартак",
+   "team_id": 18,
+   "headline": "Жамнов о Комтуа и Гальченюке: «Ждем от них большего. Ребята потеряли игровой ритм из‑за травм, нужно 3-4 матча»",
+   "url": "https://www.sports.ru/hockey/1117390093-zhamnov-o-komtua-i-galchenyuke-zhdem-ot-nix-bolshego-no-rebyata-potery.html",
+   "term": null,
+   "confidence": "средняя",
+   "found_at": "2026-10-05T00:31:52",
+   "first_seen": "2026-10-05T00:31:48",
+   "last_seen": "2026-10-05T00:31:48"
   },
   {
    "player": "Марченко Алексей",
