@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-06T21:32:47",
+ "updated_at": "2026-10-07T03:01:09",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -149,9 +149,22 @@
    "url": "https://www.sports.ru/hockey/1117390896-avangard-vyvel-sharipzyanova-iz-spiska-travmirovannyx-zashhitnik-mozhe.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-10-06T21:32:47",
+   "found_at": "2026-10-07T03:01:09",
    "first_seen": "2026-10-05T23:38:47",
-   "last_seen": "2026-10-06T21:32:39"
+   "last_seen": "2026-10-07T03:01:04"
+  },
+  {
+   "player": "Бардаков Захар",
+   "player_id": 30509,
+   "team": "СКА",
+   "team_id": 44,
+   "headline": "Игорь Ларионов: «У Бардакова операция впереди. Мы потеряли его на 5-6 месяцев. У Уилсона травма, завтра с утра будет понятен статус»",
+   "url": "https://www.sports.ru/hockey/1117391921-igor-larionov-u-bardakova-operacziya-vperedi-my-poteryali-ego-na-5-6-m.html",
+   "term": "на 5-6 месяцев",
+   "confidence": "средняя",
+   "found_at": "2026-10-07T03:01:09",
+   "first_seen": "2026-10-07T03:01:04",
+   "last_seen": "2026-10-07T03:01:04"
   },
   {
    "player": "Граф Егор",
@@ -191,6 +204,19 @@
    "found_at": "2026-09-29T23:45:07",
    "first_seen": "2026-09-29T23:45:02",
    "last_seen": "2026-09-29T23:45:02"
+  },
+  {
+   "player": "Уилсон Скотт",
+   "player_id": 37555,
+   "team": "СКА",
+   "team_id": 44,
+   "headline": "Игорь Ларионов: «У Бардакова операция впереди. Мы потеряли его на 5-6 месяцев. У Уилсона травма, завтра с утра будет понятен статус»",
+   "url": "https://www.sports.ru/hockey/1117391921-igor-larionov-u-bardakova-operacziya-vperedi-my-poteryali-ego-na-5-6-m.html",
+   "term": "на 5-6 месяцев",
+   "confidence": "средняя",
+   "found_at": "2026-10-07T03:01:09",
+   "first_seen": "2026-10-07T03:01:04",
+   "last_seen": "2026-10-07T03:01:04"
   }
  ]
 }
