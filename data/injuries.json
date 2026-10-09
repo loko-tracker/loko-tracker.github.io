@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-08T21:59:27",
+ "updated_at": "2026-10-09T03:38:20",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -58,9 +58,22 @@
    "url": "https://www.sports.ru/hockey/1117392788-trener-sochi-mironov-posle-25-ot-spartaka-gusev-lider-vedet-igru-koman.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-10-08T21:59:27",
+   "found_at": "2026-10-09T03:38:20",
    "first_seen": "2026-10-08T14:44:21",
-   "last_seen": "2026-10-08T21:59:24"
+   "last_seen": "2026-10-09T03:38:16"
+  },
+  {
+   "player": "Кузнецов Евгений",
+   "player_id": 968,
+   "team": "Сибирь",
+   "team_id": 24,
+   "headline": "Михайлов о том, может ли Кузнецов вернуться в КХЛ: «Не знаю, что произошло с ним. Из-за семейных обстоятельств пошел на разрыв контракта с «Сибирью» Что будет дальше – зависит только от Евгения»",
+   "url": "https://www.sports.ru/hockey/1117393621-mixajlov-o-tom-mozhet-li-kuzneczov-vernutsya-v-kxl-ne-znayu-chto-proiz.html",
+   "term": null,
+   "confidence": "высокая",
+   "found_at": "2026-10-09T03:38:20",
+   "first_seen": "2026-10-09T03:38:16",
+   "last_seen": "2026-10-09T03:38:16"
   },
   {
    "player": "Кузнецов Иван В.",
@@ -97,9 +110,9 @@
    "url": "https://www.sports.ru/hockey/1117392788-trener-sochi-mironov-posle-25-ot-spartaka-gusev-lider-vedet-igru-koman.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-10-08T21:59:27",
+   "found_at": "2026-10-09T03:38:20",
    "first_seen": "2026-10-08T14:44:21",
-   "last_seen": "2026-10-08T21:59:24"
+   "last_seen": "2026-10-09T03:38:16"
   },
   {
    "player": "Римашевский Егор",
