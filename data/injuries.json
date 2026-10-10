@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-10T13:55:23",
+ "updated_at": "2026-10-10T20:27:43",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -35,6 +35,19 @@
    "found_at": "2026-09-25T15:43:07",
    "first_seen": "2026-09-24T22:00:39",
    "last_seen": "2026-09-25T15:43:02"
+  },
+  {
+   "player": "Бардаков Захар",
+   "player_id": 30509,
+   "team": "СКА",
+   "team_id": 44,
+   "headline": "Бардаков перенес операцию. Ларионов говорил, что форвард СКА пропустит 5-6 месяцев",
+   "url": "https://www.sports.ru/hockey/1117395199-bardakov-perenes-operacziyu-larionov-govorit-chto-forvard-ska-propusti.html",
+   "term": null,
+   "confidence": "высокая",
+   "found_at": "2026-10-10T20:27:43",
+   "first_seen": "2026-10-07T03:01:04",
+   "last_seen": "2026-10-10T20:27:37"
   },
   {
    "player": "Галимов Артём",
@@ -87,6 +100,19 @@
    "found_at": "2026-09-24T23:43:44",
    "first_seen": "2026-09-24T22:00:39",
    "last_seen": "2026-09-24T23:43:39"
+  },
+  {
+   "player": "Ларионов Игорь",
+   "player_id": 31461,
+   "team": "СКА",
+   "team_id": 44,
+   "headline": "Бардаков перенес операцию. Ларионов говорил, что форвард СКА пропустит 5-6 месяцев",
+   "url": "https://www.sports.ru/hockey/1117395199-bardakov-perenes-operacziyu-larionov-govorit-chto-forvard-ska-propusti.html",
+   "term": null,
+   "confidence": "высокая",
+   "found_at": "2026-10-10T20:27:43",
+   "first_seen": "2026-10-10T20:27:37",
+   "last_seen": "2026-10-10T20:27:37"
   },
   {
    "player": "Лимож Алекс",
@@ -177,19 +203,6 @@
    "confidence": "высокая",
    "found_at": "2026-10-07T03:01:09",
    "first_seen": "2026-10-05T23:38:47",
-   "last_seen": "2026-10-07T03:01:04"
-  },
-  {
-   "player": "Бардаков Захар",
-   "player_id": 30509,
-   "team": "СКА",
-   "team_id": 44,
-   "headline": "Игорь Ларионов: «У Бардакова операция впереди. Мы потеряли его на 5-6 месяцев. У Уилсона травма, завтра с утра будет понятен статус»",
-   "url": "https://www.sports.ru/hockey/1117391921-igor-larionov-u-bardakova-operacziya-vperedi-my-poteryali-ego-na-5-6-m.html",
-   "term": "на 5-6 месяцев",
-   "confidence": "средняя",
-   "found_at": "2026-10-07T03:01:09",
-   "first_seen": "2026-10-07T03:01:04",
    "last_seen": "2026-10-07T03:01:04"
   },
   {
