@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-14T20:27:52",
+ "updated_at": "2026-10-15T02:26:03",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -191,6 +191,19 @@
    "found_at": "2026-10-07T03:01:09",
    "first_seen": "2026-10-05T23:38:47",
    "last_seen": "2026-10-07T03:01:04"
+  },
+  {
+   "player": "Богданов Никита В.",
+   "player_id": 4713,
+   "team": "Салават Юлаев",
+   "team_id": 32,
+   "headline": "«Салават» интересуется вратарем «Северстали» Шостаком. Богданов выбыл на 1,5 месяца из-за травмы («Сила спорта»)",
+   "url": "https://www.sports.ru/hockey/1117401596-salavat-interesuetsya-vratarem-severstali-shostakom-sila-sporta.html",
+   "term": null,
+   "confidence": "средняя",
+   "found_at": "2026-10-15T02:26:03",
+   "first_seen": "2026-10-15T02:25:59",
+   "last_seen": "2026-10-15T02:25:59"
   },
   {
    "player": "Граф Егор",
