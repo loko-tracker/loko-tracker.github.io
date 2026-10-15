@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-15T02:26:03",
+ "updated_at": "2026-10-15T12:34:15",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -141,19 +141,6 @@
    "last_seen": "2026-10-09T03:38:16"
   },
   {
-   "player": "Римашевский Егор",
-   "player_id": 40555,
-   "team": "Динамо М",
-   "team_id": 8,
-   "headline": "«Динамо» внесло Римашевского в список травмированных до конца октября",
-   "url": "https://www.sports.ru/hockey/1117378043-dinamo-vneslo-rimashevskogo-v-spisok-travmirovannyx-do-koncza-oktyabry.html",
-   "term": "до конца октября",
-   "confidence": "высокая",
-   "found_at": "2026-09-23T12:07:11",
-   "first_seen": "2026-09-23T00:40:59",
-   "last_seen": "2026-09-23T12:07:07"
-  },
-  {
    "player": "Серебряков Никита",
    "player_id": 5077,
    "team": "Авангард",
@@ -201,9 +188,9 @@
    "url": "https://www.sports.ru/hockey/1117401596-salavat-interesuetsya-vratarem-severstali-shostakom-sila-sporta.html",
    "term": null,
    "confidence": "средняя",
-   "found_at": "2026-10-15T02:26:03",
+   "found_at": "2026-10-15T12:34:14",
    "first_seen": "2026-10-15T02:25:59",
-   "last_seen": "2026-10-15T02:25:59"
+   "last_seen": "2026-10-15T12:33:59"
   },
   {
    "player": "Граф Егор",
