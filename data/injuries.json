@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-16T19:52:22",
+ "updated_at": "2026-10-17T02:00:55",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -87,19 +87,6 @@
    "found_at": "2026-10-10T03:16:19",
    "first_seen": "2026-10-09T03:38:16",
    "last_seen": "2026-10-10T03:16:14"
-  },
-  {
-   "player": "Кузнецов Иван В.",
-   "player_id": 48367,
-   "team": "Ак Барс",
-   "team_id": 40,
-   "headline": "Кузнецов не сыграет с «Ак Барсом» из-за повреждения",
-   "url": "https://www.sports.ru/hockey/1117379956-kuzneczov-ne-sygraet-s-ak-barsom-iz-za-povrezhdeniya.html",
-   "term": null,
-   "confidence": "высокая",
-   "found_at": "2026-09-24T23:43:44",
-   "first_seen": "2026-09-24T22:00:39",
-   "last_seen": "2026-09-24T23:43:39"
   },
   {
    "player": "Лажуа Максим",
