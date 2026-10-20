@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-20T12:44:31",
+ "updated_at": "2026-10-20T20:25:19",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -48,6 +48,19 @@
    "found_at": "2026-10-06T21:32:47",
    "first_seen": "2026-09-27T23:42:18",
    "last_seen": "2026-10-06T21:32:39"
+  },
+  {
+   "player": "Голдобин Николай",
+   "player_id": 29837,
+   "team": "СКА",
+   "team_id": 44,
+   "headline": "Голдобин пропустит 10-14 дней из-за травмы, рассказал Разин. Ранее сообщалось о возможном уходе форварда из СКА",
+   "url": "https://www.sports.ru/hockey/1117407080-goldobin-propustit-10-14-dnej-iz-za-travmy-soobshhil-razin.html",
+   "term": null,
+   "confidence": "высокая",
+   "found_at": "2026-10-20T20:25:19",
+   "first_seen": "2026-10-20T20:25:13",
+   "last_seen": "2026-10-20T20:25:13"
   },
   {
    "player": "Гусев Никита",
@@ -162,9 +175,9 @@
    "url": "https://www.sports.ru/hockey/1117406440-dinamo-vyvelo-tertyshnogo-iz-spiska-travmirovannyx-forvard-propustil-m.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-10-20T12:44:31",
+   "found_at": "2026-10-20T20:25:19",
    "first_seen": "2026-10-19T21:50:10",
-   "last_seen": "2026-10-20T12:44:25"
+   "last_seen": "2026-10-20T20:25:13"
   },
   {
    "player": "Шарипзянов Дамир",
