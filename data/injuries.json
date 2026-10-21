@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-21T20:28:29",
+ "updated_at": "2026-10-22T02:34:44",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -232,17 +232,17 @@
    "last_seen": "2026-10-05T00:31:48"
   },
   {
-   "player": "Марченко Алексей",
-   "player_id": 1104,
-   "team": "Ак Барс",
-   "team_id": 40,
-   "headline": "Марченко может пропустить старт сезона. Новичку «Торонто» нужно решить вопрос с визой",
-   "url": "https://www.sports.ru/hockey/1117384953-marchenko-mozhet-propustit-start-sezona-novichku-toronto-nuzhno-reshit.html",
+   "player": "Панин Григорий",
+   "player_id": 1240,
+   "team": "Салават Юлаев",
+   "team_id": 32,
+   "headline": "Козлов о Силантьеве: «Дмитрия жалко. Уверен, Панин неумышленно нанес травму, это стечение обстоятельств»",
+   "url": "https://www.sports.ru/hockey/1117409634-kozlov-o-silanteve-dmitriya-zhalko-uveren-panin-neumyshlenno-nanes-tra.html",
    "term": null,
    "confidence": "средняя",
-   "found_at": "2026-09-29T23:45:07",
-   "first_seen": "2026-09-29T23:45:02",
-   "last_seen": "2026-09-29T23:45:02"
+   "found_at": "2026-10-22T02:34:44",
+   "first_seen": "2026-10-22T02:34:40",
+   "last_seen": "2026-10-22T02:34:40"
   },
   {
    "player": "Уилсон Скотт",
