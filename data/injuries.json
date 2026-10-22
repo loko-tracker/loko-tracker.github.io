@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-22T12:46:01",
+ "updated_at": "2026-10-22T20:26:17",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -102,19 +102,6 @@
    "last_seen": "2026-10-16T02:14:33"
   },
   {
-   "player": "Ларионов Игорь",
-   "player_id": 31461,
-   "team": "СКА",
-   "team_id": 44,
-   "headline": "Разин о СКА: «У Ларионова-младшего травма, но меня устраивает центральная ось без него. Поговорил с Плотниковым – у него будет другое амплуа, воспринял с энтузиазмом»",
-   "url": "https://www.sports.ru/hockey/1117406344-razin-o-ska-u-larionova-mladshego-travma-no-menya-polnostyu-ustraivaet.html",
-   "term": null,
-   "confidence": "высокая",
-   "found_at": "2026-10-20T02:55:04",
-   "first_seen": "2026-10-10T20:27:37",
-   "last_seen": "2026-10-20T02:55:00"
-  },
-  {
    "player": "Лимож Алекс",
    "player_id": 47255,
    "team": "Динамо Мн",
@@ -152,6 +139,19 @@
    "found_at": "2026-10-20T02:55:04",
    "first_seen": "2026-10-19T21:50:10",
    "last_seen": "2026-10-20T02:55:00"
+  },
+  {
+   "player": "Радулов Александр ",
+   "player_id": 1348,
+   "team": "Локомотив",
+   "team_id": 26,
+   "headline": "«Локомотив» внес Радулова в список травмированных",
+   "url": "https://www.sports.ru/hockey/1117410687-lokomotiv-vnes-radulova-v-spisok-travmirovannyx.html",
+   "term": null,
+   "confidence": "высокая",
+   "found_at": "2026-10-22T20:26:16",
+   "first_seen": "2026-10-22T20:26:11",
+   "last_seen": "2026-10-22T20:26:11"
   },
   {
    "player": "Сошников Никита",
@@ -206,19 +206,6 @@
    "last_seen": "2026-10-15T12:33:59"
   },
   {
-   "player": "Граф Егор",
-   "player_id": 50184,
-   "team": "Северсталь",
-   "team_id": 42,
-   "headline": "Фетисов о травме Овечкина на предсезонке: «Новость могла быть уткой, у ветеранов свой график и договоренности. В хорошей форме надо подойти к концу сезона»",
-   "url": "https://www.sports.ru/hockey/1117384625-fetisov-ob-ovechkine-novost-o-travme-mogla-byt-utkoj-u-veteranov-svoj-.html",
-   "term": null,
-   "confidence": "средняя",
-   "found_at": "2026-09-30T15:49:14",
-   "first_seen": "2026-09-29T15:46:36",
-   "last_seen": "2026-09-30T15:49:09"
-  },
-  {
    "player": "Комтуа Максим",
    "player_id": 42759,
    "team": "Спартак",
@@ -232,17 +219,30 @@
    "last_seen": "2026-10-05T00:31:48"
   },
   {
+   "player": "Ларионов Игорь",
+   "player_id": 31461,
+   "team": "СКА",
+   "team_id": 44,
+   "headline": "Ларионов-младший пропустит минимум 2 месяца из-за травмы",
+   "url": "https://www.sports.ru/hockey/1117410680-larionov-mladshij-propustit-minimum-2-mesyacza-iz-za-travmy.html",
+   "term": null,
+   "confidence": "средняя",
+   "found_at": "2026-10-22T20:26:16",
+   "first_seen": "2026-10-10T20:27:37",
+   "last_seen": "2026-10-22T20:26:11"
+  },
+  {
    "player": "Панин Григорий",
    "player_id": 1240,
    "team": "Салават Юлаев",
    "team_id": 32,
-   "headline": "Козлов о Силантьеве: «Дмитрия жалко. Уверен, Панин неумышленно нанес травму, это стечение обстоятельств»",
-   "url": "https://www.sports.ru/hockey/1117409634-kozlov-o-silanteve-dmitriya-zhalko-uveren-panin-neumyshlenno-nanes-tra.html",
+   "headline": "Силантьев о состоянии после толчка на борт от Панина: «Удалось избежать серьезных травм. Понадобится некоторое время для восстановления, скоро буду в строю»",
+   "url": "https://www.sports.ru/hockey/1117410526-dmitrij-silantev-udalos-izbezhat-sereznyx-travm-ponadobitsya-nekotoroe.html",
    "term": null,
    "confidence": "средняя",
-   "found_at": "2026-10-22T12:46:00",
+   "found_at": "2026-10-22T20:26:16",
    "first_seen": "2026-10-22T02:34:40",
-   "last_seen": "2026-10-22T12:45:57"
+   "last_seen": "2026-10-22T20:26:11"
   },
   {
    "player": "Уилсон Скотт",
