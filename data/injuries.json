@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-23T12:42:18",
+ "updated_at": "2026-10-23T20:21:25",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -152,6 +152,19 @@
    "found_at": "2026-10-23T02:33:42",
    "first_seen": "2026-10-22T20:26:11",
    "last_seen": "2026-10-23T02:33:38"
+  },
+  {
+   "player": "Рыков Александр",
+   "player_id": 38167,
+   "team": "Трактор",
+   "team_id": 28,
+   "headline": "Форвард «Трактора» Рыков пропустит около 3 недель из-за перелома руки («Сила спорта»)",
+   "url": "https://www.sports.ru/hockey/1117411633-forvard-traktora-rykov-propustit-okolo-3-nedel-iz-za-pereloma-ruki-sil.html",
+   "term": null,
+   "confidence": "высокая",
+   "found_at": "2026-10-23T20:21:25",
+   "first_seen": "2026-10-23T20:21:19",
+   "last_seen": "2026-10-23T20:21:19"
   },
   {
    "player": "Сошников Никита",
