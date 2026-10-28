@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-28T02:58:03",
+ "updated_at": "2026-10-28T13:56:06",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -35,6 +35,19 @@
    "found_at": "2026-10-12T15:36:24",
    "first_seen": "2026-10-07T03:01:04",
    "last_seen": "2026-10-12T15:36:17"
+  },
+  {
+   "player": "Билялов Тимур",
+   "player_id": 3649,
+   "team": "Ак Барс",
+   "team_id": 40,
+   "headline": "Яруллин пропустит матч с «Авангардом», у защитника «Ак Барса» острая инфекция. Билялов участвовал в раскатке («Бизнес Online»)",
+   "url": "https://www.sports.ru/hockey/1117418099-yarullin-propustit-match-s-avangardom-u-zashhitnika-ak-barsa-ostraya-i.html",
+   "term": null,
+   "confidence": "высокая",
+   "found_at": "2026-10-28T13:56:06",
+   "first_seen": "2026-10-28T13:56:00",
+   "last_seen": "2026-10-28T13:56:00"
   },
   {
    "player": "Галимов Артём",
@@ -217,6 +230,19 @@
    "found_at": "2026-10-07T03:01:09",
    "first_seen": "2026-10-05T23:38:47",
    "last_seen": "2026-10-07T03:01:04"
+  },
+  {
+   "player": "Яруллин Альберт",
+   "player_id": 1744,
+   "team": "Ак Барс",
+   "team_id": 40,
+   "headline": "Яруллин пропустит матч с «Авангардом», у защитника «Ак Барса» острая инфекция. Билялов участвовал в раскатке («Бизнес Online»)",
+   "url": "https://www.sports.ru/hockey/1117418099-yarullin-propustit-match-s-avangardom-u-zashhitnika-ak-barsa-ostraya-i.html",
+   "term": null,
+   "confidence": "высокая",
+   "found_at": "2026-10-28T13:56:06",
+   "first_seen": "2026-10-28T13:56:00",
+   "last_seen": "2026-10-28T13:56:00"
   },
   {
    "player": "Богданов Никита В.",
