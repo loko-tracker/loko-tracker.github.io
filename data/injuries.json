@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-28T13:56:06",
+ "updated_at": "2026-10-28T21:26:01",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -45,9 +45,9 @@
    "url": "https://www.sports.ru/hockey/1117418099-yarullin-propustit-match-s-avangardom-u-zashhitnika-ak-barsa-ostraya-i.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-10-28T13:56:06",
+   "found_at": "2026-10-28T21:26:01",
    "first_seen": "2026-10-28T13:56:00",
-   "last_seen": "2026-10-28T13:56:00"
+   "last_seen": "2026-10-28T21:25:57"
   },
   {
    "player": "Галимов Артём",
@@ -113,19 +113,6 @@
    "found_at": "2026-10-16T02:14:37",
    "first_seen": "2026-10-15T20:16:29",
    "last_seen": "2026-10-16T02:14:33"
-  },
-  {
-   "player": "Лимож Алекс",
-   "player_id": 47255,
-   "team": "Динамо Мн",
-   "team_id": 38,
-   "headline": "Минское «Динамо» вывело Лиможа из списка травмированных. Он стал третьим бомбардиром прошлой регулярки КХЛ",
-   "url": "https://www.sports.ru/hockey/1117390509-minskoe-dinamo-vyvelo-limozha-iz-spiska-travmirovannyx-on-stal-tretim-.html",
-   "term": null,
-   "confidence": "высокая",
-   "found_at": "2026-10-06T14:37:42",
-   "first_seen": "2026-10-05T23:38:47",
-   "last_seen": "2026-10-06T14:37:37"
   },
   {
    "player": "Миронов Андрей А.",
@@ -240,9 +227,9 @@
    "url": "https://www.sports.ru/hockey/1117418099-yarullin-propustit-match-s-avangardom-u-zashhitnika-ak-barsa-ostraya-i.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-10-28T13:56:06",
+   "found_at": "2026-10-28T21:26:01",
    "first_seen": "2026-10-28T13:56:00",
-   "last_seen": "2026-10-28T13:56:00"
+   "last_seen": "2026-10-28T21:25:57"
   },
   {
    "player": "Богданов Никита В.",
