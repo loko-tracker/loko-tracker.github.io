@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-28T21:26:01",
+ "updated_at": "2026-10-29T03:15:13",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -45,22 +45,9 @@
    "url": "https://www.sports.ru/hockey/1117418099-yarullin-propustit-match-s-avangardom-u-zashhitnika-ak-barsa-ostraya-i.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-10-28T21:26:01",
+   "found_at": "2026-10-29T03:15:13",
    "first_seen": "2026-10-28T13:56:00",
-   "last_seen": "2026-10-28T21:25:57"
-  },
-  {
-   "player": "Галимов Артём",
-   "player_id": 25701,
-   "team": "Ак Барс",
-   "team_id": 40,
-   "headline": "Форвард «Ак Барса» Галимов проводит матч с «Локомотивом» на тренерской скамейке. Хоккеист восстанавливается от травмы",
-   "url": "https://www.sports.ru/hockey/1117390778-forvard-ak-barsa-galimov-provodit-match-s-lokomotivom-na-trenerskoj-sk.html",
-   "term": null,
-   "confidence": "высокая",
-   "found_at": "2026-10-06T21:32:47",
-   "first_seen": "2026-09-27T23:42:18",
-   "last_seen": "2026-10-06T21:32:39"
+   "last_seen": "2026-10-29T03:15:06"
   },
   {
    "player": "Голдобин Николай",
@@ -206,19 +193,6 @@
    "last_seen": "2026-10-20T20:25:13"
   },
   {
-   "player": "Шарипзянов Дамир",
-   "player_id": 18905,
-   "team": "Авангард",
-   "team_id": 10,
-   "headline": "«Авангард» вывел Шарипзянова из списка травмированных. Защитник может впервые сыграть в сезоне в матче с «Автомобилистом»",
-   "url": "https://www.sports.ru/hockey/1117390896-avangard-vyvel-sharipzyanova-iz-spiska-travmirovannyx-zashhitnik-mozhe.html",
-   "term": null,
-   "confidence": "высокая",
-   "found_at": "2026-10-07T03:01:09",
-   "first_seen": "2026-10-05T23:38:47",
-   "last_seen": "2026-10-07T03:01:04"
-  },
-  {
    "player": "Яруллин Альберт",
    "player_id": 1744,
    "team": "Ак Барс",
@@ -227,9 +201,9 @@
    "url": "https://www.sports.ru/hockey/1117418099-yarullin-propustit-match-s-avangardom-u-zashhitnika-ak-barsa-ostraya-i.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-10-28T21:26:01",
+   "found_at": "2026-10-29T03:15:13",
    "first_seen": "2026-10-28T13:56:00",
-   "last_seen": "2026-10-28T21:25:57"
+   "last_seen": "2026-10-29T03:15:06"
   },
   {
    "player": "Богданов Никита В.",
@@ -262,13 +236,13 @@
    "player_id": 1104,
    "team": "Ак Барс",
    "team_id": 40,
-   "headline": "Марченко получил травму нижней части тела в матче с «Калгари». Форвард «Торонто» неудачно упал на лед в борьбе с Шаранговичем",
-   "url": "https://www.sports.ru/hockey/1117416952-marchenko-poluchil-travmu-nizhnej-chasti-tela-v-matche-s-kalgari-on-ne.html",
+   "headline": "«Торонто» внес Марченко в список травмированных. Форвард пропустит несколько недель из-за травмы нижней части тела",
+   "url": "https://www.sports.ru/hockey/1117418705-toronto-vnes-marchenko-v-spisok-travmirovannyx-forvard-propustit-nesko.html",
    "term": null,
    "confidence": "средняя",
-   "found_at": "2026-10-28T02:58:03",
+   "found_at": "2026-10-29T03:15:13",
    "first_seen": "2026-10-27T13:08:58",
-   "last_seen": "2026-10-28T02:57:57"
+   "last_seen": "2026-10-29T03:15:06"
   },
   {
    "player": "Панин Григорий",
@@ -282,19 +256,6 @@
    "found_at": "2026-10-23T02:33:42",
    "first_seen": "2026-10-22T02:34:40",
    "last_seen": "2026-10-23T02:33:38"
-  },
-  {
-   "player": "Уилсон Скотт",
-   "player_id": 37555,
-   "team": "СКА",
-   "team_id": 44,
-   "headline": "Игорь Ларионов: «У Бардакова операция впереди. Мы потеряли его на 5-6 месяцев. У Уилсона травма, завтра с утра будет понятен статус»",
-   "url": "https://www.sports.ru/hockey/1117391921-igor-larionov-u-bardakova-operacziya-vperedi-my-poteryali-ego-na-5-6-m.html",
-   "term": "на 5-6 месяцев",
-   "confidence": "средняя",
-   "found_at": "2026-10-07T03:01:09",
-   "first_seen": "2026-10-07T03:01:04",
-   "last_seen": "2026-10-07T03:01:04"
   }
  ]
 }
