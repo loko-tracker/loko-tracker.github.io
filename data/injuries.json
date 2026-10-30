@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-30T14:07:40",
+ "updated_at": "2026-10-30T21:09:40",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -23,6 +23,19 @@
   }
  ],
  "auto": [
+  {
+   "player": "Балдаев Виктор",
+   "player_id": 4497,
+   "team": "ХК Сочи",
+   "team_id": 113,
+   "headline": "Защитник «Сочи» Балдаев дисквалифицирован на 2 матча за удар Каюмову в голову",
+   "url": "https://www.sports.ru/hockey/1117420436-zashhitnik-sochi-baldaev-diskvalificzirovan-na-2-matcha-za-udar-kayumo.html",
+   "term": "на 2 матча",
+   "confidence": "высокая",
+   "found_at": "2026-10-30T21:09:40",
+   "first_seen": "2026-10-30T21:09:37",
+   "last_seen": "2026-10-30T21:09:37"
+  },
   {
    "player": "Бардаков Захар",
    "player_id": 30509,
@@ -74,6 +87,19 @@
    "found_at": "2026-10-09T03:38:20",
    "first_seen": "2026-10-08T14:44:21",
    "last_seen": "2026-10-09T03:38:16"
+  },
+  {
+   "player": "Каюмов Артур",
+   "player_id": 16819,
+   "team": "Локомотив",
+   "team_id": 26,
+   "headline": "Защитник «Сочи» Балдаев дисквалифицирован на 2 матча за удар Каюмову в голову",
+   "url": "https://www.sports.ru/hockey/1117420436-zashhitnik-sochi-baldaev-diskvalificzirovan-na-2-matcha-za-udar-kayumo.html",
+   "term": "на 2 матча",
+   "confidence": "высокая",
+   "found_at": "2026-10-30T21:09:40",
+   "first_seen": "2026-10-30T21:09:37",
+   "last_seen": "2026-10-30T21:09:37"
   },
   {
    "player": "Кузнецов Евгений",
