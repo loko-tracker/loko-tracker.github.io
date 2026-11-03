@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-03T15:30:59",
+ "updated_at": "2026-11-03T22:42:23",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -35,19 +35,6 @@
    "found_at": "2026-10-31T03:00:19",
    "first_seen": "2026-10-30T21:09:37",
    "last_seen": "2026-10-31T03:00:14"
-  },
-  {
-   "player": "Бардаков Захар",
-   "player_id": 30509,
-   "team": "СКА",
-   "team_id": 44,
-   "headline": "Бардаков перенес операцию. Ларионов говорил, что форвард СКА пропустит 5-6 месяцев",
-   "url": "https://www.sports.ru/hockey/1117395199-bardakov-perenes-operacziyu-larionov-govorit-chto-forvard-ska-propusti.html",
-   "term": null,
-   "confidence": "высокая",
-   "found_at": "2026-10-12T15:36:24",
-   "first_seen": "2026-10-07T03:01:04",
-   "last_seen": "2026-10-12T15:36:17"
   },
   {
    "player": "Билялов Тимур",
@@ -253,9 +240,9 @@
    "url": "https://www.sports.ru/hockey/1117424169-tarasov-vernulsya-v-vorota-detrojta-posle-travmy-i-otrazil-23-iz-26-br.html",
    "term": null,
    "confidence": "средняя",
-   "found_at": "2026-11-03T15:30:59",
+   "found_at": "2026-11-03T22:42:23",
    "first_seen": "2026-11-03T15:30:54",
-   "last_seen": "2026-11-03T15:30:54"
+   "last_seen": "2026-11-03T22:42:19"
   }
  ]
 }
