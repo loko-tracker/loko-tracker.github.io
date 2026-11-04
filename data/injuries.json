@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-04T03:48:40",
+ "updated_at": "2026-11-04T15:41:31",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -236,13 +236,13 @@
    "player_id": 47411,
    "team": "Автомобилист",
    "team_id": 56,
-   "headline": "Тарасов вернулся в ворота «Детройта» после травмы и отразил 23 из 26 бросков «Флориды». Победа – 2-я в 5 играх в сезоне (92,7% сэйвов, КН 1,75)",
-   "url": "https://www.sports.ru/hockey/1117424169-tarasov-vernulsya-v-vorota-detrojta-posle-travmy-i-otrazil-23-iz-26-br.html",
+   "headline": "Вратарь «Детройта» Гибсон получил травму в игре с «Тампой» и был заменен на Тарасова. Россиянин отразил 12 из 13 бросков, сыграв во 2-м матче за 2 дня",
+   "url": "https://www.sports.ru/hockey/1117425529-vratar-detrojta-gibson-poluchil-travmu-v-igre-s-tampoj-i-byl-zamenen-n.html",
    "term": null,
    "confidence": "средняя",
-   "found_at": "2026-11-04T03:48:40",
+   "found_at": "2026-11-04T15:41:31",
    "first_seen": "2026-11-03T15:30:54",
-   "last_seen": "2026-11-04T03:48:36"
+   "last_seen": "2026-11-04T15:41:27"
   }
  ]
 }
