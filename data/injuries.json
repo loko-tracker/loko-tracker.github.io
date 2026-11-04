@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-04T15:41:31",
+ "updated_at": "2026-11-04T22:58:43",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -87,6 +87,19 @@
    "found_at": "2026-10-16T02:14:37",
    "first_seen": "2026-10-15T20:16:29",
    "last_seen": "2026-10-16T02:14:33"
+  },
+  {
+   "player": "Орлов Даниил Р.",
+   "player_id": 38151,
+   "team": "Спартак",
+   "team_id": 18,
+   "headline": "«Спартак» сообщил о «тяжелой травме спины» у Орлова, хоккеист перенес операцию. Защитник набрал 11 очков в 20 матчах сезона",
+   "url": "https://www.sports.ru/hockey/1117425969-spartak-soobshhil-o-tyazheloj-travme-spiny-u-orlova-xokkeist-perenes-o.html",
+   "term": null,
+   "confidence": "высокая",
+   "found_at": "2026-11-04T22:58:43",
+   "first_seen": "2026-11-04T22:58:39",
+   "last_seen": "2026-11-04T22:58:39"
   },
   {
    "player": "Плотников Сергей",
@@ -223,13 +236,13 @@
    "player_id": 1240,
    "team": "Салават Юлаев",
    "team_id": 32,
-   "headline": "Силантьев о состоянии после толчка на борт от Панина: «Удалось избежать серьезных травм. Понадобится некоторое время для восстановления, скоро буду в строю»",
-   "url": "https://www.sports.ru/hockey/1117410526-dmitrij-silantev-udalos-izbezhat-sereznyx-travm-ponadobitsya-nekotoroe.html",
+   "headline": "Козлов про 5:0 с «Ладой»: «Я доволен – «Салават» все три периода четко отработал в обе стороны. У Панина повреждение»",
+   "url": "https://www.sports.ru/hockey/1117426243-kozlov-pro-50-s-ladoj-ya-dovolen-salavat-vse-tri-perioda-chetko-otrabo.html",
    "term": null,
    "confidence": "средняя",
-   "found_at": "2026-10-23T02:33:42",
+   "found_at": "2026-11-04T22:58:43",
    "first_seen": "2026-10-22T02:34:40",
-   "last_seen": "2026-10-23T02:33:38"
+   "last_seen": "2026-11-04T22:58:39"
   },
   {
    "player": "Тарасов Максим",
@@ -240,9 +253,9 @@
    "url": "https://www.sports.ru/hockey/1117425529-vratar-detrojta-gibson-poluchil-travmu-v-igre-s-tampoj-i-byl-zamenen-n.html",
    "term": null,
    "confidence": "средняя",
-   "found_at": "2026-11-04T15:41:31",
+   "found_at": "2026-11-04T22:58:43",
    "first_seen": "2026-11-03T15:30:54",
-   "last_seen": "2026-11-04T15:41:27"
+   "last_seen": "2026-11-04T22:58:39"
   }
  ]
 }
