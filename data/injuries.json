@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-04T22:58:43",
+ "updated_at": "2026-11-05T04:01:46",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -97,9 +97,9 @@
    "url": "https://www.sports.ru/hockey/1117425969-spartak-soobshhil-o-tyazheloj-travme-spiny-u-orlova-xokkeist-perenes-o.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-11-04T22:58:43",
+   "found_at": "2026-11-05T04:01:45",
    "first_seen": "2026-11-04T22:58:39",
-   "last_seen": "2026-11-04T22:58:39"
+   "last_seen": "2026-11-05T04:01:41"
   },
   {
    "player": "Плотников Сергей",
@@ -240,9 +240,9 @@
    "url": "https://www.sports.ru/hockey/1117426243-kozlov-pro-50-s-ladoj-ya-dovolen-salavat-vse-tri-perioda-chetko-otrabo.html",
    "term": null,
    "confidence": "средняя",
-   "found_at": "2026-11-04T22:58:43",
+   "found_at": "2026-11-05T04:01:45",
    "first_seen": "2026-10-22T02:34:40",
-   "last_seen": "2026-11-04T22:58:39"
+   "last_seen": "2026-11-05T04:01:41"
   },
   {
    "player": "Тарасов Максим",
@@ -253,9 +253,9 @@
    "url": "https://www.sports.ru/hockey/1117425529-vratar-detrojta-gibson-poluchil-travmu-v-igre-s-tampoj-i-byl-zamenen-n.html",
    "term": null,
    "confidence": "средняя",
-   "found_at": "2026-11-04T22:58:43",
+   "found_at": "2026-11-05T04:01:45",
    "first_seen": "2026-11-03T15:30:54",
-   "last_seen": "2026-11-04T22:58:39"
+   "last_seen": "2026-11-05T04:01:41"
   }
  ]
 }
