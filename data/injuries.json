@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-05T04:01:46",
+ "updated_at": "2026-11-05T15:52:51",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -97,9 +97,9 @@
    "url": "https://www.sports.ru/hockey/1117425969-spartak-soobshhil-o-tyazheloj-travme-spiny-u-orlova-xokkeist-perenes-o.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-11-05T04:01:45",
+   "found_at": "2026-11-05T15:52:51",
    "first_seen": "2026-11-04T22:58:39",
-   "last_seen": "2026-11-05T04:01:41"
+   "last_seen": "2026-11-05T15:52:46"
   },
   {
    "player": "Плотников Сергей",
@@ -171,13 +171,13 @@
    "player_id": 16563,
    "team": "Динамо М",
    "team_id": 8,
-   "headline": "«Динамо» вывело Тертышного из списка травмированных. Форвард пропустил месяц",
-   "url": "https://www.sports.ru/hockey/1117406440-dinamo-vyvelo-tertyshnogo-iz-spiska-travmirovannyx-forvard-propustil-m.html",
-   "term": null,
+   "headline": "Тертышный выбыл до конца сезона. Форвард «Динамо» получил травму нижней части тела в игре с «Амуром»",
+   "url": "https://www.sports.ru/hockey/1117426953-tertyshnyj-vybyl-do-koncza-sezona-forvard-dinamo-poluchil-travmu-nizhn.html",
+   "term": "до конца сезона",
    "confidence": "высокая",
-   "found_at": "2026-10-20T20:25:19",
+   "found_at": "2026-11-05T15:52:51",
    "first_seen": "2026-10-19T21:50:10",
-   "last_seen": "2026-10-20T20:25:13"
+   "last_seen": "2026-11-05T15:52:46"
   },
   {
    "player": "Яруллин Альберт",
@@ -236,13 +236,13 @@
    "player_id": 1240,
    "team": "Салават Юлаев",
    "team_id": 32,
-   "headline": "Козлов про 5:0 с «Ладой»: «Я доволен – «Салават» все три периода четко отработал в обе стороны. У Панина повреждение»",
-   "url": "https://www.sports.ru/hockey/1117426243-kozlov-pro-50-s-ladoj-ya-dovolen-salavat-vse-tri-perioda-chetko-otrabo.html",
+   "headline": "Панин пропустит около месяца из-за травмы, полученной в игре с «Ладой» (Артур Хайруллин)",
+   "url": "https://www.sports.ru/hockey/1117426893-panin-propustit-okolo-mesyacza-iz-za-travmy-artur-xajrullin.html",
    "term": null,
    "confidence": "средняя",
-   "found_at": "2026-11-05T04:01:45",
+   "found_at": "2026-11-05T15:52:51",
    "first_seen": "2026-10-22T02:34:40",
-   "last_seen": "2026-11-05T04:01:41"
+   "last_seen": "2026-11-05T15:52:46"
   },
   {
    "player": "Тарасов Максим",
@@ -253,9 +253,9 @@
    "url": "https://www.sports.ru/hockey/1117425529-vratar-detrojta-gibson-poluchil-travmu-v-igre-s-tampoj-i-byl-zamenen-n.html",
    "term": null,
    "confidence": "средняя",
-   "found_at": "2026-11-05T04:01:45",
+   "found_at": "2026-11-05T15:52:51",
    "first_seen": "2026-11-03T15:30:54",
-   "last_seen": "2026-11-05T04:01:41"
+   "last_seen": "2026-11-05T15:52:46"
   }
  ]
 }
