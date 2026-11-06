@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-06T04:04:42",
+ "updated_at": "2026-11-06T15:36:31",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -175,9 +175,9 @@
    "url": "https://www.sports.ru/hockey/1117426953-tertyshnyj-vybyl-do-koncza-sezona-forvard-dinamo-poluchil-travmu-nizhn.html",
    "term": "до конца сезона",
    "confidence": "высокая",
-   "found_at": "2026-11-06T04:04:42",
+   "found_at": "2026-11-06T15:36:31",
    "first_seen": "2026-10-19T21:50:10",
-   "last_seen": "2026-11-06T04:04:37"
+   "last_seen": "2026-11-06T15:36:27"
   },
   {
    "player": "Яруллин Альберт",
@@ -191,19 +191,6 @@
    "found_at": "2026-10-29T14:12:45",
    "first_seen": "2026-10-28T13:56:00",
    "last_seen": "2026-10-29T14:12:42"
-  },
-  {
-   "player": "Богданов Никита В.",
-   "player_id": 4713,
-   "team": "Салават Юлаев",
-   "team_id": 32,
-   "headline": "«Салават» интересуется вратарем «Северстали» Шостаком. Богданов выбыл на 1,5 месяца из-за травмы («Сила спорта»)",
-   "url": "https://www.sports.ru/hockey/1117401596-salavat-interesuetsya-vratarem-severstali-shostakom-sila-sporta.html",
-   "term": null,
-   "confidence": "средняя",
-   "found_at": "2026-10-15T12:34:14",
-   "first_seen": "2026-10-15T02:25:59",
-   "last_seen": "2026-10-15T12:33:59"
   },
   {
    "player": "Ларионов Игорь",
