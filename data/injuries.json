@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-06T22:38:04",
+ "updated_at": "2026-11-07T03:15:34",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -71,9 +71,9 @@
    "url": "https://www.sports.ru/hockey/1117428218-demidov-poluchil-perelom-golenostopa-na-predsezonke-soobshhil-agent-fo.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-11-06T22:38:04",
+   "found_at": "2026-11-07T03:15:34",
    "first_seen": "2026-11-06T22:38:00",
-   "last_seen": "2026-11-06T22:38:00"
+   "last_seen": "2026-11-07T03:15:29"
   },
   {
    "player": "Каюмов Артур",
@@ -97,22 +97,9 @@
    "url": "https://www.sports.ru/hockey/1117428619-kozlov-o-32-s-avtomobilistom-u-salavata-czelyj-lazaret-zashhitnikov-na.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-11-06T22:38:04",
+   "found_at": "2026-11-07T03:15:34",
    "first_seen": "2026-11-06T22:38:00",
-   "last_seen": "2026-11-06T22:38:00"
-  },
-  {
-   "player": "Лажуа Максим",
-   "player_id": 46563,
-   "team": "Авангард",
-   "team_id": 10,
-   "headline": "«Авангард» вывел Лажуа из списка травмированных: «Спустя 47 дней «ястреб» возвращается на лед»",
-   "url": "https://www.sports.ru/hockey/1117402016-avangard-vyvel-lazhua-iz-spiska-travmirovannyx-spustya-47-dnej-yastreb.html",
-   "term": null,
-   "confidence": "высокая",
-   "found_at": "2026-10-16T02:14:37",
-   "first_seen": "2026-10-15T20:16:29",
-   "last_seen": "2026-10-16T02:14:33"
+   "last_seen": "2026-11-07T03:15:29"
   },
   {
    "player": "Орлов Даниил Р.",
@@ -136,9 +123,9 @@
    "url": "https://www.sports.ru/hockey/1117428354-bratash-o-54-s-barysom-raboty-u-nas-u-trenerov-nepochatyj-kraj.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-11-06T22:38:04",
+   "found_at": "2026-11-07T03:15:34",
    "first_seen": "2026-11-06T22:38:00",
-   "last_seen": "2026-11-06T22:38:00"
+   "last_seen": "2026-11-07T03:15:29"
   },
   {
    "player": "Плотников Сергей",
