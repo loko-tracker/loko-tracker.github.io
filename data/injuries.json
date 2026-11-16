@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-16T16:16:28",
+ "updated_at": "2026-11-17T01:26:47",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -87,6 +87,19 @@
    "found_at": "2026-11-07T20:49:59",
    "first_seen": "2026-11-06T22:38:00",
    "last_seen": "2026-11-07T20:49:52"
+  },
+  {
+   "player": "Ильенко Артём",
+   "player_id": 5835,
+   "team": "Авангард",
+   "team_id": 10,
+   "headline": "Ильенко пропустит около двух недель из-за травмы. Форвард «Авангарда» повредил колено в матче с «Нефтехимиком»",
+   "url": "https://www.sports.ru/hockey/1117438641-ilenko-propustit-okolo-dvux-nedel-iz-za-travmy-forvard-avangarda.html",
+   "term": null,
+   "confidence": "высокая",
+   "found_at": "2026-11-17T01:26:46",
+   "first_seen": "2026-11-17T01:26:41",
+   "last_seen": "2026-11-17T01:26:41"
   },
   {
    "player": "Каюмов Артур",
@@ -210,13 +223,13 @@
    "player_id": 1104,
    "team": "Ак Барс",
    "team_id": 40,
-   "headline": "«Торонто» внес Марченко в список травмированных. Форвард пропустит несколько недель из-за травмы нижней части тела",
-   "url": "https://www.sports.ru/hockey/1117418705-toronto-vnes-marchenko-v-spisok-travmirovannyx-forvard-propustit-nesko.html",
+   "headline": "Кирилл Марченко приступил к тренировкам на льду после травмы. Форвард «Торонто» пропустит еще несколько матчей",
+   "url": "https://www.sports.ru/hockey/1117438816-kirill-marchenko-pristupil-k-trenirovkam-na-ldu-posle-travmy-forvard-t.html",
    "term": null,
    "confidence": "средняя",
-   "found_at": "2026-10-30T03:09:47",
+   "found_at": "2026-11-17T01:26:46",
    "first_seen": "2026-10-27T13:08:58",
-   "last_seen": "2026-10-30T03:09:42"
+   "last_seen": "2026-11-17T01:26:41"
   },
   {
    "player": "Панин Григорий",
