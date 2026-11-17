@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-17T16:59:31",
+ "updated_at": "2026-11-18T00:12:12",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -110,22 +110,22 @@
    "url": "https://www.sports.ru/hockey/1117439673-kayumov-diskvalificzirovan-na-odin-match-posle-draki-s-ovchinnikovym.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-11-17T16:59:31",
+   "found_at": "2026-11-18T00:12:12",
    "first_seen": "2026-10-30T21:09:37",
-   "last_seen": "2026-11-17T16:59:27"
+   "last_seen": "2026-11-18T00:12:08"
   },
   {
    "player": "Козлов Андрей Е.",
    "player_id": 42139,
    "team": "Металлург Мг",
    "team_id": 30,
-   "headline": "Козлов после 3:2 с «Автомобилистом»: «У «Салавата» целый лазарет защитников, нам нужна помощь. Заслуженная победа придаст эмоций»",
-   "url": "https://www.sports.ru/hockey/1117428619-kozlov-o-32-s-avtomobilistom-u-salavata-czelyj-lazaret-zashhitnikov-na.html",
+   "headline": "Форварда «Металлурга» Козлова увезли в больницу на скорой – он получил травму в матче с «Ладой» и не смог самостоятельно покинуть лед",
+   "url": "https://www.sports.ru/hockey/1117440020-forvard-metallurga-kozlov-poluchil-travmu-v-matche-s-ladoj-i-ne-smog-s.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-11-08T02:50:13",
+   "found_at": "2026-11-18T00:12:12",
    "first_seen": "2026-11-06T22:38:00",
-   "last_seen": "2026-11-08T02:50:08"
+   "last_seen": "2026-11-18T00:12:08"
   },
   {
    "player": "Мисюль Даниил",
@@ -149,9 +149,9 @@
    "url": "https://www.sports.ru/hockey/1117439673-kayumov-diskvalificzirovan-na-odin-match-posle-draki-s-ovchinnikovym.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-11-17T16:59:31",
+   "found_at": "2026-11-18T00:12:12",
    "first_seen": "2026-11-17T16:59:27",
-   "last_seen": "2026-11-17T16:59:27"
+   "last_seen": "2026-11-18T00:12:08"
   },
   {
    "player": "Орлов Даниил Р.",
