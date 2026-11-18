@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-18T05:34:26",
+ "updated_at": "2026-11-18T16:34:57",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -123,9 +123,9 @@
    "url": "https://www.sports.ru/hockey/1117440020-forvard-metallurga-kozlov-poluchil-travmu-v-matche-s-ladoj-i-ne-smog-s.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-11-18T05:34:26",
+   "found_at": "2026-11-18T16:34:57",
    "first_seen": "2026-11-06T22:38:00",
-   "last_seen": "2026-11-18T05:34:21"
+   "last_seen": "2026-11-18T16:34:52"
   },
   {
    "player": "Мисюль Даниил",
@@ -193,6 +193,19 @@
    "last_seen": "2026-11-07T20:49:52"
   },
   {
+   "player": "Ремпал Шелдон",
+   "player_id": 42379,
+   "team": "Салават Юлаев",
+   "team_id": 32,
+   "headline": "«Салават Юлаев» внес лучшего бомбардира команды Ремпала в список травмированных",
+   "url": "https://www.sports.ru/hockey/1117440486-salavat-yulaev-vnes-luchshego-bombardira-komandy-rempala-v-spisok-trav.html",
+   "term": null,
+   "confidence": "высокая",
+   "found_at": "2026-11-18T16:34:57",
+   "first_seen": "2026-11-18T16:34:52",
+   "last_seen": "2026-11-18T16:34:52"
+  },
+  {
    "player": "Спронг Даниэль",
    "player_id": 46995,
    "team": "Автомобилист",
@@ -230,6 +243,19 @@
    "found_at": "2026-10-29T14:12:45",
    "first_seen": "2026-10-28T13:56:00",
    "last_seen": "2026-10-29T14:12:42"
+  },
+  {
+   "player": "Котляров Илья",
+   "player_id": 50152,
+   "team": "Спартак",
+   "team_id": 18,
+   "headline": "Чезганов о дисквалификации на 4 матча за удар клюшкой в лицо: «Я был неправ, это факт. Никогда не стал бы специально бить соперника в лицо. Хотел просто оттолкнуть Котлярова»",
+   "url": "https://www.sports.ru/hockey/1117440699-chezganov-o-diskvalifikaczii-na-4-matcha-za-udar-klyushkrj-v-liczo-ya-.html",
+   "term": "на 4 матча",
+   "confidence": "средняя",
+   "found_at": "2026-11-18T16:34:57",
+   "first_seen": "2026-11-18T16:34:52",
+   "last_seen": "2026-11-18T16:34:52"
   },
   {
    "player": "Марченко Алексей",
