@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-18T16:34:57",
+ "updated_at": "2026-11-18T23:48:43",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -61,6 +61,19 @@
    "found_at": "2026-11-12T23:14:59",
    "first_seen": "2026-11-12T16:28:49",
    "last_seen": "2026-11-12T23:14:55"
+  },
+  {
+   "player": "Гамзин Дмитрий",
+   "player_id": 31781,
+   "team": "ЦСКА",
+   "team_id": 16,
+   "headline": "ЦСКА заменил вратаря из-за травмы в конце 3-го периода. Гамзина увели в радевалку, Самонов вышел вместо него",
+   "url": "https://www.sports.ru/hockey/1117441060-czska-zamenil-vratarya-iz-za-travmy-v-koncze-3-go-perioda-gamzina-uvel.html",
+   "term": null,
+   "confidence": "высокая",
+   "found_at": "2026-11-18T23:48:43",
+   "first_seen": "2026-11-18T23:48:38",
+   "last_seen": "2026-11-18T23:48:38"
   },
   {
    "player": "Голдобин Николай",
@@ -201,22 +214,22 @@
    "url": "https://www.sports.ru/hockey/1117440486-salavat-yulaev-vnes-luchshego-bombardira-komandy-rempala-v-spisok-trav.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-11-18T16:34:57",
+   "found_at": "2026-11-18T23:48:43",
    "first_seen": "2026-11-18T16:34:52",
-   "last_seen": "2026-11-18T16:34:52"
+   "last_seen": "2026-11-18T23:48:38"
   },
   {
-   "player": "Спронг Даниэль",
-   "player_id": 46995,
-   "team": "Автомобилист",
-   "team_id": 56,
-   "headline": "У защитника «Автомобилиста» Воробьева нет сотрясения или костных повреждений после столкновения со Спронгом, сообщили в клубе: «Небольшое мышечное растяжение»",
-   "url": "https://www.sports.ru/hockey/1117417156-u-zashhitnika-avtomobilista-vorobeva-net-sotryaseniya-ili-kostnyx-povr.html",
+   "player": "Самонов Александр",
+   "player_id": 1965,
+   "team": "ЦСКА",
+   "team_id": 16,
+   "headline": "ЦСКА заменил вратаря из-за травмы в конце 3-го периода. Гамзина увели в радевалку, Самонов вышел вместо него",
+   "url": "https://www.sports.ru/hockey/1117441060-czska-zamenil-vratarya-iz-za-travmy-v-koncze-3-go-perioda-gamzina-uvel.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-10-27T21:10:32",
-   "first_seen": "2026-10-27T03:01:28",
-   "last_seen": "2026-10-27T21:10:26"
+   "found_at": "2026-11-18T23:48:43",
+   "first_seen": "2026-11-18T23:48:38",
+   "last_seen": "2026-11-18T23:48:38"
   },
   {
    "player": "Тертышный Никита",
@@ -253,9 +266,9 @@
    "url": "https://www.sports.ru/hockey/1117440699-chezganov-o-diskvalifikaczii-na-4-matcha-za-udar-klyushkrj-v-liczo-ya-.html",
    "term": "на 4 матча",
    "confidence": "средняя",
-   "found_at": "2026-11-18T16:34:57",
+   "found_at": "2026-11-18T23:48:43",
    "first_seen": "2026-11-18T16:34:52",
-   "last_seen": "2026-11-18T16:34:52"
+   "last_seen": "2026-11-18T23:48:38"
   },
   {
    "player": "Марченко Алексей",
