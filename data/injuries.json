@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-19T04:59:40",
+ "updated_at": "2026-11-19T17:02:13",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -132,13 +132,26 @@
    "player_id": 42139,
    "team": "Металлург Мг",
    "team_id": 30,
-   "headline": "Форварда «Металлурга» Козлова увезли в больницу на скорой – он получил травму в матче с «Ладой» и не смог самостоятельно покинуть лед",
-   "url": "https://www.sports.ru/hockey/1117440020-forvard-metallurga-kozlov-poluchil-travmu-v-matche-s-ladoj-i-ne-smog-s.html",
+   "headline": "Форвард «Металлурга» Козлов пропустит 14 недель из-за перелома ноги. Он набрал 9 очков в 28 матчах сезона («Сила Спорта»)",
+   "url": "https://www.sports.ru/hockey/1117441394-forvard-metallurga-kozlov-propustit-14-nedel-iz-za-pereloma-nogi-on-na.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-11-18T16:34:57",
+   "found_at": "2026-11-19T17:02:13",
    "first_seen": "2026-11-06T22:38:00",
-   "last_seen": "2026-11-18T16:34:52"
+   "last_seen": "2026-11-19T17:02:09"
+  },
+  {
+   "player": "Ларионов Игорь",
+   "player_id": 31461,
+   "team": "СКА",
+   "team_id": 44,
+   "headline": "Агент Ларионова-младшего о положении форварда в СКА: «У Игоря травма. Он на больничном до 1 декабря. Вопросов нет»",
+   "url": "https://www.sports.ru/hockey/1117441608-agent-larionova-mladshego-o-polozhenii-forvarda-v-ska-u-igorya-travma-.html",
+   "term": null,
+   "confidence": "высокая",
+   "found_at": "2026-11-19T17:02:13",
+   "first_seen": "2026-11-19T17:02:09",
+   "last_seen": "2026-11-19T17:02:09"
   },
   {
    "player": "Мисюль Даниил",
@@ -266,9 +279,9 @@
    "url": "https://www.sports.ru/hockey/1117440699-chezganov-o-diskvalifikaczii-na-4-matcha-za-udar-klyushkrj-v-liczo-ya-.html",
    "term": "на 4 матча",
    "confidence": "средняя",
-   "found_at": "2026-11-19T04:59:40",
+   "found_at": "2026-11-19T17:02:13",
    "first_seen": "2026-11-18T16:34:52",
-   "last_seen": "2026-11-19T04:59:35"
+   "last_seen": "2026-11-19T17:02:09"
   },
   {
    "player": "Марченко Алексей",
