@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-20T04:53:43",
+ "updated_at": "2026-11-20T16:46:14",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -35,19 +35,6 @@
    "found_at": "2026-10-31T03:00:19",
    "first_seen": "2026-10-30T21:09:37",
    "last_seen": "2026-10-31T03:00:14"
-  },
-  {
-   "player": "Билялов Тимур",
-   "player_id": 3649,
-   "team": "Ак Барс",
-   "team_id": 40,
-   "headline": "Яруллин пропустит матч с «Авангардом», у защитника «Ак Барса» острая инфекция. Билялов участвовал в раскатке («Бизнес Online»)",
-   "url": "https://www.sports.ru/hockey/1117418099-yarullin-propustit-match-s-avangardom-u-zashhitnika-ak-barsa-ostraya-i.html",
-   "term": null,
-   "confidence": "высокая",
-   "found_at": "2026-10-29T14:12:45",
-   "first_seen": "2026-10-28T13:56:00",
-   "last_seen": "2026-10-29T14:12:42"
   },
   {
    "player": "Брики Рональд",
@@ -136,9 +123,9 @@
    "url": "https://www.sports.ru/hockey/1117441394-forvard-metallurga-kozlov-propustit-14-nedel-iz-za-pereloma-nogi-on-na.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-11-20T04:53:43",
+   "found_at": "2026-11-20T16:46:14",
    "first_seen": "2026-11-06T22:38:00",
-   "last_seen": "2026-11-20T04:53:38"
+   "last_seen": "2026-11-20T16:46:10"
   },
   {
    "player": "Ларионов Игорь",
@@ -149,9 +136,9 @@
    "url": "https://www.sports.ru/hockey/1117441608-agent-larionova-mladshego-o-polozhenii-forvarda-v-ska-u-igorya-travma-.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-11-20T04:53:43",
+   "found_at": "2026-11-20T16:46:14",
    "first_seen": "2026-11-19T17:02:09",
-   "last_seen": "2026-11-20T04:53:38"
+   "last_seen": "2026-11-20T16:46:10"
   },
   {
    "player": "Мисюль Даниил",
@@ -256,19 +243,6 @@
    "found_at": "2026-11-06T15:36:31",
    "first_seen": "2026-10-19T21:50:10",
    "last_seen": "2026-11-06T15:36:27"
-  },
-  {
-   "player": "Яруллин Альберт",
-   "player_id": 1744,
-   "team": "Ак Барс",
-   "team_id": 40,
-   "headline": "Яруллин пропустит матч с «Авангардом», у защитника «Ак Барса» острая инфекция. Билялов участвовал в раскатке («Бизнес Online»)",
-   "url": "https://www.sports.ru/hockey/1117418099-yarullin-propustit-match-s-avangardom-u-zashhitnika-ak-barsa-ostraya-i.html",
-   "term": null,
-   "confidence": "высокая",
-   "found_at": "2026-10-29T14:12:45",
-   "first_seen": "2026-10-28T13:56:00",
-   "last_seen": "2026-10-29T14:12:42"
   },
   {
    "player": "Котляров Илья",
