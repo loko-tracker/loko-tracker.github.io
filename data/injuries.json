@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-27T00:49:04",
+ "updated_at": "2026-11-27T06:08:40",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -232,6 +232,19 @@
    "last_seen": "2026-11-19T04:59:35"
   },
   {
+   "player": "Степанов Егор А.",
+   "player_id": 28541,
+   "team": "Северсталь",
+   "team_id": 42,
+   "headline": "Поражение «Спартака», камбэки «Милана» и «Ювентуса», Андронов в реанимации, Синнер не сыграет на AO, победа Степановой и другие новости",
+   "url": "https://www.sports.ru/football/1117449887-porazhenie-spartaka-kambeki-milana-i-yuventusa-andronov-v-reanimaczii-.html",
+   "term": null,
+   "confidence": "высокая",
+   "found_at": "2026-11-27T06:08:40",
+   "first_seen": "2026-11-27T06:08:36",
+   "last_seen": "2026-11-27T06:08:36"
+  },
+  {
    "player": "Тертышный Никита",
    "player_id": 16563,
    "team": "Динамо М",
@@ -305,9 +318,9 @@
    "url": "https://www.sports.ru/hockey/1117449535-dronov-propustit-kubok-pervogo-kanala-iz-za-povrezhdeniya-soobshhil-ro.html",
    "term": null,
    "confidence": "средняя",
-   "found_at": "2026-11-27T00:49:04",
+   "found_at": "2026-11-27T06:08:40",
    "first_seen": "2026-11-27T00:49:01",
-   "last_seen": "2026-11-27T00:49:01"
+   "last_seen": "2026-11-27T06:08:36"
   }
  ]
 }
