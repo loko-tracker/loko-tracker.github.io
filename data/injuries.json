@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-27T06:08:40",
+ "updated_at": "2026-11-27T17:32:52",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -240,9 +240,9 @@
    "url": "https://www.sports.ru/football/1117449887-porazhenie-spartaka-kambeki-milana-i-yuventusa-andronov-v-reanimaczii-.html",
    "term": null,
    "confidence": "высокая",
-   "found_at": "2026-11-27T06:08:40",
+   "found_at": "2026-11-27T17:32:52",
    "first_seen": "2026-11-27T06:08:36",
-   "last_seen": "2026-11-27T06:08:36"
+   "last_seen": "2026-11-27T17:32:49"
   },
   {
    "player": "Тертышный Никита",
@@ -295,19 +295,6 @@
    "found_at": "2026-11-14T14:53:53",
    "first_seen": "2026-10-22T02:34:40",
    "last_seen": "2026-11-14T14:53:48"
-  },
-  {
-   "player": "Тарасов Максим",
-   "player_id": 47411,
-   "team": "Автомобилист",
-   "team_id": 56,
-   "headline": "Вратарь «Детройта» Гибсон получил травму в игре с «Тампой» и был заменен на Тарасова. Россиянин отразил 12 из 13 бросков, сыграв во 2-м матче за 2 дня",
-   "url": "https://www.sports.ru/hockey/1117425529-vratar-detrojta-gibson-poluchil-travmu-v-igre-s-tampoj-i-byl-zamenen-n.html",
-   "term": null,
-   "confidence": "средняя",
-   "found_at": "2026-11-05T15:52:51",
-   "first_seen": "2026-11-03T15:30:54",
-   "last_seen": "2026-11-05T15:52:46"
   },
   {
    "player": "Юдин Дмитрий",
