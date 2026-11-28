@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-28T06:00:29",
+ "updated_at": "2026-11-28T16:48:03",
  "manual": [
   {
    "player": "Каюмов Артур",
@@ -232,19 +232,6 @@
    "last_seen": "2026-11-27T17:32:49"
   },
   {
-   "player": "Тертышный Никита",
-   "player_id": 16563,
-   "team": "Динамо М",
-   "team_id": 8,
-   "headline": "Тертышный выбыл до конца сезона. Форвард «Динамо» получил травму нижней части тела в игре с «Амуром»",
-   "url": "https://www.sports.ru/hockey/1117426953-tertyshnyj-vybyl-do-koncza-sezona-forvard-dinamo-poluchil-travmu-nizhn.html",
-   "term": "до конца сезона",
-   "confidence": "высокая",
-   "found_at": "2026-11-06T15:36:31",
-   "first_seen": "2026-10-19T21:50:10",
-   "last_seen": "2026-11-06T15:36:27"
-  },
-  {
    "player": "Котляров Илья",
    "player_id": 50152,
    "team": "Спартак",
@@ -262,13 +249,13 @@
    "player_id": 1104,
    "team": "Ак Барс",
    "team_id": 40,
-   "headline": "Кирилл Марченко приступил к тренировкам на льду после травмы. Форвард «Торонто» пропустит еще несколько матчей",
-   "url": "https://www.sports.ru/hockey/1117438816-kirill-marchenko-pristupil-k-trenirovkam-na-ldu-posle-travmy-forvard-t.html",
+   "headline": "Марченко сыграл впервые за месяц, вернувшись в состав «Торонто» после травмы. У него 1 бросок в створ и 2 промаха за 15:28 против «Бостона»",
+   "url": "https://www.sports.ru/hockey/1117450955-marchenko-sygral-vpervye-za-mesyacz-vernuvshis-v-sostav-toronto-posle-.html",
    "term": null,
    "confidence": "средняя",
-   "found_at": "2026-11-17T16:59:31",
+   "found_at": "2026-11-28T16:48:02",
    "first_seen": "2026-10-27T13:08:58",
-   "last_seen": "2026-11-17T16:59:27"
+   "last_seen": "2026-11-28T16:47:59"
   },
   {
    "player": "Панин Григорий",
